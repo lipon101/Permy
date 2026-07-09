@@ -1,0 +1,21 @@
+{
+  "name": "permy-sdk",
+  "version": "0.1.0",
+  "description": "Node/TypeScript SDK for the Permy Building Permit & Construction Intelligence API",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "types": "./index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc index.ts --target es2020 --module esnext --moduleResolution node --declaration --strict --skipLibCheck"
+  },
+  "keywords": ["permits", "construction", "contractor", "leads", "municipal", "rapidapi", "proptech"],
+  "homepage": "https://rapidapi.com/permy",
+  "engines": { "node": ">=18" }
+}

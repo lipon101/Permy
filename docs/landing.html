@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permy — Building Permit & Construction Intelligence API</title>
+<meta name="description" content="Normalized permits, contractor activity, property timelines, and ZIP development signals — ranked, sourced, and ready for your app.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --amber:#F59E0B; --amber-deep:#D97706; --amber-soft:#FEF3C7;
+  --ink:#1A1614; --ink-soft:#44403C; --mute:#78716C;
+  --cream:#FAF7F2; --paper:#FFFFFF; --line:#E7E2D9;
+  --green:#16A34A; --red:#DC2626;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,sans-serif;
+  background:var(--cream); color:var(--ink);
+  line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 5%}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit}
+
+/* ---------- nav ---------- */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(250,247,242,0.88);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+.brand-mark{width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--line)}
+nav ul{display:flex;gap:28px;list-style:none;font-size:14.5px;font-weight:500}
+nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .15s}
+nav ul a:hover{color:var(--amber-deep)}
+nav .cta{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 16px;border-radius:9px;font-weight:600;font-size:14px;
+  text-decoration:none;transition:all .15s;cursor:pointer;border:none;
+}
+.btn-primary{background:var(--ink);color:var(--cream)}
+.btn-primary:hover{background:var(--amber-deep);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-amber{background:var(--amber);color:var(--ink)}
+.btn-amber:hover{background:var(--amber-deep);color:#fff}
+@media(max-width:760px){nav ul{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 48px;position:relative;overflow:hidden}
+.hero::before{
+  content:'';position:absolute;top:-120px;right:-80px;width:480px;height:480px;
+  background:radial-gradient(circle,rgba(245,158,11,0.10),transparent 65%);
+  pointer-events:none;
+}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+@media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:36px}}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:600;color:var(--amber-deep);
+  background:var(--amber-soft);padding:6px 13px;border-radius:99px;
+  margin-bottom:22px;letter-spacing:.01em;
+}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+h1{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(38px,5.5vw,58px);line-height:1.04;letter-spacing:-.025em;
+  margin-bottom:20px;
+}
+h1 em{font-style:italic;color:var(--amber-deep);font-weight:500}
+.lead{
+  font-size:19px;color:var(--ink-soft);max-width:540px;margin-bottom:30px;line-height:1.55;
+}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}
+.hero-meta{display:flex;gap:24px;flex-wrap:wrap;font-size:13.5px;color:var(--mute)}
+.hero-meta span{display:inline-flex;align-items:center;gap:6px}
+.hero-meta svg{width:15px;height:15px;color:var(--amber-deep)}
+
+.mascot-stage{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  background:var(--paper);border:1px solid var(--line);border-radius:28px;
+  padding:28px;box-shadow:0 24px 60px -28px rgba(26,22,20,0.22);
+}
+.mascot-stage::after{
+  content:'PERMY';position:absolute;bottom:14px;right:18px;
+  font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+  font-size:13px;color:var(--mute);letter-spacing:.18em;
+}
+.mascot{width:100%;max-width:380px;border-radius:18px;object-fit:cover}
+.badge-floating{
+  position:absolute;top:18px;left:18px;
+  background:var(--ink);color:var(--cream);font-size:11px;font-weight:600;
+  padding:6px 11px;border-radius:7px;letter-spacing:.04em;
+}
+
+/* ---------- section scaffolding ---------- */
+section{padding:72px 0;border-top:1px solid var(--line)}
+.section-head{margin-bottom:44px;max-width:720px}
+.section-head h2{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(30px,4vw,42px);line-height:1.08;letter-spacing:-.02em;margin-bottom:14px;
+}
+.section-head p{font-size:18px;color:var(--ink-soft);max-width:620px}
+.kicker{font-size:13px;font-weight:700;color:var(--amber-deep);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+
+/* ---------- endpoints ---------- */
+.endpoint-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.endpoint{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 20px;transition:all .18s;
+}
+.endpoint:hover{border-color:var(--amber);transform:translateY(-2px);box-shadow:0 10px 30px -16px rgba(245,158,11,0.3)}
+.endpoint .method{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;margin-bottom:9px}
+.m-get{background:#DCFCE7;color:#15803D}
+.m-post{background:#FEF3C7;color:#B45309}
+.m-del{background:#FEE2E2;color:#B91C1C}
+.endpoint .path{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:7px;word-break:break-all}
+.endpoint .desc{font-size:13.5px;color:var(--ink-soft);line-height:1.45}
+.endpoint .tag-gate{display:inline-block;margin-top:9px;font-size:11px;font-weight:600;color:var(--mute);background:var(--cream);padding:2px 7px;border-radius:4px;border:1px solid var(--line)}
+
+/* ---------- code block ---------- */
+.code-card{
+  background:#1A1614;border-radius:16px;overflow:hidden;margin:0 auto;max-width:760px;
+  box-shadow:0 24px 60px -28px rgba(26,22,20,0.4);
+}
+.code-tabs{display:flex;border-bottom:1px solid #2D2724;font-size:13px}
+.code-tab{padding:13px 20px;color:#A8A29E;cursor:pointer;font-weight:500;border-bottom:2px solid transparent;transition:all .15s}
+.code-tab.active{color:var(--amber);border-bottom-color:var(--amber)}
+.code-tab:hover{color:#fff}
+.code-body{padding:22px 26px;overflow-x:auto}
+.code-body pre{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#E7E2D9;white-space:pre}
+.code-body pre .k{color:#FBBF24}
+.code-body pre .s{color:#86EFAC}
+.code-body pre .c{color:#78716C;font-style:italic}
+.code-body pre .n{color:#F0ABFC}
+.code-pane{display:none}
+.code-pane.active{display:block}
+.code-card .copy{float:right;margin:10px 14px;color:#A8A29E;font-size:11px;cursor:pointer;user-select:none}
+.code-card .copy:hover{color:#fff}
+
+/* ---------- response example ---------- */
+.resp-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media(max-width:880px){.resp-grid{grid-template-columns:1fr}}
+.resp-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.resp-card .head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600}
+.resp-card .head .pill{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--amber-soft);color:var(--amber-deep);padding:3px 8px;border-radius:5px}
+.resp-card pre{padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;color:var(--ink);overflow-x:auto}
+.resp-card .hl{color:var(--amber-deep);font-weight:600}
+.resp-card .null{color:var(--mute)}
+
+.explain{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 26px}
+.explain h3{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin-bottom:14px}
+.explain ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+.explain li{display:flex;gap:12px;font-size:14.5px;color:var(--ink-soft);line-height:1.5}
+.explain li .ico{flex-shrink:0;width:22px;height:22px;border-radius:6px;background:var(--amber-soft);color:var(--amber-deep);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin-top:1px}
+
+/* ---------- scoring ---------- */
+.score-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:start}
+@media(max-width:880px){.score-grid{grid-template-columns:1fr}}
+.score-formula{
+  background:var(--ink);color:var(--cream);border-radius:18px;padding:30px 32px;
+}
+.score-formula .lbl{font-size:12px;color:var(--amber);letter-spacing:.12em;font-weight:700;margin-bottom:14px}
+.score-formula .eq{font-family:'JetBrains Mono',monospace;font-size:14.5px;line-height:2}
+.score-formula .eq .w{color:var(--amber)}
+.score-bars{display:flex;flex-direction:column;gap:14px}
+.score-bar{display:grid;grid-template-columns:120px 1fr 36px;align-items:center;gap:12px;font-size:13.5px}
+.score-bar .track{height:9px;background:var(--line);border-radius:99px;overflow:hidden}
+.score-bar .fill{height:100%;background:var(--amber);border-radius:99px}
+.score-bar .val{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink-soft);text-align:right}
+.bands{margin-top:24px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.band{padding:14px 12px;border-radius:10px;text-align:center;font-size:12.5px}
+.band b{display:block;font-size:17px;font-family:'Fraunces',serif;margin-bottom:2px}
+.b-call{background:#DCFCE7;color:#15803D}
+.b-qual{background:#DBEAFE;color:#1D4ED8}
+.b-mon{background:var(--amber-soft);color:var(--amber-deep)}
+.b-skip{background:#F5F5F4;color:var(--mute)}
+
+/* ---------- pricing ---------- */
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.price{
+  background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:26px 24px;
+  display:flex;flex-direction:column;position:relative;transition:all .18s;
+}
+.price:hover{transform:translateY(-3px);box-shadow:0 16px 40px -20px rgba(26,22,20,0.25)}
+.price.featured{border-color:var(--amber);border-width:2px}
+.price.featured::before{
+  content:'Most popular';position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--amber);color:var(--ink);font-size:11px;font-weight:700;
+  padding:4px 12px;border-radius:99px;letter-spacing:.03em;
+}
+.price .tier-name{font-size:15px;font-weight:700;margin-bottom:6px}
+.price .price-amt{font-family:'Fraunces',serif;font-size:34px;font-weight:600;margin-bottom:4px;letter-spacing:-.02em}
+.price .price-amt small{font-size:15px;color:var(--mute);font-weight:400}
+.price .price-sub{font-size:12.5px;color:var(--mute);margin-bottom:18px;min-height:34px}
+.price ul{list-style:none;display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:var(--ink-soft);margin-bottom:20px;flex:1}
+.price li{display:flex;gap:9px;align-items:flex-start}
+.price li::before{content:'✓';color:var(--amber-deep);font-weight:700;flex-shrink:0}
+.price .btn{width:100%;justify-content:center}
+
+/* ---------- sources / trust ---------- */
+.trust-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.trust{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.trust .ico{font-size:22px;margin-bottom:10px}
+.trust h4{font-size:15px;margin-bottom:6px}
+.trust p{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+
+/* ---------- video ---------- */
+.video-wrap{
+  background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  box-shadow:0 24px 60px -28px rgba(26,22,20,0.25);max-width:880px;margin:0 auto;
+}
+.video-wrap video{display:block;width:100%;aspect-ratio:16/9;background:#1A1614}
+.video-cap{padding:16px 22px;font-size:13.5px;color:var(--ink-soft);display:flex;justify-content:space-between;align-items:center}
+.video-cap b{color:var(--ink)}
+
+/* ---------- footer ---------- */
+footer{background:var(--ink);color:var(--cream);padding:56px 0 32px;margin-top:0}
+footer .grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px}
+@media(max-width:760px){footer .grid{grid-template-columns:1fr 1fr}}
+footer h5{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;font-weight:700}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:9px;font-size:14px}
+footer a{color:#D6D3D1;text-decoration:none;transition:color .15s}
+footer a:hover{color:var(--amber)}
+footer .brand-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-weight:800;font-size:18px}
+footer .brand-row img{width:32px;height:32px;border-radius:8px}
+footer .tagline{color:#A8A29E;font-size:14px;max-width:280px}
+footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;display:flex;justify-content:space-between;font-size:12.5px;color:#78716C;flex-wrap:wrap;gap:10px}
+
+/* ---------- misc ---------- */
+.split-stat{display:flex;gap:40px;flex-wrap:wrap;margin-top:30px}
+.split-stat .s b{display:block;font-family:'Fraunces',serif;font-size:30px;color:var(--amber-deep)}
+.split-stat .s span{font-size:13.5px;color:var(--mute)}
+
+/* ---------- playground (matches house style) ---------- */
+.pg-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px -28px rgba(26,22,20,0.18)}
+.pg-head{padding:16px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.pg-head h3{font-family:'Fraunces',serif;font-weight:600;font-size:18px}
+.pg-live{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--green);background:#DCFCE7;padding:5px 11px;border-radius:99px}
+.pg-live .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.pg-body{display:grid;grid-template-columns:360px 1fr;min-height:480px}
+@media(max-width:820px){.pg-body{grid-template-columns:1fr}}
+.pg-left{padding:22px;border-right:1px solid var(--line);background:linear-gradient(180deg,var(--cream),#FCFAF6)}
+@media(max-width:820px){.pg-left{border-right:none;border-bottom:1px solid var(--line)}}
+.pg-right{padding:22px;display:flex;flex-direction:column}
+.pg-left label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);margin:13px 0 5px;letter-spacing:.02em;text-transform:uppercase}
+.pg-left select,.pg-left input{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;font-family:inherit;font-size:14px;background:#fff;color:var(--ink);transition:border-color .15s}
+.pg-left select:focus,.pg-left input:focus{outline:none;border-color:var(--amber)}
+.pg-left select{font-weight:600}
+.run-btn{width:100%;margin-top:18px;padding:12px;border:none;border-radius:10px;background:var(--amber);color:var(--ink);font-weight:700;font-size:14.5px;cursor:pointer;transition:all .15s}
+.run-btn:hover{background:var(--amber-deep);color:#fff;transform:translateY(-1px)}
+.run-btn:disabled{opacity:.6;cursor:wait}
+.pg-hint{font-size:12px;color:var(--mute);margin-top:13px;line-height:1.55}
+.pg-hint code{background:var(--cream);padding:1px 6px;border-radius:4px;font-size:11.5px;font-family:'JetBrains Mono',monospace}
+.pg-req{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:13px;margin-bottom:14px;flex-wrap:wrap}
+.pg-req .m-get{background:#DCFCE7;color:#15803D;font-weight:700;font-size:11px;padding:3px 9px;border-radius:5px}
+.pg-req .url{color:var(--ink-soft);word-break:break-all}
+.pg-resp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.pg-resp-head .lab{font-size:11px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.07em}
+.pg-status{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:5px}
+.s-ok{background:#DCFCE7;color:#15803D}
+.s-err{background:#FEE2E2;color:#B91C1C}
+.s-load{background:var(--amber-soft);color:#B45309}
+.pg-resp{flex:1;background:#1A1614;border-radius:12px;padding:18px;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;color:#E7E2D9;min-height:280px;max-height:460px;white-space:pre-wrap;word-break:break-word}
+.pg-resp .j-key{color:#FBBF24}
+.pg-resp .j-str{color:#86EFAC}
+.pg-resp .j-num{color:#93C5FD}
+.pg-resp .j-bool{color:#F0ABFC}
+.pg-resp .j-null{color:#A8A29E;font-style:italic}
+.pg-resp .empty{color:#78716C;font-style:italic}
+
+/* ---------- coverage strip (house style) ---------- */
+.cov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px}
+.cov-city{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px;transition:all .18s}
+.cov-city:hover{border-color:var(--amber);transform:translateY(-2px)}
+.cov-city .nm{font-weight:700;font-size:14.5px}
+.cov-city .st{font-size:11.5px;color:var(--mute);font-weight:600;margin-bottom:9px}
+.cov-city .portal{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;display:inline-block;margin-bottom:8px}
+.cov-city .p-socrata{background:#DBEAFE;color:#1D4ED8}
+.cov-city .p-arcgis{background:#FEF3C7;color:#B45309}
+.cov-city .flags{display:flex;gap:5px;flex-wrap:wrap}
+.cov-flag{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.03em}
+.cf-y{background:#DCFCE7;color:#15803D}
+.cf-n{background:#F5F5F4;color:var(--mute)}
+.cf-p{background:var(--amber-soft);color:var(--amber-deep)}
+.cov-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--mute)}
+.cov-legend span{display:inline-flex;align-items:center;gap:6px}
+</style>
+<style>
+.ha-img-placeholder{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:#f4f4f5;border:1px dashed #d4d4d8;border-radius:8px;color:#71717a;font-size:12px;font-family:system-ui,sans-serif;min-height:80px;padding:16px;box-sizing:border-box;animation:ha-img-pulse 1.5s ease-in-out infinite}
+.ha-img-placeholder.ha-failed{animation:none;opacity:.7}
+@keyframes ha-img-pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@media(prefers-color-scheme:dark){.ha-img-placeholder{background:#27272a;border-color:#3f3f46;color:#a1a1aa}}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav>
+  <div class="wrap">
+    <div class="brand">
+      <img class="brand-mark" src="https://pub.hyperagent.com/api/published/pbf01KX3W268A_34Y0WK2XHD4NRZK4/70510ef8-7b31-4b3a-9327-3879dd87dc44.png" alt="Permy">
+      Permy
+    </div>
+    <ul>
+      <li><a href="#playground">Playground</a></li>
+      <li><a href="#coverage">Coverage</a></li>
+      <li><a href="#endpoints">Endpoints</a></li>
+      <li><a href="#quickstart">Quickstart</a></li>
+      <li><a href="#scoring">Lead Scoring</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <div class="cta">
+      <a class="btn btn-ghost" href="#playground">Try it live</a>
+      <a class="btn btn-primary" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Get API Key →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span> 9 cities live · daily-fresh · try it keyless</span>
+      <h1>Permit data, <em>made friendly.</em></h1>
+      <p class="lead">Give Permy an address, city, ZIP, contractor, or trade — get back clean, normalized, ranked municipal intelligence: permits, contractor activity, property timelines, and ZIP development signals — with source links and confidence scores.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-amber" href="#playground">Try it live — no key</a>
+        <a class="btn btn-primary" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Get your API key — Free</a>
+        <a class="btn btn-ghost" href="#quickstart">See the quickstart</a>
+      </div>
+      <div class="hero-meta">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> 9 cities, 2 portal types</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> 100 req/day free</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> OpenAPI 3.1 + MCP + SDKs</span>
+      </div>
+    </div>
+    <div class="mascot-stage">
+      <span class="badge-floating">v0.1 · daily-fresh</span>
+      <img class="mascot" src="https://pub.hyperagent.com/api/published/pbf01KX3W2695_6VREB6YKPTGRPTRT/47b2f116-b898-4e65-9478-f1a26703f609.png" alt="Permy — the friendly permit mascot">
+    </div>
+  </div>
+</header>
+
+<!-- ===================== PLAYGROUND ===================== -->
+<section id="playground" style="background:linear-gradient(180deg,var(--cream),#F5F0E8)">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Playground · no signup, no key</div>
+      <h2>Hit Run. Get real data.</h2>
+      <p>These are live sample endpoints — <span class="mono" style="color:var(--amber-deep)">/v1/sample/*</span> — capped at 10 records and 30 requests/day per IP. Enough to evaluate before you grab a key. Point it at your own deploy with <span class="mono" style="color:var(--amber-deep)">?api=https://your-host</span>.</p>
+    </div>
+    <div class="pg-card">
+      <div class="pg-head">
+        <h3>Interactive playground</h3>
+        <span class="pg-live"><span class="dot"></span>Live · sample mode</span>
+      </div>
+      <div class="pg-body">
+        <div class="pg-left">
+          <label for="pg-ep">Endpoint</label>
+          <select id="pg-ep">
+            <option value="permits">GET /v1/sample/permits/search — Search permits</option>
+            <option value="coverage">GET /v1/sample/coverage — Supported cities</option>
+            <option value="leads">GET /v1/sample/leads/ranked — Ranked leads</option>
+            <option value="contractors">GET /v1/sample/contractors/search — Contractors</option>
+            <option value="permit">GET /v1/sample/permits/{id} — Permit detail</option>
+          </select>
+          <div id="pg-params"></div>
+          <button class="run-btn" id="pg-run">Run request →</button>
+          <p class="pg-hint">Sample mode returns up to <code>10</code> records / <code>30</code> requests per day. For 100/day free + full endpoints (leads, intelligence, alerts, webhooks), <a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer" style="color:var(--amber-deep);font-weight:600">get a key</a>.</p>
+        </div>
+        <div class="pg-right">
+          <div class="pg-req"><span class="m-get" id="pg-method">GET</span><span class="url" id="pg-url">/v1/sample/permits/search</span></div>
+          <div class="pg-resp-head"><span class="lab">Response</span><span class="pg-status s-load" id="pg-status">ready</span></div>
+          <div class="pg-resp" id="pg-resp"><span class="empty">// hit “Run request” to fetch live data</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COVERAGE ===================== -->
+<section id="coverage">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Coverage · 9 cities, 2 portal types</div>
+      <h2>What each city actually publishes — honestly noted.</h2>
+      <p>Every city exposes different fields. Green = published and populated, amber = partial, grey = not published (an explicit <span class="mono" style="color:var(--amber-deep)">null</span> on every record — never silently omitted). We never serve frozen or demo feeds as live.</p>
+    </div>
+    <div class="cov-grid" id="cov-grid"></div>
+    <div class="cov-legend">
+      <span><span class="cov-flag cf-y">val</span> valuation</span>
+      <span><span class="cov-flag cf-y">con</span> contractor</span>
+      <span><span class="cov-flag cf-y">own</span> owner</span>
+      <span><span class="cov-flag cf-y">ph</span> phone</span>
+      <span><span class="cov-flag cf-y">geo</span> geocode</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ENDPOINTS ===================== -->
+<section id="endpoints">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">The API surface · /v1</div>
+      <h2>One normalized schema. Twenty endpoints.</h2>
+      <p>Every record is cross-city normalized, source-cited, confidence-scored, and ready for your app. Missing fields are explicit <span class="mono" style="color:var(--amber-deep)">null</span> — never omitted — so schema drift across cities never breaks your code.</p>
+    </div>
+    <div class="endpoint-grid">
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/permits/search</div><div class="desc">Search normalized permits by city, state, ZIP, trade, type, status, date range, valuation, contractor, keyword, or geo bbox.</div></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/permits/{id}</div><div class="desc">Full permit detail with all enrichment + source links.</div></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/properties/resolve</div><div class="desc">Normalize an address → jurisdiction, city/county, parcel hints, coverage status.</div></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/properties/{id}/timeline</div><div class="desc">Full permit history for an address — every permit, sorted, categorized.</div></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/contractors/search</div><div class="desc">Find contractors by name, license #, city, trade, activity level.</div></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/contractors/{id}/activity</div><div class="desc">Permit count, trade mix, active cities, value bands, momentum, confidence.</div></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/markets/{zip}/development-score</div><div class="desc">ZIP momentum: volume, value, trade mix, MoM delta, hotspot score 0–100.</div></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/leads/ranked</div><div class="desc">Ranked opportunities for a persona with lead_score + recommended_action + reason.</div><span class="tag-gate">Pro+</span></div>
+      <div class="endpoint"><span class="method m-post">POST</span><div class="path">/v1/intelligence/score</div><div class="desc">address/permit + persona → development_score, risk_flags, market narrative, sources.</div><span class="tag-gate">Pro+</span></div>
+      <div class="endpoint"><span class="method m-post">POST</span><div class="path">/v1/alerts</div><div class="desc">Saved searches with signed HMAC webhook delivery on new matching permits.</div><span class="tag-gate">Pro+</span></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/alerts · DELETE /v1/alerts/{id}</div><div class="desc">List and delete your saved searches.</div><span class="tag-gate">Pro+</span></div>
+      <div class="endpoint"><span class="method m-post">POST</span><div class="path">/v1/webhooks/test</div><div class="desc">Send a signed test payload to your webhook URL.</div><span class="tag-gate">Pro+</span></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/coverage</div><div class="desc">Supported cities, fields available per city, freshness — honestly noted.</div></div>
+      <div class="endpoint"><span class="method m-get">GET</span><div class="path">/v1/health · /v1/usage</div><div class="desc">Service health + quota usage for the caller.</div></div>
+      <div class="endpoint" style="border-color:var(--amber)"><span class="method m-get">GET</span><div class="path">/v1/sample/permits/search</div><div class="desc">Keyless try-it: search permits, capped at 10 records. No signup.</div><span class="tag-gate" style="color:var(--amber-deep);border-color:var(--amber)">no key</span></div>
+      <div class="endpoint" style="border-color:var(--amber)"><span class="method m-get">GET</span><div class="path">/v1/sample/coverage · /leads · /contractors</div><div class="desc">Keyless try-it for coverage, ranked leads, and contractors.</div><span class="tag-gate" style="color:var(--amber-deep);border-color:var(--amber)">no key</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== QUICKSTART ===================== -->
+<section id="quickstart" style="background:linear-gradient(180deg,var(--cream),#F5F0E8)">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Quickstart · under 5 minutes</div>
+      <h2>From subscribe to first lead in one call.</h2>
+    </div>
+
+    <div class="code-card">
+      <div class="code-tabs">
+        <div class="code-tab active" data-tab="curl">cURL</div>
+        <div class="code-tab" data-tab="python">Python</div>
+        <div class="code-tab" data-tab="js">JavaScript</div>
+        <div class="code-tab" data-tab="node-sdk">Node SDK</div>
+        <span class="copy" onclick="copyCode()">copy</span>
+      </div>
+      <div class="code-body">
+<pre class="code-pane active" id="pane-curl"><span class="c"># Ranked roofing leads in Austin</span>
+curl -G <span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked"</span> \
+  --data-urlencode <span class="s">"persona=roofer"</span> \
+  --data-urlencode <span class="s">"city=Austin"</span> \
+  --data-urlencode <span class="s">"limit=10"</span> \
+  -H <span class="s">"X-RapidAPI-Key: YOUR_KEY"</span> \
+  -H <span class="s">"X-RapidAPI-Host: permy.p.rapidapi.com"</span></pre>
+
+<pre class="code-pane" id="pane-python"><span class="k">import</span> requests
+
+url = <span class="s">"https://permy.p.rapidapi.com/v1/permits/search"</span>
+headers = {<span class="s">"X-RapidAPI-Key"</span>: <span class="s">"YOUR_KEY"</span>}
+params  = {<span class="s">"city"</span>: <span class="s">"Austin"</span>, <span class="s">"trade"</span>: <span class="s">"roofing"</span>, <span class="s">"limit"</span>: <span class="n">10</span>}
+
+r = requests.get(url, headers=headers, params=params)
+<span class="k">for</span> p <span class="k">in</span> r.json()[<span class="s">"permits"</span>]:
+    print(p[<span class="s">"address"</span>][<span class="s">"full"</span>], p[<span class="s">"enrichment"</span>][<span class="s">"lead_score"</span>],
+          p[<span class="s">"enrichment"</span>][<span class="s">"recommended_action"</span>])</pre>
+
+<pre class="code-pane" id="pane-js"><span class="k">const</span> url = <span class="k">new</span> URL(<span class="s">"https://permy.p.rapidapi.com/v1/permits/search"</span>);
+url.searchParams.set(<span class="s">"city"</span>, <span class="s">"Austin"</span>);
+url.searchParams.set(<span class="s">"trade"</span>, <span class="s">"roofing"</span>);
+url.searchParams.set(<span class="s">"limit"</span>, <span class="s">"10"</span>);
+
+<span class="k">const</span> res = <span class="k">await</span> fetch(url, {
+  headers: { <span class="s">"X-RapidAPI-Key"</span>: <span class="s">"YOUR_KEY"</span> }
+});
+<span class="k">const</span> { permits, total } = <span class="k">await</span> res.json();
+permits.forEach(p =&gt; console.log(p.address.full, p.enrichment.lead_score));</pre>
+
+<pre class="code-pane" id="pane-node-sdk"><span class="k">import</span> { Permy } <span class="k">from</span> <span class="s">"permy-sdk"</span>;  <span class="c">// npm i permy-sdk</span>
+<span class="k">const</span> permy = <span class="k">new</span> Permy({ apiKey: <span class="s">"YOUR_RAPIDAPI_KEY"</span> });
+
+<span class="c">// What's being built in ZIP 78704?</span>
+<span class="k">const</span> market = <span class="k">await</span> permy.marketScore(<span class="s">"78704"</span>);
+console.log(market.hotspot_score, market.narrative);
+
+<span class="c">// Top roofing leads, ranked with a human reason</span>
+<span class="k">const</span> { leads } = <span class="k">await</span> permy.rankLeads(<span class="s">"roofer"</span>, { city: <span class="s">"Austin"</span>, limit: <span class="n">10</span> });
+leads.forEach(l =&gt; console.log(l.lead_score, l.recommended_action, l.reason));</pre>
+      </div>
+    </div>
+
+    <div class="split-stat">
+      <div class="s"><b>198</b><span>tests passing in the reference repo</span></div>
+      <div class="s"><b>9</b><span>cities, 2 portal types, daily-fresh</span></div>
+      <div class="s"><b>1</b><span>closed roofing job pays for a year</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RESPONSE EXAMPLE ===================== -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">A real response · Austin, today</div>
+      <h2>Not just data — a decision, with a reason.</h2>
+      <p>Every permit carries a deterministic <span class="mono" style="color:var(--amber-deep)">lead_score</span>, a <span class="mono" style="color:var(--amber-deep)">recommended_action</span>, a human <span class="mono" style="color:var(--amber-deep)">reason</span>, source provenance, and a 0–1 <span class="mono" style="color:var(--amber-deep)">confidence</span>.</p>
+    </div>
+    <div class="resp-grid">
+      <div class="resp-card">
+        <div class="head"><span>GET /v1/permits/search?city=Austin&amp;limit=1</span><span class="pill">200 OK</span></div>
+<pre>{
+  <span class="hl">"id"</span>: "austin-tx:13703267",
+  <span class="hl">"canonical_uid"</span>: "austin-tx:13703267",
+  <span class="hl">"jurisdiction_slug"</span>: "austin-tx",
+  <span class="hl">"source_url"</span>: "https://abc.austintexas.gov/web/permit/...",
+  <span class="hl">"source_name"</span>: "City of Austin — Building Permits",
+  "address": {
+    "street": "7507 HART LN", "city": "AUSTIN", "state": "TX",
+    "zip": "78731", "full": "7507 HART LN, AUSTIN, TX, 78731"
+  },
+  "permit_type_normalized": "Mechanical Permit",
+  "trade_category": <span class="hl">"hvac"</span>,
+  "valuation_usd": <span class="null">null</span>,
+  "dates": { "applied": "2026-04-20", "issued": "2026-07-09" },
+  "current_status": "active",
+  "contractor": {
+    "name": "TX Central Services LLC",
+    "trade": "Mechanical Contractor",
+    "phone": "5123581527"
+  },
+  <span class="hl">"enrichment"</span>: {
+    <span class="hl">"lead_score"</span>: 66,
+    <span class="hl">"recommended_action"</span>: "qualify",
+    <span class="hl">"reason"</span>: "[general] fresh signal=23/25, ...",
+    "dq_flags": ["valuation_unknown"],
+    <span class="hl">"confidence"</span>: 0.87
+  }
+}</pre>
+      </div>
+      <div class="explain">
+        <h3>What you actually get</h3>
+        <ul>
+          <li><span class="ico">✓</span><span><b>Decision-scored.</b> A 0–100 <span class="mono">lead_score</span> + <span class="mono">recommended_action</span> (call_now / qualify / monitor / skip) so you don't just get data, you get a recommendation.</span></li>
+          <li><span class="ico">⛓</span><span><b>Source provenance</b> on every record — <span class="mono">source_url</span>, <span class="mono">source_name</span>, <span class="mono">last_checked_at</span>. Always click through to the city's own page.</span></li>
+          <li><span class="ico">○</span><span><b>Explicit null, never omitted.</b> Austin didn't publish a valuation here — it's <span class="mono">null</span>, not missing, so your parser never breaks.</span></li>
+          <li><span class="ico">★</span><span><b>Confidence score</b> (0–1) blends source trust + freshness + field completeness — surface "verified" vs "unverified" in your UI.</span></li>
+          <li><span class="ico">!</span><span><b>DQ flags</b> (<span class="mono">valuation_unknown</span>, <span class="mono">no_phone</span>, <span class="mono">weak_geocode</span>) tell you exactly what's thin so your app can decide.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SCORING ===================== -->
+<section id="scoring" style="background:linear-gradient(180deg,#F5F0E8,var(--cream))">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Concepts · Lead scoring</div>
+      <h2>A deterministic score you can audit.</h2>
+      <p>Same inputs always produce the same score — no LLM in the hot path. Six components, persona-adjustable weights, transparent bands.</p>
+    </div>
+    <div class="score-grid">
+      <div class="score-formula">
+        <div class="lbl">lead_score = round( … )  · 0–100</div>
+        <div class="eq">
+recency       × <span class="w">w_recency</span><br>
++ valuation     × <span class="w">w_valuation</span><br>
++ trade_fit     × <span class="w">w_trade_fit</span><br>
++ property_fit  × <span class="w">w_property_fit</span><br>
++ contactability× <span class="w">w_contactability</span><br>
++ momentum      × <span class="w">w_momentum</span>
+        </div>
+        <div style="margin-top:22px;font-size:12.5px;color:#A8A29E;line-height:1.6">
+          Each component scored 0–1, scaled by its weight (summing to 100). Weights shift by persona — a roofer weights recency + trade fit; an investor weights value + multi-family + ZIP momentum; a supplier weights commercial volume + market heat.
+        </div>
+      </div>
+      <div>
+        <div class="score-bars">
+          <div class="score-bar"><span>recency</span><div class="track"><div class="fill" style="width:88%"></div></div><span class="val">25</span></div>
+          <div class="score-bar"><span>valuation</span><div class="track"><div class="fill" style="width:75%"></div></div><span class="val">25</span></div>
+          <div class="score-bar"><span>trade_fit</span><div class="track"><div class="fill" style="width:62%"></div></div><span class="val">20</span></div>
+          <div class="score-bar"><span>property_fit</span><div class="track"><div class="fill" style="width:38%"></div></div><span class="val">10</span></div>
+          <div class="score-bar"><span>contactable</span><div class="track"><div class="fill" style="width:48%"></div></div><span class="val">10</span></div>
+          <div class="score-bar"><span>momentum</span><div class="track"><div class="fill" style="width:36%"></div></div><span class="val">10</span></div>
+        </div>
+        <div class="bands">
+          <div class="band b-call"><b>≥80</b>call_now</div>
+          <div class="band b-qual"><b>60–79</b>qualify</div>
+          <div class="band b-mon"><b>35–59</b>monitor</div>
+          <div class="band b-skip"><b>&lt;35</b>skip</div>
+        </div>
+        <div style="margin-top:22px;font-size:13.5px;color:var(--ink-soft);line-height:1.55">
+          Every scored permit also returns a human <span class="mono" style="color:var(--amber-deep)">reason</span>: <em>"[roofer] fresh signal=23/30, trade match=25/25, contactability=6/10 (trade=roofing, ~$45,000, issued=2026-07-08) ⚠ valuation_unknown"</em> — ready to surface in your own UI.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VIDEO ===================== -->
+<section>
+  <div class="wrap">
+    <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto">
+      <div class="kicker">Meet Permy</div>
+      <h2>The helpful permit buddy.</h2>
+      <p style="margin-left:auto;margin-right:auto">The friendly permit clerk who does the boring municipal data wrangling — so your app, agents, and pipelines don't have to.</p>
+    </div>
+    <div class="video-wrap">
+      <video controls preload="metadata" poster="https://pub.hyperagent.com/api/published/pbf01KX3W2695_6VREB6YKPTGRPTRT/47b2f116-b898-4e65-9478-f1a26703f609.png">
+        <source src="https://pub.hyperagent.com/api/published/pbf01KX3W2696_CCMYMEVWC4FQTC28/7bc04686-d960-44a4-ba68-aa16e4d94e51.mp4" type="video/mp4">
+      </video>
+      <div class="video-cap"><span><b>Permy intro</b> — stamp, hat tip, wave · 8s</span><span style="color:var(--mute)">amber #F59E0B · off-white</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PRICING ===================== -->
+<section id="pricing" style="background:linear-gradient(180deg,var(--cream),#F5F0E8)">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Pricing · message value, bill by requests</div>
+      <h2>One closed job pays for a year.</h2>
+    </div>
+    <div class="price-grid">
+      <div class="price">
+        <div class="tier-name">Free</div>
+        <div class="price-amt">$0<small>/mo</small></div>
+        <div class="price-sub">100 requests/day · 1 saved search · no webhooks</div>
+        <ul>
+          <li>/permits/search + /permits/{id}</li>
+          <li>/coverage, /health, /usage</li>
+          <li>100 requests / day</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Start free</a>
+      </div>
+      <div class="price">
+        <div class="tier-name">Starter</div>
+        <div class="price-amt">$19<small>/mo</small></div>
+        <div class="price-sub">2,000 requests/mo · search + property timeline</div>
+        <ul>
+          <li>Everything in Free</li>
+          <li>/properties/resolve + timeline</li>
+          <li>2,000 requests / month</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Choose Starter</a>
+      </div>
+      <div class="price">
+        <div class="tier-name">Builder</div>
+        <div class="price-amt">$49<small>/mo</small></div>
+        <div class="price-sub">10,000 requests/mo · 5 searches · CSV export</div>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>/contractors/search + activity</li>
+          <li>5 saved searches, CSV export</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Choose Builder</a>
+      </div>
+      <div class="price featured">
+        <div class="tier-name">Pro</div>
+        <div class="price-amt">$149<small>/mo</small></div>
+        <div class="price-sub">100,000 requests/mo · webhooks · leads · intelligence</div>
+        <ul>
+          <li>Everything in Builder</li>
+          <li>/leads/ranked + /intelligence/score</li>
+          <li>Signed webhooks on new permits</li>
+          <li>Priority email support</li>
+        </ul>
+        <a class="btn btn-amber" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Choose Pro</a>
+      </div>
+      <div class="price">
+        <div class="tier-name">Business</div>
+        <div class="price-amt">$499<small>/mo</small></div>
+        <div class="price-sub">500,000 requests/mo · bulk · multi-key · SLA · MCP</div>
+        <ul>
+          <li>Everything in Pro</li>
+          <li>Bulk export, multiple API keys</li>
+          <li>99.5% SLA, MCP server access</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Choose Business</a>
+      </div>
+      <div class="price">
+        <div class="tier-name">Enterprise</div>
+        <div class="price-amt">custom</div>
+        <div class="price-sub">Snowflake/BigQuery · white-label · dedicated · DPA</div>
+        <ul>
+          <li>Volume pricing, dedicated infra</li>
+          <li>Data warehouse delivery</li>
+          <li>White-label, DPA, custom cities</li>
+        </ul>
+        <a class="btn btn-ghost" href="/cdn-cgi/l/email-protection#36535842534446445f4553764653445b4f18525340">Talk to us</a>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:22px;font-size:13.5px;color:var(--mute)">Usage-based overage on Pro+ · ~17% annual discount on all paid tiers.</p>
+  </div>
+</section>
+
+<!-- ===================== TRUST / SOURCES ===================== -->
+<section id="trust">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Sources · trust · compliance</div>
+      <h2>Public records only. Provenance on everything.</h2>
+    </div>
+    <div class="trust-grid">
+      <div class="trust"><div class="ico">🏛️</div><h4>Official open-data APIs</h4><p>Socrata, ArcGIS Hub, Accela, Tyler, CKAN — never gated or ToS-protected sources. We use public records and rate-limit politely upstream.</p></div>
+      <div class="trust"><div class="ico">🔗</div><h4>Provenance on every record</h4><p>source_url, source_name, last_checked_at on every permit. Always verify against the city's own page.</p></div>
+      <div class="trust"><div class="ico">🕒</div><h4>Honest freshness</h4><p>last_ingested_at exposed per city on /v1/coverage. Archive feeds clearly labeled — never stale data served as fresh.</p></div>
+      <div class="trust"><div class="ico">🎯</div><h4>Honest coverage</h4><p>Per-city ✅/❌/partial for permits, valuation, contractor, owner, phone across 9 cities. Austin publishes phone; SF doesn't publish contractor — we say so, with an explicit null.</p></div>
+      <div class="trust"><div class="ico">🤖</div><h4>Agent-ready (MCP)</h4><p>5 MCP tools (search_permits, property_timeline, contractor_activity, zip_development_score, rank_leads) over stdio + HTTP for Claude, Cursor & agents.</p></div>
+      <div class="trust"><div class="ico">🔒</div><h4>Privacy-first</h4><p>GDPR-aware. No selling of personal data. DPA on Enterprise. Homeowner PII minimized per city license.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <div class="brand-row"><img src="https://pub.hyperagent.com/api/published/pbf01KX3W268A_34Y0WK2XHD4NRZK4/70510ef8-7b31-4b3a-9327-3879dd87dc44.png" alt="Permy"> Permy</div>
+        <p class="tagline">The friendly permit & construction-intelligence API. What's being built, before everyone else sees it.</p>
+      </div>
+      <div>
+        <h5>Product</h5>
+        <ul>
+          <li><a href="#playground">Playground</a></li>
+          <li><a href="#coverage">Coverage</a></li>
+          <li><a href="#endpoints">Endpoints</a></li>
+          <li><a href="#scoring">Lead scoring</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#trust">Sources</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Developers</h5>
+        <ul>
+          <li><a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">RapidAPI listing</a></li>
+          <li><a href="#quickstart">Quickstart + code</a></li>
+          <li><a href="#playground">Try it (no key)</a></li>
+          <li><a href="#">OpenAPI 3.1 spec</a></li>
+          <li><a href="#">Node & Python SDKs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="/cdn-cgi/l/email-protection#721a1b320217001f0b5c161704"><span class="__cf_email__" data-cfemail="82eaebc2f2e7f0effbace6e7f4">[email&#160;protected]</span></a></li>
+          <li><a href="/cdn-cgi/l/email-protection#e2878c96879092908b9187a29287908f9bcc868794">Enterprise</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#4a29233e232f390a3a2f382733642e2f3c">Request a city</a></li>
+          <li><a href="#">Legal & data license</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom">
+      <span>© 2026 Permy · Apache-2.0 (code) · data per upstream license</span>
+      <span>Building permits are public records — the earliest signal of funded construction.</span>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// code tabs
+document.querySelectorAll('.code-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.code-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.code-pane').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('pane-'+tab.dataset.tab).classList.add('active');
+  });
+});
+function copyCode(){
+  const active=document.querySelector('.code-pane.active');
+  navigator.clipboard.writeText(active.innerText);
+  const c=document.querySelector('.code-card .copy'); c.textContent='copied!';
+  setTimeout(()=>c.textContent='copy',1400);
+}
+
+// ===================== PLAYGROUND =====================
+(function(){
+  const API = new URLSearchParams(location.search).get('api') || 'https://permy.onrender.com';
+  const EPS = {
+    permits:     {method:'GET',path:'/v1/sample/permits/search',params:[
+      {k:'city',label:'City',ph:'Austin',val:''},
+      {k:'trade',label:'Trade',ph:'roofing',val:''},
+      {k:'status',label:'Status',ph:'issued',val:''},
+      {k:'min_valuation',label:'Min valuation $',ph:'50000',val:''},
+      {k:'page',label:'Page',ph:'1',val:'1'}]},
+    coverage:    {method:'GET',path:'/v1/sample/coverage',params:[]},
+    leads:       {method:'GET',path:'/v1/sample/leads/ranked',params:[
+      {k:'persona',label:'Persona',ph:'roofer',val:'roofer'},
+      {k:'city',label:'City',ph:'Austin',val:''},
+      {k:'trade',label:'Trade',ph:'roofing',val:''}]},
+    contractors: {method:'GET',path:'/v1/sample/contractors/search',params:[
+      {k:'name',label:'Contractor name',ph:'Roofing',val:''},
+      {k:'trade',label:'Trade',ph:'roofing',val:''},
+      {k:'city',label:'City',ph:'Austin',val:''}]},
+    permit:      {method:'GET',path:'/v1/sample/permits/{id}',params:[
+      {k:'id',label:'Permit id',ph:'austin-tx:...',val:''}]},
+  };
+  const $=id=>document.getElementById(id);
+  let cur='permits';
+  function renderParams(){
+    const ep=EPS[cur], box=$('pg-params'); box.innerHTML='';
+    ep.params.forEach(p=>{const w=document.createElement('div');
+      w.innerHTML='<label>'+p.label+'</label><input data-k="'+p.k+'" placeholder="'+p.ph+'" value="'+p.val+'">';
+      box.appendChild(w);});
+    $('pg-method').textContent=ep.method;
+    updateUrl();
+  }
+  function updateUrl(){
+    const ep=EPS[cur]; const qs=[]; let path=ep.path;
+    document.querySelectorAll('#pg-params input').forEach(inp=>{
+      const v=inp.value.trim(); if(!v)return;
+      if(ep.path.includes('{id}')){path=ep.path.replace('{id}',encodeURIComponent(v));}
+      else{qs.push(encodeURIComponent(inp.dataset.k)+'='+encodeURIComponent(v));}
+    });
+    const url=path+(qs.length?'?'+qs.join('&'):'');
+    $('pg-url').textContent=url; return API+url;
+  }
+  function hl(json){
+    json=json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,m=>{
+      let cls='j-num'; if(/^"/.test(m)){cls=/:$/.test(m)?'j-key':'j-str';}
+      else if(/true|false/.test(m)){cls='j-bool';} else if(/null/.test(m)){cls='j-null';}
+      return '<span class="'+cls+'">'+m+'</span>';});
+  }
+  async function run(){
+    const url=updateUrl(); $('pg-run').disabled=true;
+    $('pg-status').textContent='loading…'; $('pg-status').className='pg-status s-load';
+    $('pg-resp').innerHTML='<span class="empty">// fetching…</span>';
+    try{
+      const r=await fetch(url,{headers:{'Accept':'application/json'}});
+      $('pg-status').textContent=r.status+' '+(r.ok?'OK':r.statusText);
+      $('pg-status').className='pg-status '+(r.ok?'s-ok':'s-err');
+      const text=await r.text(); let pretty=text;
+      try{pretty=JSON.stringify(JSON.parse(text),null,2);}catch(e){}
+      $('pg-resp').innerHTML=hl(pretty);
+    }catch(e){
+      $('pg-status').textContent='network error'; $('pg-status').className='pg-status s-err';
+      $('pg-resp').innerHTML='<span class="empty">// could not reach '+API+' — is the API deployed? Try ?api=http://localhost:8000</span>';
+    }finally{$('pg-run').disabled=false;}
+  }
+  $('pg-ep').addEventListener('change',e=>{cur=e.target.value;renderParams();});
+  document.addEventListener('input',e=>{if(e.target.closest('#pg-params'))updateUrl();});
+  $('pg-run').addEventListener('click',run);
+  renderParams();
+})();
+
+// ===================== COVERAGE STRIP =====================
+(function(){
+  const CITIES=[
+    {n:'Austin',s:'TX',portal:'Socrata',v:'y',c:'y',o:'n',p:'y',g:'n'},
+    {n:'New York',s:'NY',portal:'Socrata',v:'n',c:'y',o:'y',p:'y',g:'y'},
+    {n:'Chicago',s:'IL',portal:'Socrata',v:'n',c:'y',o:'p',p:'n',g:'y'},
+    {n:'San Francisco',s:'CA',portal:'Socrata',v:'y',c:'n',o:'n',p:'n',g:'y'},
+    {n:'Seattle',s:'WA',portal:'Socrata',v:'y',c:'n',o:'n',p:'n',g:'y'},
+    {n:'Los Angeles',s:'CA',portal:'ArcGIS',v:'y',c:'n',o:'n',p:'n',g:'y'},
+    {n:'Miami-Dade',s:'FL',portal:'ArcGIS',v:'n',c:'y',o:'n',p:'n',g:'y'},
+    {n:'Orlando',s:'FL',portal:'Socrata',v:'y',c:'y',o:'y',p:'n',g:'y'},
+    {n:'Fort Worth',s:'TX',portal:'ArcGIS',v:'y',c:'n',o:'y',p:'n',g:'y'},
+  ];
+  const f=k=>{const cls=k==='y'?'cf-y':k==='p'?'cf-p':'cf-n';return 'cov-flag '+cls;};
+  const lab={v:'val',c:'con',o:'own',p:'ph',g:'geo'};
+  document.getElementById('cov-grid').innerHTML=CITIES.map(c=>`
+    <div class="cov-city">
+      <div class="nm">${c.n}</div><div class="st">${c.s}</div>
+      <span class="portal p-${c.portal.toLowerCase()}">${c.portal}</span>
+      <div class="flags">
+        <span class="${f(c.v)}">val</span><span class="${f(c.c)}">con</span>
+        <span class="${f(c.o)}">own</span><span class="${f(c.p)}">ph</span>
+        <span class="${f(c.g)}">geo</span>
+      </div>
+    </div>`).join('');
+})();
+</script>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && window.parent !== window) {
+    window.parent.postMessage({ type: 'close-fullscreen' }, '*');
+  }
+});
+</script>
+<!-- broken-img-handler -->
+<script>
+(function(){
+  if(window.__brokenImgHandler)return;
+  window.__brokenImgHandler=true;
+  var MAX=5,DELAYS=[2000,4000,8000,16000,32000];
+  document.addEventListener('error',function(e){
+    var img=e.target;
+    if(!img||img.tagName!=='IMG')return;
+    var liveSrc=img.getAttribute('src');
+    var src=img.dataset.haOriginalSrc||liveSrc;
+    if(!src)return;
+    if(img.dataset.haOriginalSrc&&liveSrc&&liveSrc!==img.dataset.haOriginalSrc&&liveSrc.indexOf('_r=')<0){src=liveSrc;img.dataset.haOriginalSrc=src;img.dataset.haRetryCount='0'}
+    else if(!img.dataset.haOriginalSrc){img.dataset.haOriginalSrc=src}
+    var attempt=parseInt(img.dataset.haRetryCount||'0',10);
+    if(img.dataset.haPhId){var old=document.getElementById(img.dataset.haPhId);if(old)old.remove()}
+    var ph=document.createElement('div');
+    ph.className='ha-img-placeholder'+(attempt>=MAX?' ha-failed':'');
+    ph.id='ha-ph-'+Math.random().toString(36).slice(2,9);
+    var w=img.getAttribute('width');var h=img.getAttribute('height');
+    if(w)ph.style.width=w+(isNaN(Number(w))?'':'px');
+    else if(img.style.width)ph.style.width=img.style.width;
+    else if(img.width>1)ph.style.width=img.width+'px';
+    if(h)ph.style.height=h+(isNaN(Number(h))?'':'px');
+    else if(img.style.height)ph.style.height=img.style.height;
+    else if(img.height>1)ph.style.height=img.height+'px';
+    ph.textContent=attempt>=MAX?'Image unavailable':'Loading image\u2026';
+    img.dataset.haPhId=ph.id;
+    if(img.dataset.haOrigDisplay==null)img.dataset.haOrigDisplay=img.style.display||'';
+    img.style.display='none';
+    img.insertAdjacentElement('afterend',ph);
+    if(attempt<MAX){
+      img.dataset.haRetryCount=String(attempt+1);
+      setTimeout(function(){
+        if(!img.isConnected)return;
+        if(img.dataset.haOriginalSrc!==src)return;
+        if(img.complete&&img.naturalWidth>0)return;
+        var curSrc=img.getAttribute('src');
+        if(curSrc&&curSrc.indexOf(src)!==0)return;
+        var fresh=src+(src.indexOf('?')>=0?'&':'?')+'_r='+(attempt+1)+'_'+Date.now();
+        img.src=fresh;
+      },DELAYS[attempt]);
+    }
+  },true);
+  document.addEventListener('load',function(e){
+    var img=e.target;
+    if(!img||img.tagName!=='IMG')return;
+    if(img.dataset.haPhId){
+      var ph=document.getElementById(img.dataset.haPhId);
+      if(ph)ph.remove();
+      delete img.dataset.haPhId;
+      img.style.display=img.dataset.haOrigDisplay||'';
+      delete img.dataset.haOrigDisplay;
+      delete img.dataset.haOriginalSrc;
+      delete img.dataset.haRetryCount;
+    }
+  },true);
+})();
+</script>
+</body>
+</html>

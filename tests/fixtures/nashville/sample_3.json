@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--[if lt IE 9]>  <html class="ie lt-ie9 ie8"> <![endif]-->
+<!--[if IE 9]>     <html class="ie ie9"> <![endif]-->
+<!--[if !IE]><!--> <html> <!--<![endif]-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArcGIS Hub Unsupported</title>
+  <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.2.5/css/calcite-web.min.css">
+  <style>
+    .gateway {
+      margin-top: 6.5rem;
+      min-height: 40.625rem;
+    }
+
+    .gateway-splash {
+      text-align: center;
+      color: rgba(0,0,0,.87);
+    }
+    
+    .black-text {
+      color: rgba(0,0,0,.87);
+    }
+
+    img {
+      height: 400px;
+      width: auto;
+      width: auto;
+      width: auto;
+    }
+
+    h4 {
+      font-weight: 600;
+      font-size: 1.375rem;
+      margin-top: 6rem;
+    }
+
+    p {
+      color: #555555;
+    }
+
+    .button-container {
+      margin-top: 1.875rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div class="grid-container">
+      <div class="column-16 center-column">
+        <a id="topnav" href="https://hub.arcgis.com" class="top-nav-title">ArcGIS Hub</a>
+      </div>
+    </div>
+  </header>  
+  <div class="container gateway gateway-splash">
+    <div class="img-wrapper">
+      <img src="https://hubcdn.arcgis.com/static/images/undraw_warning_cyit.svg" alt="This site is not longer supported">
+    </div>
+    <h4>This site is no longer supported</h4>
+    <p>If you have questions, <a class="link-blue" href="https://support.esri.com/en/contact-tech-support">contact support</a>.</p>
+    <p><a class="link-blue" href="https://www.esri.com/arcgis-blog/products/arcgis-hub/national-government/updating-legacy-open-data-sites-in-arcgis-hub/">Learn how to migrate your site to Hub.</a></p>
+    <div class="button-container">
+      <a class="btn" href="https://hub.arcgis.com" type="button">Go to ArcGIS Hub</a>
+    </div>
+  </div>
+</body>
+</html>

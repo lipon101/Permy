@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: permy
+          POSTGRES_PASSWORD: permy
+          POSTGRES_DB: permy
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U permy"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - run: pip install -U pip
+      - run: pip install ".[dev]"
+      - run: ruff check permy tests
+      - run: mypy permy || true
+      - name: Tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://permy:permy@localhost:5432/permy
+          REDIS_URL: redis://localhost:6379/0
+          PERMY_API_KEYS: ci-key
+          PERMY_WEBHOOK_SECRET: ci-secret
+        run: pytest -m "not live"

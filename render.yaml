@@ -1,0 +1,83 @@
+# =============================================================================
+# Permy — Render Blueprint (one-click deploy)
+# =============================================================================
+# How to use:
+#   1. Push this repo (with this render.yaml at the root) to GitHub.
+#   2. Go to https://dashboard.render.com/deploy?repo=https://github.com/YOUR_USER/permy
+#      (replace YOUR_USER with your GitHub username).
+#   3. Render reads this blueprint, creates the web service, and asks you to
+#      fill in the 4 secrets below. Click Apply. Done — you're live.
+#
+# Cost at launch: $0. The API runs on Render's free web service with zero
+# infrastructure (in-memory store seeded from real fixtures, in-process rate
+# limiter). No Postgres or Redis required to go live.
+#
+# The services marked `enabled: false` below (postgres + daily ingest cron)
+# are commented out intentionally. Enable them only when you have paying
+# customers and want fresh, persistent data. See the hosting guide Step 8.
+# ==============================================================================
+
+services:
+  # ---- Permy API (free web service) ----
+  - type: web
+    name: permy
+    runtime: docker
+    plan: free                 # 512 MB RAM, 0.1 CPU, spins down after 15 min idle
+    region: oregon             # change to frankfurt / singapore / etc. near your buyers
+    branch: main
+    healthCheckPath: /v1/health
+    autoDeploy: true
+    # Render builds straight from the Dockerfile at the repo root.
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PERMY_ENV
+        value: prod
+      - key: PERMY_BASE_URL
+        # Render injects your service URL here. Leave as-is; Render fills it in
+        # after first deploy — or set it manually to https://permy.onrender.com
+        fromRenderService:
+          name: permy
+          type: web
+          property: host
+      - key: PERMY_API_KEYS
+        sync: false            # SECRET — Render prompts you to enter this at deploy time
+      - key: PERMY_WEBHOOK_SECRET
+        sync: false            # SECRET — Render prompts you to enter this at deploy time
+      - key: GEOCODER_PROVIDER
+        value: census          # free, no key needed
+      - key: PERMY_ENABLE_MCP
+        value: "true"
+      - key: PERMY_SAMPLE_DAILY_LIMIT
+        value: "30"
+      # Uncomment when you enable the postgres service below:
+      # - key: DATABASE_URL
+      #   fromDatabase:
+      #     name: permy-db
+      #     property: connectionString
+
+  # ---- Postgres + PostGIS (enable when you want fresh, persistent data) ----
+  # Free for 90 days on Render, then ~$7/mo. For a truly free, indefinite
+  # Postgres, use Neon (https://neon.tech, free 0.5GB) and paste its
+  # connection string into a manual DATABASE_URL env var above instead.
+  # - type: pserv
+  #   name: permy-db
+  #   plan: free
+  #   ipAllowList: []          # allow connections from Render services only
+  #   postgis: true
+
+  # ---- Daily ingestion cron (enable with Postgres) ----
+  # Pulls fresh permits from all 9 city open-data feeds every day at 06:00 UTC.
+  # - type: cron
+  #   name: permy-ingest
+  #   runtime: docker
+  #   plan: free
+  #   schedule: "0 6 * * *"
+  #   dockerfilePath: ./Dockerfile
+  #   command: permy-ingest austin-tx nyc-ny chicago-il sf-ca seattle-wa la-ca miami-fl orlando-fl fortworth-tx
+  #   envVars:
+  #     - key: PERMY_ENV
+  #       value: prod
+  #     - key: DATABASE_URL
+  #       fromDatabase:
+  #         name: permy-db
+  #         property: connectionString

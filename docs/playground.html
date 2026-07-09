@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permy — Playground & API Docs</title>
+<meta name="description" content="Try the Permy Building Permit API live, no key required. Search permits, contractors, leads, and coverage across 9 cities — ranked, sourced, and ready for your app.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --amber:#F59E0B; --amber-deep:#D97706; --amber-soft:#FEF3C7;
+  --ink:#1A1614; --ink-soft:#44403C; --mute:#78716C;
+  --cream:#FAF7F2; --paper:#FFFFFF; --line:#E7E2D9;
+  --green:#16A34A; --red:#DC2626;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 5%}
+
+/* ---------- nav (matches landing.html) ---------- */
+nav{position:sticky;top:0;z-index:50;background:rgba(250,247,242,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+.brand-mark{width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--line)}
+nav ul{display:flex;gap:28px;list-style:none;font-size:14.5px;font-weight:500}
+nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .15s}
+nav ul a:hover{color:var(--amber-deep)}
+nav .cta{display:flex;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:9px;font-weight:600;font-size:14px;text-decoration:none;transition:all .15s;cursor:pointer;border:none}
+.btn-primary{background:var(--ink);color:var(--cream)}
+.btn-primary:hover{background:var(--amber-deep);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-amber{background:var(--amber);color:var(--ink)}
+.btn-amber:hover{background:var(--amber-deep);color:#fff}
+@media(max-width:760px){nav ul{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:60px 0 40px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-120px;right:-80px;width:480px;height:480px;background:radial-gradient(circle,rgba(245,158,11,0.10),transparent 65%);pointer-events:none}
+.hero h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(32px,5vw,52px);letter-spacing:-.025em;line-height:1.06;margin-bottom:16px}
+.hero h1 em{font-style:italic;color:var(--amber-deep);font-weight:500}
+.hero p{font-size:18px;color:var(--ink-soft);max-width:640px;margin:0 auto 24px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--amber-deep);background:var(--amber-soft);padding:6px 13px;border-radius:99px;margin-bottom:20px}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero-meta{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;margin-top:6px;font-size:14px;color:var(--mute)}
+.hero-meta b{color:var(--ink);font-weight:700}
+
+/* ---------- playground card (house style) ---------- */
+section{padding:54px 0}
+.section-head{margin-bottom:30px;max-width:720px}
+.section-head .kicker{font-size:13px;font-weight:700;color:var(--amber-deep);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.section-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,3.5vw,36px);line-height:1.08;letter-spacing:-.02em;margin-bottom:11px}
+.section-head p{font-size:16px;color:var(--ink-soft);max-width:620px}
+
+.pg-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px -28px rgba(26,22,20,0.18)}
+.pg-head{padding:16px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.pg-head h3{font-family:'Fraunces',serif;font-weight:600;font-size:18px}
+.pg-live{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--green);background:#DCFCE7;padding:5px 11px;border-radius:99px}
+.pg-live .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.pg-body{display:grid;grid-template-columns:360px 1fr;min-height:480px}
+@media(max-width:820px){.pg-body{grid-template-columns:1fr}}
+.pg-left{padding:22px;border-right:1px solid var(--line);background:linear-gradient(180deg,var(--cream),#FCFAF6)}
+@media(max-width:820px){.pg-left{border-right:none;border-bottom:1px solid var(--line)}}
+.pg-right{padding:22px;display:flex;flex-direction:column}
+.pg-left label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);margin:13px 0 5px;letter-spacing:.02em;text-transform:uppercase}
+.pg-left select,.pg-left input{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;font-family:inherit;font-size:14px;background:#fff;color:var(--ink);transition:border-color .15s}
+.pg-left select:focus,.pg-left input:focus{outline:none;border-color:var(--amber)}
+.pg-left select{font-weight:600}
+.param{margin-bottom:2px}
+.run-btn{width:100%;margin-top:18px;padding:12px;border:none;border-radius:10px;background:var(--amber);color:var(--ink);font-weight:700;font-size:14.5px;cursor:pointer;transition:all .15s}
+.run-btn:hover{background:var(--amber-deep);color:#fff;transform:translateY(-1px)}
+.run-btn:disabled{opacity:.6;cursor:wait}
+.pg-hint{font-size:12px;color:var(--mute);margin-top:12px;line-height:1.55}
+.pg-hint code{background:var(--cream);padding:1px 6px;border-radius:4px;font-size:11.5px;font-family:'JetBrains Mono',monospace}
+
+.pg-req{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:13px;margin-bottom:14px;flex-wrap:wrap}
+.pg-req .m-get{background:#DCFCE7;color:#15803D;font-weight:700;font-size:11px;padding:3px 9px;border-radius:5px}
+.pg-req .m-post{background:#DBEAFE;color:#1D4ED8;font-weight:700;font-size:11px;padding:3px 9px;border-radius:5px}
+.pg-req .url{color:var(--ink-soft);word-break:break-all}
+.pg-resp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.pg-resp-head .lab{font-size:11px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.07em}
+.pg-status{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:5px}
+.s-ok{background:#DCFCE7;color:#15803D}
+.s-err{background:#FEE2E2;color:#B91C1C}
+.s-load{background:var(--amber-soft);color:#B45309}
+.pg-resp{flex:1;background:#1A1614;border-radius:12px;padding:18px;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;color:#E7E2D9;min-height:280px;max-height:480px;white-space:pre-wrap;word-break:break-word}
+.pg-resp .j-key{color:#FBBF24}
+.pg-resp .j-str{color:#86EFAC}
+.pg-resp .j-num{color:#93C5FD}
+.pg-resp .j-bool{color:#F0ABFC}
+.pg-resp .j-null{color:#A8A29E;font-style:italic}
+.pg-resp .empty{color:#78716C;font-style:italic}
+
+/* ---------- endpoint reference ---------- */
+.ep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.ep{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;transition:all .18s}
+.ep:hover{border-color:var(--amber);transform:translateY(-2px);box-shadow:0 10px 30px -16px rgba(245,158,11,0.3)}
+.ep .method{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;margin-bottom:8px}
+.m-get{background:#DCFCE7;color:#15803D}
+.m-post{background:#FEF3C7;color:#B45309}
+.ep .path{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;word-break:break-all}
+.ep .desc{font-size:13px;color:var(--ink-soft);line-height:1.45}
+.ep .gate{display:inline-block;margin-top:8px;font-size:10.5px;font-weight:600;color:var(--mute);background:var(--cream);padding:2px 7px;border-radius:4px;border:1px solid var(--line)}
+.ep .gate.pro{color:var(--amber-deep);border-color:var(--amber);background:var(--amber-soft)}
+.ep .gate.sample{color:#15803D;border-color:#BBF7D0;background:#DCFCE7}
+
+/* ---------- quickstart tabs ---------- */
+.qs-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 20px 50px -30px rgba(26,22,20,0.16)}
+.qs-tabs{display:flex;border-bottom:1px solid var(--line);background:#FCFAF6;overflow-x:auto}
+.qs-tab{padding:13px 20px;font-size:13.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;transition:all .15s;font-family:inherit;white-space:nowrap}
+.qs-tab:hover{color:var(--ink)}
+.qs-tab.active{color:var(--amber-deep);border-bottom-color:var(--amber)}
+.qs-pane{display:none;padding:20px 22px;overflow-x:auto}
+.qs-pane.active{display:block}
+.qs-pane pre{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;color:var(--ink);white-space:pre}
+.qs-pane .c-comment{color:var(--mute)}
+.qs-pane .c-str{color:#15803D}
+.qs-pane .c-key{color:var(--amber-deep)}
+
+/* ---------- coverage strip (house style) ---------- */
+.cov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px}
+.cov-city{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px;transition:all .18s}
+.cov-city:hover{border-color:var(--amber);transform:translateY(-2px)}
+.cov-city .nm{font-weight:700;font-size:14.5px}
+.cov-city .st{font-size:11.5px;color:var(--mute);font-weight:600;margin-bottom:9px}
+.cov-city .portal{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;display:inline-block;margin-bottom:8px}
+.cov-city .p-socrata{background:#DBEAFE;color:#1D4ED8}
+.cov-city .p-arcgis{background:#FEF3C7;color:#B45309}
+.cov-city .flags{display:flex;gap:5px;flex-wrap:wrap}
+.cov-flag{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.03em}
+.cf-y{background:#DCFCE7;color:#15803D}
+.cf-n{background:#F5F5F4;color:var(--mute)}
+.cf-p{background:var(--amber-soft);color:var(--amber-deep)}
+.cov-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--mute)}
+.cov-legend span{display:inline-flex;align-items:center;gap:6px}
+
+/* ---------- footer (matches landing.html) ---------- */
+footer{background:var(--ink);color:var(--cream);padding:48px 0 28px}
+footer .wrap{max-width:1120px}
+footer .grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px}
+@media(max-width:760px){footer .grid{grid-template-columns:1fr 1fr}}
+footer h5{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;font-weight:700}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:9px;font-size:14px}
+footer a{color:#D6D3D1;text-decoration:none;transition:color .15s}
+footer a:hover{color:var(--amber)}
+footer .brand-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-weight:800;font-size:18px}
+footer .brand-row img{width:32px;height:32px;border-radius:8px}
+footer .tagline{color:#A8A29E;font-size:14px;max-width:280px}
+footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;display:flex;justify-content:space-between;font-size:12.5px;color:#78716C;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav>
+  <div class="wrap">
+    <div class="brand">
+      <img class="brand-mark" src="https://pub.hyperagent.com/api/published/pbf01KX3W268A_34Y0WK2XHD4NRZK4/70510ef8-7b31-4b3a-9327-3879dd87dc44.png" alt="Permy">
+      Permy
+    </div>
+    <ul>
+      <li><a href="#playground">Playground</a></li>
+      <li><a href="#endpoints">Endpoints</a></li>
+      <li><a href="#quickstart">Quickstart</a></li>
+      <li><a href="#coverage">Coverage</a></li>
+    </ul>
+    <div class="cta">
+      <a class="btn btn-ghost" href="#playground">Try it live</a>
+      <a class="btn btn-primary" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Get API Key →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero"><div class="wrap">
+  <span class="eyebrow"><span class="dot"></span>9 cities live · daily fresh · no key to try</span>
+  <h1>Try the permit API <em>live</em>.<br>No signup, no key.</h1>
+  <p>Search real building permits across 9 cities, ranked into leads, with contractor activity and ZIP development signals — all normalized into one schema. Hit Run below; the response is real data, fetched live from the sample routes.</p>
+  <div class="hero-meta">
+    <span><b>20</b> endpoints</span>
+    <span><b>5</b> keyless try-it routes</span>
+    <span><b>OpenAPI 3.1</b></span>
+    <span><b>Python + Node</b> SDKs</span>
+  </div>
+</div></header>
+
+<!-- ===================== PLAYGROUND ===================== -->
+<section id="playground" style="padding-top:18px"><div class="wrap">
+  <div class="pg-card">
+    <div class="pg-head">
+      <h3>Interactive playground</h3>
+      <span class="pg-live"><span class="dot"></span>Live · sample mode · no key required</span>
+    </div>
+    <div class="pg-body">
+      <div class="pg-left">
+        <label for="ep">Endpoint</label>
+        <select id="ep">
+          <option value="permits">Search permits</option>
+          <option value="coverage">Supported cities</option>
+          <option value="leads">Ranked leads</option>
+          <option value="contractors">Search contractors</option>
+          <option value="permit">Permit detail</option>
+        </select>
+        <div id="params"></div>
+        <button class="run-btn" id="run">Run request →</button>
+        <p class="pg-hint">Sample mode returns up to <code>10</code> records and allows <code>30</code> requests/day per IP — enough to evaluate. For 100/day free + all 20 endpoints, <a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">get a key</a>. Point at your own deploy with <code>?api=https://your-host</code>.</p>
+      </div>
+      <div class="pg-right">
+        <div class="pg-req">
+          <span class="m-get" id="req-method">GET</span>
+          <span class="url" id="req-url">/v1/sample/permits/search</span>
+        </div>
+        <div class="pg-resp-head">
+          <span class="lab">Response</span>
+          <span class="pg-status s-load" id="status">ready</span>
+        </div>
+        <div class="pg-resp" id="resp"><span class="empty">// hit "Run request" to fetch live data</span></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== ENDPOINT REFERENCE ===================== -->
+<section id="endpoints" style="background:linear-gradient(180deg,var(--cream),#F5F0E8)"><div class="wrap">
+  <div class="section-head">
+    <div class="kicker">Endpoint reference · 20 routes</div>
+    <h2>One surface, three access tiers.</h2>
+    <p>Real endpoints need an <span class="mono" style="color:var(--amber-deep)">X-API-Key</span> (your RapidAPI key, sent automatically through the gateway). The five <span class="mono" style="color:#15803D">/v1/sample/*</span> routes are keyless — the conversion funnel that lets a buyer feel the data before they subscribe.</p>
+  </div>
+  <div class="ep-grid" id="ep-grid"></div>
+</div></section>
+
+<!-- ===================== QUICKSTART ===================== -->
+<section id="quickstart"><div class="wrap">
+  <div class="section-head">
+    <div class="kicker">Quickstart · copy &amp; run</div>
+    <h2>From zero to first permit in under a minute.</h2>
+    <p>Subscribe to the Free plan on RapidAPI and your key is sent automatically as <span class="mono" style="color:var(--amber-deep)">X-RapidAPI-Key</span> — nothing else to configure. Sample routes work with no key at all.</p>
+  </div>
+  <div class="qs-card">
+    <div class="qs-tabs">
+      <button class="qs-tab active" data-tab="curl">curl</button>
+      <button class="qs-tab" data-tab="python">Python</button>
+      <button class="qs-tab" data-tab="node">Node</button>
+    </div>
+    <div class="qs-pane active" data-pane="curl"><pre><span class="c-comment"># sample mode — no key needed</span>
+curl -G <span class="c-str">"https://permy.onrender.com/v1/sample/permits/search"</span> \
+  --data-urlencode <span class="c-str">"city=Austin"</span> --data-urlencode <span class="c-str">"trade=roofing"</span>
+
+<span class="c-comment"># real endpoints — your RapidAPI key is sent automatically</span>
+curl -G <span class="c-str">"https://permy.p.rapidapi.com/v1/permits/search"</span> \
+  --data-urlencode <span class="c-str">"city=Austin"</span> --data-urlencode <span class="c-str">"trade=roofing"</span> \
+  -H <span class="c-str">"X-RapidAPI-Key: YOUR_KEY"</span> -H <span class="c-str">"X-RapidAPI-Host: permy.p.rapidapi.com"</span></pre></div>
+    <div class="qs-pane" data-pane="python"><pre><span class="c-key">from</span> permy_sdk <span class="c-key">import</span> Permy, PermyError
+
+p = Permy(api_key=<span class="c-str">"YOUR_RAPIDAPI_KEY"</span>, base_url=<span class="c-str">"https://permy.p.rapidapi.com"</span>)
+
+<span class="c-comment"># sample mode — no key needed, great for kicking the tires</span>
+print(p.sample_coverage())
+
+<span class="c-comment"># real endpoints</span>
+permits = p.search_permits(city=<span class="c-str">"Austin"</span>, trade=<span class="c-str">"roofing"</span>, limit=<span class="c-str">25</span>)
+lead = p.get_permit(<span class="c-str">"austin-tx:12345"</span>)
+
+<span class="c-comment"># Pro+ — ranked leads + intelligence score</span>
+leads = p.rank_leads(persona=<span class="c-str">"roofer"</span>, limit=<span class="c-str">10</span>)
+intel = p.score_intelligence(address=<span class="c-str">"10912 Mystic Timber Dr, Austin, TX 78754"</span>, persona=<span class="c-str">"roofer"</span>)
+
+<span class="c-comment"># error handling — every non-2xx raises PermyError with a stable code</span>
+<span class="c-key">try</span>:
+    p.search_permits(limit=<span class="c-str">99999</span>)
+<span class="c-key">except</span> PermyError <span class="c-key">as</span> e:
+    print(e.code, e.status)  <span class="c-comment"># e.g. "quota_exceeded" 429</span></pre></div>
+    <div class="qs-pane" data-pane="node"><pre><span class="c-key">import</span> { Permy, PermyError } <span class="c-key">from</span> <span class="c-str">"permy-sdk"</span>;
+
+<span class="c-key">const</span> p = <span class="c-key">new</span> Permy({ apiKey: <span class="c-str">"YOUR_RAPIDAPI_KEY"</span>, baseUrl: <span class="c-str">"https://permy.p.rapidapi.com"</span> });
+
+<span class="c-comment">// sample mode — no key needed</span>
+console.log(<span class="c-key">await</span> p.sampleCoverage());
+
+<span class="c-comment">// real endpoints</span>
+<span class="c-key">const</span> permits = <span class="c-key">await</span> p.searchPermits({ city: <span class="c-str">"Austin"</span>, trade: <span class="c-str">"roofing"</span>, limit: <span class="c-str">25</span> });
+<span class="c-key">const</span> lead = <span class="c-key">await</span> p.getPermit(<span class="c-str">"austin-tx:12345"</span>);
+
+<span class="c-comment">// Pro+ — ranked leads + intelligence score</span>
+<span class="c-key">const</span> leads = <span class="c-key">await</span> p.rankLeads(<span class="c-str">"roofer"</span>, { limit: <span class="c-str">10</span> });
+<span class="c-key">const</span> intel = <span class="c-key">await</span> p.scoreIntelligence({ address: <span class="c-str">"10912 Mystic Timber Dr, Austin, TX 78754"</span>, persona: <span class="c-str">"roofer"</span> });
+
+<span class="c-comment">// error handling — every non-2xx throws PermyError with a stable code</span>
+<span class="c-key">try</span> {
+  <span class="c-key">await</span> p.searchPermits({ limit: <span class="c-str">99999</span> });
+} <span class="c-key">catch</span> (e) {
+  <span class="c-key">if</span> (e <span class="c-key">instanceof</span> PermyError) console.log(e.code, e.status); <span class="c-comment">// "quota_exceeded" 429</span>
+}</pre></div>
+  </div>
+</div></section>
+
+<!-- ===================== COVERAGE ===================== -->
+<section id="coverage" style="background:linear-gradient(180deg,#F5F0E8,var(--cream))"><div class="wrap">
+  <div class="section-head">
+    <div class="kicker">Coverage · 9 cities, honestly noted</div>
+    <h2>Every city publishes a different slice. We flag it.</h2>
+    <p>No silent gaps — each record carries an explicit <span class="mono" style="color:var(--amber-deep)">null</span> for any field the city doesn't publish, with a confidence score and source link on every permit.</p>
+  </div>
+  <div class="cov-grid" id="cov-grid"></div>
+  <div class="cov-legend">
+    <span><span class="cov-flag cf-y">val</span> valuation published</span>
+    <span><span class="cov-flag cf-y">con</span> contractor</span>
+    <span><span class="cov-flag cf-y">own</span> owner</span>
+    <span><span class="cov-flag cf-y">geo</span> geocoded</span>
+    <span><span class="cov-flag cf-p">◐</span> partial / often null</span>
+  </div>
+</div></section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <div class="brand-row"><img src="https://pub.hyperagent.com/api/published/pbf01KX3W268A_34Y0WK2XHD4NRZK4/70510ef8-7b31-4b3a-9327-3879dd87dc44.png" alt="Permy"> Permy</div>
+        <p class="tagline">The friendly permit &amp; construction-intelligence API. What's being built, before everyone else sees it.</p>
+      </div>
+      <div>
+        <h5>Product</h5>
+        <ul>
+          <li><a href="#playground">Playground</a></li>
+          <li><a href="#endpoints">Endpoints</a></li>
+          <li><a href="#coverage">Coverage</a></li>
+          <li><a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Developers</h5>
+        <ul>
+          <li><a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">RapidAPI listing</a></li>
+          <li><a href="#quickstart">Quickstart + code</a></li>
+          <li><a href="#playground">Try it (no key)</a></li>
+          <li><a href="https://permy.onrender.com/v1/coverage" target="_blank" rel="noopener noreferrer">Live /v1/coverage</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="mailto:hello@permy.dev">hello@permy.dev</a></li>
+          <li><a href="mailto:enterprise@permy.dev">Enterprise</a></li>
+          <li><a href="mailto:hello@permy.dev">Request a city</a></li>
+          <li><a href="https://permy.onrender.com/v1/health" target="_blank" rel="noopener noreferrer">Service status</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom">
+      <span>© 2026 Permy · Apache-2.0 (code) · data per upstream license</span>
+      <span>Building permits are public records — the earliest signal of funded construction.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ---- API base (override with ?api= for local testing) ----
+const API = new URLSearchParams(location.search).get('api') || 'https://permy.onrender.com';
+
+const ENDPOINTS = {
+  permits:     { method:'GET', path:'/v1/sample/permits/search', params:[
+    {k:'city',label:'City',ph:'Austin',val:''},
+    {k:'trade',label:'Trade',ph:'roofing',val:''},
+    {k:'status',label:'Status',ph:'issued',val:''},
+    {k:'min_valuation',label:'Min valuation $',ph:'50000',val:''},
+    {k:'page',label:'Page',ph:'1',val:'1'},
+  ]},
+  coverage:    { method:'GET', path:'/v1/sample/coverage', params:[] },
+  leads:       { method:'GET', path:'/v1/sample/leads/ranked', params:[
+    {k:'persona',label:'Persona',ph:'roofer',val:'roofer'},
+    {k:'city',label:'City',ph:'Austin',val:''},
+    {k:'trade',label:'Trade',ph:'roofing',val:''},
+  ]},
+  contractors: { method:'GET', path:'/v1/sample/contractors/search', params:[
+    {k:'name',label:'Contractor name',ph:'Roofing',val:''},
+    {k:'trade',label:'Trade',ph:'roofing',val:''},
+    {k:'city',label:'City',ph:'Austin',val:''},
+  ]},
+  permit:      { method:'GET', path:'/v1/sample/permits/{id}', params:[
+    {k:'id',label:'Permit id (canonical_uid)',ph:'austin-tx:...',val:''},
+  ]},
+};
+
+const $ = id => document.getElementById(id);
+let current = 'permits';
+
+function renderParams(){
+  const ep = ENDPOINTS[current];
+  const box = $('params');
+  box.innerHTML = '';
+  ep.params.forEach(p => {
+    const w = document.createElement('div'); w.className='param';
+    w.innerHTML = `<label>${p.label}</label><input data-k="${p.k}" placeholder="${p.ph}" value="${p.val}">`;
+    box.appendChild(w);
+  });
+  $('req-method').textContent = ep.method;
+  $('req-method').className = 'm-' + ep.method.toLowerCase();
+  updateUrl();
+  document.querySelectorAll('#params input').forEach(i => i.addEventListener('input', updateUrl));
+}
+
+function updateUrl(){
+  const ep = ENDPOINTS[current];
+  const qs = [];
+  let path = ep.path;
+  document.querySelectorAll('#params input').forEach(inp => {
+    const v = inp.value.trim();
+    if(!v) return;
+    if(ep.path.includes('{id}')){ path = ep.path.replace('{id}', encodeURIComponent(v)); }
+    else { qs.push(encodeURIComponent(inp.dataset.k)+'='+encodeURIComponent(v)); }
+  });
+  const url = path + (qs.length ? '?'+qs.join('&') : '');
+  $('req-url').textContent = url;
+  return API + url;
+}
+
+function syntaxHighlight(json){
+  json = json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
+    let cls = 'j-num';
+    if(/^"/.test(m)){ cls = /:$/.test(m) ? 'j-key' : 'j-str'; }
+    else if(/true|false/.test(m)){ cls = 'j-bool'; }
+    else if(/null/.test(m)){ cls = 'j-null'; }
+    return `<span class="${cls}">${m}</span>`;
+  });
+}
+
+async function run(){
+  const url = updateUrl();
+  $('run').disabled = true;
+  $('status').textContent = 'loading…'; $('status').className = 'pg-status s-load';
+  $('resp').innerHTML = '<span class="empty">// fetching…</span>';
+  try{
+    const r = await fetch(url, {headers:{'Accept':'application/json'}});
+    $('status').textContent = r.status + ' ' + (r.ok?'OK':r.statusText);
+    $('status').className = 'pg-status ' + (r.ok ? 's-ok' : 's-err');
+    const text = await r.text();
+    let pretty = text;
+    try{ pretty = JSON.stringify(JSON.parse(text), null, 2); }catch(e){}
+    $('resp').innerHTML = syntaxHighlight(pretty);
+  }catch(e){
+    $('status').textContent = 'network error'; $('status').className = 'pg-status s-err';
+    $('resp').innerHTML = '<span class="empty">// could not reach ' + API + ' — is the API deployed? Try ?api=http://localhost:8000</span>';
+  }finally{
+    $('run').disabled = false;
+  }
+}
+
+$('ep').addEventListener('change', e => { current = e.target.value; renderParams(); });
+$('run').addEventListener('click', run);
+renderParams();
+
+// ---- quickstart tabs ----
+document.querySelectorAll('.qs-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    const tab = t.dataset.tab;
+    document.querySelectorAll('.qs-tab').forEach(x => x.classList.toggle('active', x===t));
+    document.querySelectorAll('.qs-pane').forEach(p => p.classList.toggle('active', p.dataset.pane===tab));
+  });
+});
+
+// ---- endpoint reference (mirrors the real 20 routes in docs/openapi.json) ----
+const EPS = [
+  {m:'GET',p:'/v1/sample/permits/search',d:'Keyless try-it: search permits, capped at 10.',g:'sample'},
+  {m:'GET',p:'/v1/sample/coverage',d:'Keyless try-it: supported cities + fields.',g:'sample'},
+  {m:'GET',p:'/v1/sample/leads/ranked',d:'Keyless try-it: ranked leads, capped at 10.',g:'sample'},
+  {m:'GET',p:'/v1/sample/contractors/search',d:'Keyless try-it: contractors, capped at 10.',g:'sample'},
+  {m:'GET',p:'/v1/sample/permits/{id}',d:'Keyless try-it: full permit detail.',g:'sample'},
+  {m:'GET',p:'/v1/permits/search',d:'Search permits by city, trade, ZIP, valuation, contractor, keyword, geo bbox.',g:''},
+  {m:'GET',p:'/v1/permits/{id}',d:'Full permit detail with enrichment + source links.',g:''},
+  {m:'GET',p:'/v1/properties/resolve',d:'Normalize an address → jurisdiction, parcel, coverage.',g:''},
+  {m:'GET',p:'/v1/properties/{id}/timeline',d:'Full permit history for an address, sorted + categorized.',g:''},
+  {m:'GET',p:'/v1/contractors/search',d:'Find contractors by name, license #, city, trade.',g:''},
+  {m:'GET',p:'/v1/contractors/{id}/activity',d:'Permit count, trade mix, cities, value bands, momentum.',g:''},
+  {m:'GET',p:'/v1/markets/{zip}/development-score',d:'ZIP momentum: volume, value, hotspot 0–100.',g:''},
+  {m:'GET',p:'/v1/coverage',d:'Supported cities, fields per city, freshness.',g:''},
+  {m:'GET',p:'/v1/health',d:'Service health.',g:''},
+  {m:'GET',p:'/v1/usage',d:'Quota usage for the caller.',g:''},
+  {m:'GET',p:'/v1/leads/ranked',d:'Ranked opportunities for a persona + lead_score 0–100.',g:'pro'},
+  {m:'POST',p:'/v1/intelligence/score',d:'Address + persona → development_score + risk_flags.',g:'pro'},
+  {m:'POST',p:'/v1/alerts',d:'Saved searches with signed HMAC webhook delivery.',g:'pro'},
+  {m:'GET',p:'/v1/alerts',d:'List your saved alerts.',g:'pro'},
+  {m:'POST',p:'/v1/webhooks/test',d:'Send a signed test payload to your webhook URL.',g:'pro'},
+];
+const gl = g => g==='pro' ? '<span class="gate pro">Pro+</span>' : g==='sample' ? '<span class="gate sample">no key</span>' : '';
+$('ep-grid').innerHTML = EPS.map(e =>
+  `<div class="ep"><span class="method m-${e.m.toLowerCase()}">${e.m}</span><div class="path">${e.p}${gl(e.g)}</div><div class="desc">${e.d}</div></div>`
+).join('');
+
+// ---- coverage strip (mirrors /v1/sample/coverage) ----
+const CITIES = [
+  {n:'Austin',       s:'TX', portal:'socrata', v:'y', c:'y', o:'n', g:'n'},
+  {n:'New York',     s:'NY', portal:'socrata', v:'n', c:'y', o:'y', g:'y'},
+  {n:'Chicago',      s:'IL', portal:'socrata', v:'n', c:'y', o:'p', g:'y'},
+  {n:'San Francisco',s:'CA', portal:'socrata', v:'y', c:'n', o:'n', g:'y'},
+  {n:'Seattle',      s:'WA', portal:'socrata', v:'y', c:'n', o:'n', g:'y'},
+  {n:'Los Angeles',  s:'CA', portal:'arcgis',  v:'y', c:'n', o:'n', g:'y'},
+  {n:'Miami',        s:'FL', portal:'arcgis',  v:'n', c:'y', o:'n', g:'y'},
+  {n:'Orlando',      s:'FL', portal:'socrata', v:'y', c:'y', o:'y', g:'y'},
+  {n:'Fort Worth',   s:'TX', portal:'arcgis',  v:'y', c:'n', o:'y', g:'y'},
+];
+const flag = (k,l) => `<span class="cov-flag cf-${k}">${l}</span>`;
+$('cov-grid').innerHTML = CITIES.map(c => `
+  <div class="cov-city">
+    <div class="nm">${c.n}</div><div class="st">${c.s}</div>
+    <span class="portal p-${c.portal}">${c.portal}</span>
+    <div class="flags">
+      ${flag(c.v,'val')}${flag(c.c,'con')}${flag(c.o==='y'?'y':c.o==='p'?'p':'n', c.o==='y'?'own':c.o==='p'?'own':'own')}${flag(c.g,'geo')}
+    </div>
+  </div>`).join('');
+</script>
+</body>
+</html>
