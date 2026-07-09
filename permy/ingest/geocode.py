@@ -6,9 +6,9 @@ Census returns rooftop-ish points for real addresses; confidence is derived
 from the matcher score. For MVP we use Census exclusively; paid tiers swap to
 Smarty for true rooftop accuracy. All geocoders return (lat, lng, confidence).
 """
-from typing import Optional, Tuple
+from typing import Optional, Tuple  # noqa: E402
 
-import httpx
+import httpx  # noqa: E402
 
 CENSUS_URL = "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress"
 

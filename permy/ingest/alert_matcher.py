@@ -16,12 +16,12 @@ right default for a "tell me everything in Austin" alert.
 Pure + dependency-free so it's trivially unit-testable; the worker wires it to
 the repo + the delivery queue.
 """
-from dataclasses import dataclass, field
-from datetime import date
-from typing import Any, Dict, List, Optional
+from dataclasses import dataclass, field  # noqa: E402
+from datetime import date  # noqa: E402
+from typing import Any, Dict, List, Optional  # noqa: E402
 
-from permy.models.schemas import Alert, Permit
-from permy.scoring.lead_score import score_permit
+from permy.models.schemas import Alert, Permit  # noqa: E402
+from permy.scoring.lead_score import score_permit  # noqa: E402
 
 
 @dataclass

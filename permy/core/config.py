@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 """Core config & constants for Permy."""
-from typing import List, Optional
 
-from pydantic import Field
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field  # noqa: E402
+from pydantic_settings import BaseSettings, SettingsConfigDict  # noqa: E402
 
 
 class Settings(BaseSettings):

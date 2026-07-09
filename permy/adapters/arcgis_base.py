@@ -21,13 +21,13 @@ like the Socrata adapters — the only ArcGIS-isms they need are the helpers bel
 (``epoch_ms_to_date`` for dates, ``_feature_attributes`` / ``_feature_geometry``
 to unwrap a feature). fetch() is provided here once for every ArcGIS city.
 """
-from datetime import date, datetime, timezone
-from typing import Any, Dict, List, Optional
-from urllib.parse import urlencode
+from datetime import date, datetime, timezone  # noqa: E402
+from typing import Any, Dict, List, Optional  # noqa: E402
+from urllib.parse import urlencode  # noqa: E402
 
-import httpx
+import httpx  # noqa: E402
 
-from permy.adapters.base import _str, now_utc
+from permy.adapters.base import _str, now_utc  # noqa: E402
 
 
 # ---------------------------------------------------------------------------

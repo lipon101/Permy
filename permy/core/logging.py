@@ -6,12 +6,11 @@ Every log line carries request_id when available, and secrets are masked
 (API keys, auth headers) so PII/credentials never hit a log sink. This is the
 minimum bar for the enterprise/Business-tier buyers who run security reviews.
 """
-import json
-import logging
-import os
-import sys
-from typing import Any, MutableMapping
-
+import json  # noqa: E402
+import logging  # noqa: E402
+import os  # noqa: E402
+import sys  # noqa: E402
+from typing import Any, MutableMapping  # noqa: E402
 
 _SENSITIVE_KEYS = {"api_key", "x-api-key", "authorization", "x-rapidapi-key",
                    "webhook_secret", "password", "token", "secret", "database_url"}

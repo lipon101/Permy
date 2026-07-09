@@ -37,14 +37,25 @@ Honest gaps:
     geocode coverage flag to False (honest). A reprojection step (Proj4) can
     upgrade this later.
 """
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional  # noqa: E402
 
-from permy.adapters.arcgis_base import (
-    ArcGISAdapter, _feature_attributes, _feature_geometry, _is_projected_crs, epoch_ms_to_date, reproject_xy,
+from permy.adapters.arcgis_base import (  # noqa: E402
+    ArcGISAdapter,
+    _feature_attributes,
+    _feature_geometry,
+    epoch_ms_to_date,
+    reproject_xy,
 )
-from permy.adapters.base import (
-    Address, ContractorRef, Enrichment, OwnerRef, Permit, PermitDates,
-    _str, now_utc, register,
+from permy.adapters.base import (  # noqa: E402
+    Address,
+    ContractorRef,
+    Enrichment,
+    OwnerRef,
+    Permit,
+    PermitDates,
+    _str,
+    now_utc,
+    register,
 )
 
 MAPSERVER = "https://gisweb.miamidade.gov/arcgis/rest/services/MD_LandInformation/MapServer"
@@ -132,7 +143,7 @@ class MiamiAdapter(ArcGISAdapter):
         addr_full = _str(attrs.get("ADDRESS")) or ""
         street = addr_full.strip() or None
         zipc = _str(attrs.get("ZIP"))  # not always present
-        unit = _str(attrs.get("UNIT"))
+        _unit = _str(attrs.get("UNIT"))  # noqa: F841  # parsed but not yet surfaced
 
         # work category / description pairs (CAT1..10 + DESC1..10)
         descriptions: List[str] = []

@@ -17,13 +17,13 @@ Exits 0 on success (even if some cities failed — partial progress is reported)
 1 if nothing could be processed at all. Per-city failures are printed but don't
 abort the batch.
 """
-import sys
-from datetime import date, timedelta
-from typing import List, Optional, Tuple
+import sys  # noqa: E402
+from datetime import date, timedelta  # noqa: E402
+from typing import List, Optional, Tuple  # noqa: E402
 
-from permy.adapters.base import ADAPTERS
-from permy.db.repo import Repo, get_repo
-from permy.ingest.pipeline import process_record
+from permy.adapters.base import ADAPTERS  # noqa: E402
+from permy.db.repo import Repo, get_repo  # noqa: E402
+from permy.ingest.pipeline import process_record  # noqa: E402
 
 
 def _parse_args(argv: List[str]) -> Tuple[List[str], Optional[date]]:

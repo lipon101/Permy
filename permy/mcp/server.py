@@ -18,7 +18,7 @@ The server speaks MCP over stdio (FastMCP) and proxies to the REST API using
 the caller's PERMY_API_KEY. Input/output JSON schemas below are the contract
 that the MCP layer + the agent both rely on.
 """
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Tool schemas (the source of truth — also rendered into the MCP listing copy)
@@ -173,7 +173,7 @@ TOOL_DEFINITIONS: List[Dict[str, Any]] = [
 # the REST API share one data layer. In a standalone deployment, swap these
 # for httpx calls to the REST API with the caller's PERMY_API_KEY.
 # ---------------------------------------------------------------------------
-from permy.db.repo import get_repo
+from permy.db.repo import get_repo  # noqa: E402
 
 
 def _tool_search_permits(args: Dict[str, Any]) -> Dict[str, Any]:
@@ -223,7 +223,7 @@ def _tool_rank_leads(args: Dict[str, Any]) -> Dict[str, Any]:
     repo = get_repo()
     leads, total = repo.rank_leads({k: v for k, v in args.items() if v is not None})
     return {"persona": args["persona"], "total": total,
-            "leads": [l.model_dump(mode="json") for l in leads]}
+            "leads": [lead.model_dump(mode="json") for lead in leads]}
 
 
 _DISPATCH = {
@@ -241,8 +241,8 @@ _DISPATCH = {
 def build_server():  # pragma: no cover — requires mcp package
     try:
         from mcp.server.fastmcp import FastMCP
-    except ImportError:
-        raise RuntimeError("Install the MCP SDK: pip install 'permy[mcp]'")
+    except ImportError as err:
+        raise RuntimeError("Install the MCP SDK: pip install 'permy[mcp]'") from err
 
     mcp = FastMCP("permy")
 
@@ -298,8 +298,7 @@ def run_stdio():  # pragma: no cover
 # the in-process repo. Used when the MCP server is hosted separately from the
 # API (e.g. MCP on Fly, API on Render). Set PERMY_API_URL + PERMY_API_KEY.
 # ---------------------------------------------------------------------------
-import os as _os
-import json as _json
+import os as _os  # noqa: E402
 
 _PERMY_API_URL = _os.environ.get("PERMY_API_URL", "").rstrip("/")
 _PERMY_API_KEY = _os.environ.get("PERMY_API_KEY", "")
@@ -397,10 +396,11 @@ def list_tools() -> List[Dict[str, Any]]:
 def build_http_app():
     """Return a Starlette app exposing /mcp (JSON-RPC: tools/list, tools/call)
     + /health. This is the transport for a remotely-hosted MCP server."""
+    import json
+
     from starlette.applications import Starlette
     from starlette.requests import Request
     from starlette.responses import JSONResponse
-    import json
 
     async def health(request: Request) -> JSONResponse:
         return JSONResponse({

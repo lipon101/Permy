@@ -7,7 +7,11 @@ import pytest
 
 from permy.adapters.austin import AustinAdapter
 from permy.ingest.classify import classify_trade, classify_work_class
-from permy.ingest.dedupe import canonical_contractor_uid, canonical_permit_uid, canonical_property_uid
+from permy.ingest.dedupe import (
+    canonical_contractor_uid,
+    canonical_permit_uid,
+    canonical_property_uid,
+)
 from permy.ingest.pipeline import process_record, run_ingest
 from permy.ingest.webhooks import build_event, deliver, sign_payload, verify_signature
 from permy.models.schemas import Permit

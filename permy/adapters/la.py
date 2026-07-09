@@ -33,14 +33,25 @@ Honest gaps:
   * No contractor name on the main feature (license-board join later via CA CSLB).
   * Owner not published.
 """
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional  # noqa: E402
 
-from permy.adapters.arcgis_base import (
-    ArcGISAdapter, _feature_attributes, _feature_geometry, epoch_ms_to_date,
+from permy.adapters.arcgis_base import (  # noqa: E402
+    ArcGISAdapter,
+    _feature_attributes,
+    _feature_geometry,
+    epoch_ms_to_date,
 )
-from permy.adapters.base import (
-    Address, ContractorRef, Enrichment, OwnerRef, Permit, PermitDates,
-    _float, _int, _str, now_utc, register,
+from permy.adapters.base import (  # noqa: E402
+    Address,
+    Enrichment,
+    OwnerRef,
+    Permit,
+    PermitDates,
+    _float,
+    _int,
+    _str,
+    now_utc,
+    register,
 )
 
 FEATURE_SERVER = "https://lacitydbs.org/arcgiswebad/rest/services/PERMIT_FC_PRO/FeatureServer"
@@ -110,7 +121,7 @@ class LAAdapter(ArcGISAdapter):
 
     def normalize(self, raw: Dict[str, Any]) -> Permit:
         attrs = _feature_attributes(raw)
-        geom = _feature_geometry(raw)
+        _geom = _feature_geometry(raw)  # noqa: F841  # kept for future reprojection
 
         # source id — OBJECTID is stable + unique within the layer
         source_id = _str(attrs.get("PCIS_ID")) or _str(attrs.get("OBJECTID"))

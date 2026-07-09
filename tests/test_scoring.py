@@ -6,8 +6,14 @@ import pytest
 
 from permy.models.schemas import Address, ContractorRef, Enrichment, OwnerRef, Permit, PermitDates
 from permy.scoring.lead_score import (
-    PERSONA_WEIGHTS, PERSONA_TARGET_TRADES, _band, _dq_flags,
-    rank_permits, score_permit, score_recency, score_valuation,
+    PERSONA_TARGET_TRADES,
+    PERSONA_WEIGHTS,
+    _band,
+    _dq_flags,
+    rank_permits,
+    score_permit,
+    score_recency,
+    score_valuation,
 )
 
 

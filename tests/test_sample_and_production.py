@@ -3,11 +3,11 @@ from __future__ import annotations
 """Tests for sample mode (no-key playground) + production hardening:
 security headers, request-id echo, 404 envelope (no auth leak), quota enforcement.
 """
-import pytest
-from fastapi.testclient import TestClient
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 
-from permy.api.main import app
-from permy.db.repo import reset_repo
+from permy.api.main import app  # noqa: E402
+from permy.db.repo import reset_repo  # noqa: E402
 
 
 @pytest.fixture

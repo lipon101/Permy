@@ -8,17 +8,15 @@ This is the offline/batch path. The same `process_record` function is used by
 the queue worker for incremental near-real-time pulls (a few high-value cities).
 Pure-ish: I/O (geocode, DB) is injected so the pipeline is unit-testable.
 """
-from datetime import date
-from typing import Any, Callable, Dict, List, Optional
+from datetime import date  # noqa: E402
+from typing import Any, Callable, Dict, Optional  # noqa: E402
 
-from permy.adapters.base import ADAPTERS, CityAdapter
-from permy.core.confidence import overall_confidence
-from permy.ingest.classify import classify_trade
-from permy.ingest.dedupe import canonical_permit_uid
-from permy.ingest.geocode import geocode
-from permy.ingest.license import get_board
-from permy.models.schemas import Enrichment, Permit
-from permy.scoring.lead_score import score_permit
+from permy.adapters.base import ADAPTERS, CityAdapter  # noqa: E402
+from permy.core.confidence import overall_confidence  # noqa: E402
+from permy.ingest.classify import classify_trade  # noqa: E402
+from permy.ingest.license import get_board  # noqa: E402
+from permy.models.schemas import Enrichment, Permit  # noqa: E402
+from permy.scoring.lead_score import score_permit  # noqa: E402
 
 Geocoder = Callable[[str], Optional[Any]]  # returns (lat,lng,conf) or None
 Persister = Callable[[Permit], None]

@@ -14,11 +14,11 @@ Usage:
 
 City args match by slug prefix: "austin" → austin-tx, "nyc" → nyc-ny, etc.
 """
-import sys
-from pathlib import Path
-from typing import Dict, List, Optional
+import sys  # noqa: E402
+from pathlib import Path  # noqa: E402
+from typing import Dict, List  # noqa: E402
 
-from permy.db.repo import get_repo
+from permy.db.repo import get_repo  # noqa: E402
 
 # (arg prefix, adapter module path, adapter class, fixture subdir)
 _CITIES = (
@@ -72,7 +72,7 @@ def run() -> None:
 
     repo = get_repo()
     root = _fixtures_root()
-    total_before = len(getattr(repo, "permits", []))
+    _total_before = len(getattr(repo, "permits", []))  # noqa: F841  # baseline for diff logging
     total_added = 0
     for c in cities:
         fx = root / c["subdir"] / "sample_3.json"

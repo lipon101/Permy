@@ -7,13 +7,13 @@ the daily/monthly quota from TIER_LIMITS. Quota counters are written to the
 `usage_daily` table in prod; here we keep a process-local counter for the
 self-contained test path.
 """
-import time
-from collections import defaultdict
-from typing import Optional, Tuple
+import time  # noqa: E402
+from collections import defaultdict  # noqa: E402
+from typing import Optional, Tuple  # noqa: E402
 
-from fastapi import HTTPException, Request, status
+from fastapi import HTTPException, Request, status  # noqa: E402
 
-from permy.core.config import settings
+from permy.core.config import settings  # noqa: E402
 
 # in-process fallback (tests/local). Redis is the source of truth in prod.
 _buckets: dict = defaultdict(lambda: {"tokens": float(settings.rate_limit_paid), "ts": time.time()})

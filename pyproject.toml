@@ -62,7 +62,11 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B"]
-ignore = ["E501", "B008"]  # B008: FastAPI Depends() in defaults is idiomatic
+# E501: line length (handled by formatter); B008: FastAPI Depends() in defaults.
+# UP006/UP007/UP035/UP045/UP037: these rewrite typing.Optional[X] → X | None and
+# typing.Dict → dict, but X | None is a *runtime* error on Python 3.9 with Pydantic
+# (it evaluates annotations eagerly). We target py39, so keep the typing.* forms.
+ignore = ["E501", "B008", "UP006", "UP007", "UP035", "UP045", "UP037"]
 
 [tool.mypy]
 python_version = "3.9"

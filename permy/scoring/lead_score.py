@@ -26,11 +26,11 @@ A human `reason` explains the top 2-3 contributing factors (and any dq_flags).
 This module is PURE: no I/O, no network, no LLM. Same inputs → same score.
 That determinism is a feature — it's auditable and testable.
 """
-from dataclasses import dataclass
-from datetime import date, datetime, timedelta, timezone
-from typing import Dict, List, Optional, Tuple
+from dataclasses import dataclass  # noqa: E402
+from datetime import date  # noqa: E402
+from typing import Dict, List, Optional, Tuple  # noqa: E402
 
-from permy.models.schemas import Permit, Persona, RecommendedAction
+from permy.models.schemas import Permit, Persona, RecommendedAction  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Persona weight presets. Each dict's values sum to 100.

@@ -13,17 +13,26 @@ Honest coverage note: Chicago publishes FEES (building_fee_paid, etc.) NOT a
 declared job valuation. We surface total_fee as a *fee proxy* in description
 but leave valuation_usd null (fees != job value). This is flagged in coverage.
 """
-from datetime import date
-from typing import Any, Dict, List, Optional
-from urllib.parse import urlencode
+from datetime import date  # noqa: E402
+from typing import Any, Dict, List, Optional  # noqa: E402
+from urllib.parse import urlencode  # noqa: E402
 
-import httpx
+import httpx  # noqa: E402
 
-from permy.adapters.base import (
-    Address, ContractorRef, Enrichment, OwnerRef, Permit, PermitDates,
-    _date, _float, _int, _str, now_utc, register,
+from permy.adapters.base import (  # noqa: E402
+    Address,
+    ContractorRef,
+    Enrichment,
+    OwnerRef,
+    Permit,
+    PermitDates,
+    _date,
+    _float,
+    _str,
+    now_utc,
+    register,
 )
-from permy.core.config import settings
+from permy.core.config import settings  # noqa: E402
 
 RESOURCE_ID = "ydr8-5enu"
 BASE_URL = f"https://data.cityofchicago.org/resource/{RESOURCE_ID}.json"

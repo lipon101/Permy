@@ -9,16 +9,16 @@ event type in `X-Permy-Event`. Receivers SHOULD verify the signature.
 Delivery contract: best-effort, at-least-once, within ~60s of new permits.
 Retries with exponential backoff (30s, 2m, 10m) up to 3 attempts, then dead.
 """
-import hashlib
-import hmac
-import json
-import time
-from dataclasses import dataclass
-from typing import Any, Dict, Optional
+import hashlib  # noqa: E402
+import hmac  # noqa: E402
+import json  # noqa: E402
+import time  # noqa: E402
+from dataclasses import dataclass  # noqa: E402
+from typing import Any, Dict, Optional  # noqa: E402
 
-import httpx
+import httpx  # noqa: E402
 
-from permy.core.config import settings
+from permy.core.config import settings  # noqa: E402
 
 RETRY_BACKOFFS = [30, 120, 600]  # seconds
 

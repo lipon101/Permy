@@ -16,10 +16,10 @@ license joins, scoring, and dedupe happen downstream in the pipeline
 
 Register adapters in ADAPTERS below; the worker iterates them on cron.
 """
-from datetime import date, datetime, timezone
-from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
+from datetime import date, datetime, timezone  # noqa: E402
+from typing import Any, Dict, List, Optional, Protocol, runtime_checkable  # noqa: E402
 
-from permy.models.schemas import (
+from permy.models.schemas import (  # noqa: E402
     Address,
     ContractorRef,
     Enrichment,

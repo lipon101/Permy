@@ -1,21 +1,24 @@
 from __future__ import annotations
 
 """Alerts + webhooks (10–11)."""
-import hashlib
-import hmac
-import json
-import time
-from typing import List, Optional
+import hashlib  # noqa: E402
+import hmac  # noqa: E402
+import json  # noqa: E402
+import time  # noqa: E402
+from typing import List  # noqa: E402
 
-import httpx
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+import httpx  # noqa: E402
+from fastapi import APIRouter, Depends, HTTPException, status  # noqa: E402
 
-from permy.db.repo import Repo, get_repo
-from permy.middleware.auth import ApiKeyContext, require_feature
-from permy.models.schemas import (
-    Alert, AlertCreate, ErrorResponse, WebhookTestRequest, WebhookTestResponse,
+from permy.core.config import settings  # noqa: E402
+from permy.db.repo import Repo, get_repo  # noqa: E402
+from permy.middleware.auth import ApiKeyContext, require_feature  # noqa: E402
+from permy.models.schemas import (  # noqa: E402
+    Alert,
+    AlertCreate,
+    WebhookTestRequest,
+    WebhookTestResponse,
 )
-from permy.core.config import settings
 
 router = APIRouter(prefix="/v1", tags=["alerts & webhooks"])
 

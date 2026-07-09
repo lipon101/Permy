@@ -9,17 +9,27 @@ Richest municipal permit schema we've seen published openly: includes contractor
 Endpoint base: https://data.austintexas.gov/resource/3syk-w9eu.json
 SoQL params used: $limit, $order, $where (for incremental pulls), $select (rare).
 """
-from datetime import date
-from typing import Any, Dict, List, Optional
-from urllib.parse import urlencode
+from datetime import date  # noqa: E402
+from typing import Any, Dict, List, Optional  # noqa: E402
+from urllib.parse import urlencode  # noqa: E402
 
-import httpx
+import httpx  # noqa: E402
 
-from permy.adapters.base import (
-    Address, ContractorRef, Enrichment, OwnerRef, Permit, PermitDates,
-    _date, _float, _int, _str, now_utc, register,
+from permy.adapters.base import (  # noqa: E402
+    Address,
+    ContractorRef,
+    Enrichment,
+    OwnerRef,
+    Permit,
+    PermitDates,
+    _date,
+    _float,
+    _int,
+    _str,
+    now_utc,
+    register,
 )
-from permy.core.config import AUSTIN_PERMITTYPE_MAP, AUSTIN_WORKCLASS_MAP, settings
+from permy.core.config import AUSTIN_PERMITTYPE_MAP, AUSTIN_WORKCLASS_MAP, settings  # noqa: E402
 
 RESOURCE_ID = "3syk-w9eu"
 BASE_URL = f"https://data.austintexas.gov/resource/{RESOURCE_ID}.json"

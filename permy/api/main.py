@@ -5,27 +5,26 @@ from __future__ import annotations
 OpenAPI 3.1 is generated from code at /openapi.json. The spec is the contract:
 RapidAPI, the docs site, and the MCP server all derive from it.
 """
-import time
-import uuid
-from typing import Any
+import time  # noqa: E402
+import uuid  # noqa: E402
 
-from fastapi import FastAPI, Request
-from fastapi.exceptions import RequestValidationError
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi import FastAPI, Request  # noqa: E402
+from fastapi.exceptions import RequestValidationError  # noqa: E402
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from fastapi.responses import JSONResponse  # noqa: E402
+from starlette.middleware.base import BaseHTTPMiddleware  # noqa: E402
 
-from permy.api.v1.alerts import router as alerts_router
-from permy.api.v1.contractors import router as contractors_router
-from permy.api.v1.leads import router as leads_router
-from permy.api.v1.meta import router as meta_router
-from permy.api.v1.permits import router as permits_router
-from permy.api.v1.sample import router as sample_router
-from permy.core.config import settings
-from permy.core.logging import logger
-from permy.middleware.auth import get_api_key_context
-from permy.middleware.ratelimit import check_rate_limit, record_usage
-from permy.models.schemas import ErrorDetail, ErrorResponse
+from permy.api.v1.alerts import router as alerts_router  # noqa: E402
+from permy.api.v1.contractors import router as contractors_router  # noqa: E402
+from permy.api.v1.leads import router as leads_router  # noqa: E402
+from permy.api.v1.meta import router as meta_router  # noqa: E402
+from permy.api.v1.permits import router as permits_router  # noqa: E402
+from permy.api.v1.sample import router as sample_router  # noqa: E402
+from permy.core.config import settings  # noqa: E402
+from permy.core.logging import logger  # noqa: E402
+from permy.middleware.auth import get_api_key_context  # noqa: E402
+from permy.middleware.ratelimit import check_rate_limit, record_usage  # noqa: E402
+from permy.models.schemas import ErrorDetail, ErrorResponse  # noqa: E402
 
 APP_VERSION = "0.1.0"
 
@@ -282,7 +281,7 @@ def create_app() -> FastAPI:
         for path, methods in schema.get("paths", {}).items():
             if path.startswith("/v1/sample") or path in ("/v1/health",):
                 continue
-            for method, op in methods.items():
+            for _method, op in methods.items():
                 if isinstance(op, dict):
                     op["security"] = [{"ApiKeyAuth": []}]
         schema["info"]["x-logo"] = {"url": "https://permy.dev/assets/brand-mark.png"}

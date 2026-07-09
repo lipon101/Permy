@@ -16,14 +16,14 @@ alert-notification path runs inside this worker so delivery is async + retried.
 Pure helper ``match_and_deliver`` is separated out so it's unit-testable without
 a running arq/Redis — tests call it with a stubbed deliverer.
 """
-from datetime import date
-from typing import Any, Callable, Dict, List, Optional
+from datetime import date  # noqa: E402
+from typing import Any, Callable, Dict, List, Optional  # noqa: E402
 
-from permy.adapters.base import ADAPTERS
-from permy.ingest.alert_matcher import build_webhook_payload, match_alerts
-from permy.ingest.pipeline import process_record
-from permy.ingest.webhooks import RETRY_BACKOFFS, DeliveryResult, deliver
-from permy.models.schemas import Alert, Permit
+from permy.adapters.base import ADAPTERS  # noqa: E402
+from permy.ingest.alert_matcher import build_webhook_payload, match_alerts  # noqa: E402
+from permy.ingest.pipeline import process_record  # noqa: E402
+from permy.ingest.webhooks import RETRY_BACKOFFS, DeliveryResult, deliver  # noqa: E402
+from permy.models.schemas import Alert, Permit  # noqa: E402
 
 
 def _new_permits(adapter, since: Optional[date], limit: int) -> List[Permit]:

@@ -6,7 +6,7 @@ canonical_uid = hash(jurisdiction_slug + source_permit_id). This is stable
 across re-ingests, so an UPDATE path beats INSERT on conflict. For address-
 based dedup of property records we hash the normalized full_address.
 """
-import hashlib
+import hashlib  # noqa: E402
 
 
 def canonical_permit_uid(jurisdiction_slug: str, source_permit_id: str) -> str:

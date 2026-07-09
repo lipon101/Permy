@@ -13,12 +13,12 @@ spins up as a service. These tests cover:
 Live integration (against the CI Postgres service) is gated behind a
 PG_AVAILABLE check so local/test runs skip gracefully.
 """
-import os
-from datetime import date, datetime, timezone
+import os  # noqa: E402
+from datetime import date, datetime, timezone  # noqa: E402
 
-import pytest
+import pytest  # noqa: E402
 
-from permy.db.repo import get_repo, reset_repo
+from permy.db.repo import get_repo, reset_repo  # noqa: E402
 
 
 def test_pg_repo_module_imports():
@@ -133,7 +133,10 @@ PG_AVAILABLE = bool(os.environ.get("PERMY_TEST_LIVE_PG"))
 @pytest.mark.skipif(not PG_AVAILABLE, reason="needs PERMY_TEST_LIVE_PG + running Postgres+PostGIS")
 def test_live_pg_upsert_and_search():
     """Live: create schema, upsert a permit, search it back. Requires Postgres+PostGIS."""
-    import asyncio, asyncpg
+    import asyncio
+
+    import asyncpg
+
     from permy.db.pg_repo import PostgresRepo
     from permy.models.schemas import Address, Enrichment, Permit, PermitDates
 

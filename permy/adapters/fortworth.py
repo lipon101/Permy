@@ -39,14 +39,24 @@ Honest gaps:
   * JobValue frequently null on small trade permits (plumbing/electrical) —
     populated on building permits.
 """
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional  # noqa: E402
 
-from permy.adapters.arcgis_base import (
-    ArcGISAdapter, _feature_attributes, _feature_geometry, epoch_ms_to_date,
+from permy.adapters.arcgis_base import (  # noqa: E402
+    ArcGISAdapter,
+    _feature_attributes,
+    epoch_ms_to_date,
 )
-from permy.adapters.base import (
-    Address, ContractorRef, Enrichment, OwnerRef, Permit, PermitDates,
-    _float, _int, _str, now_utc, register,
+from permy.adapters.base import (  # noqa: E402
+    Address,
+    Enrichment,
+    OwnerRef,
+    Permit,
+    PermitDates,
+    _float,
+    _int,
+    _str,
+    now_utc,
+    register,
 )
 
 MAPSERVER = "https://mapit.fortworthtexas.gov/ags/rest/services/CIVIC/Permits/MapServer"

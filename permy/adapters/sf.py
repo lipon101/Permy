@@ -32,17 +32,26 @@ Honest gaps:
   * No owner name published.
   * Valuation present (revised_cost > estimated_cost).
 """
-from datetime import date
-from typing import Any, Dict, List, Optional
-from urllib.parse import urlencode
+from datetime import date  # noqa: E402
+from typing import Any, Dict, List, Optional  # noqa: E402
+from urllib.parse import urlencode  # noqa: E402
 
-import httpx
+import httpx  # noqa: E402
 
-from permy.adapters.base import (
-    Address, ContractorRef, Enrichment, OwnerRef, Permit, PermitDates,
-    _date, _float, _int, _str, now_utc, register,
+from permy.adapters.base import (  # noqa: E402
+    Address,
+    Enrichment,
+    OwnerRef,
+    Permit,
+    PermitDates,
+    _date,
+    _float,
+    _int,
+    _str,
+    now_utc,
+    register,
 )
-from permy.core.config import settings
+from permy.core.config import settings  # noqa: E402
 
 RESOURCE_ID = "i98e-djp9"
 BASE_URL = f"https://data.sfgov.org/resource/{RESOURCE_ID}.json"

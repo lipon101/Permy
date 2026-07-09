@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 """Leads + intelligence endpoints (8–9). Pro-tier gated."""
-from typing import Optional
+from typing import Optional  # noqa: E402
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query  # noqa: E402
 
-from permy.db.repo import Repo, get_repo
-from permy.middleware.auth import ApiKeyContext, require_feature
-from permy.models.schemas import (
-    IntelligenceRequest, IntelligenceResponse, RankedLeadsResponse,
+from permy.db.repo import Repo, get_repo  # noqa: E402
+from permy.middleware.auth import ApiKeyContext, require_feature  # noqa: E402
+from permy.models.schemas import (  # noqa: E402
+    IntelligenceRequest,
+    IntelligenceResponse,
+    RankedLeadsResponse,
 )
 
 router = APIRouter(prefix="/v1", tags=["leads & intelligence"])

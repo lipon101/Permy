@@ -9,7 +9,7 @@ MVP: thin lookup interface + a TX TRCC stub. Real boards have heterogeneous
 APIs (some are CSV downloads, some web scraping, some no public API at all),
 so each board is its own small adapter behind LicenseBoard protocol.
 """
-from typing import Dict, Optional, Protocol, runtime_checkable
+from typing import Dict, Optional, Protocol, runtime_checkable  # noqa: E402
 
 
 @runtime_checkable

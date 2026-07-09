@@ -9,20 +9,34 @@ with the same interface drops in for production — see `permy/db/pg_repo.py`.
 
 Routers NEVER touch SQL or adapters directly; they go through `get_repo()`.
 """
-import json
-from datetime import date, datetime, timezone
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+import json  # noqa: E402
+from datetime import date, datetime, timezone  # noqa: E402
+from pathlib import Path  # noqa: E402
+from typing import Any, Dict, List, Optional, Tuple  # noqa: E402
 
-from permy.adapters.austin import AustinAdapter
-from permy.core.confidence import completeness_confidence, freshness_confidence, overall_confidence, source_confidence
-from permy.models.schemas import (
-    Address, Alert, AlertCreate, Contractor, ContractorActivity, ContractorRef,
-    CoverageCity, CoverageResponse, Enrichment, IntelligenceRequest,
-    IntelligenceResponse, MarketScore, OwnerRef, Permit, PermitTimelineEntry,
-    Property, PropertyTimeline, RankedLead, RiskFlag,
+from permy.adapters.austin import AustinAdapter  # noqa: E402
+from permy.core.confidence import (  # noqa: E402
+    overall_confidence,
 )
-from permy.scoring.lead_score import score_permit
+from permy.models.schemas import (  # noqa: E402
+    Alert,
+    AlertCreate,
+    Contractor,
+    ContractorActivity,
+    CoverageCity,
+    CoverageResponse,
+    Enrichment,
+    IntelligenceRequest,
+    IntelligenceResponse,
+    MarketScore,
+    Permit,
+    PermitTimelineEntry,
+    Property,
+    PropertyTimeline,
+    RankedLead,
+    RiskFlag,
+)
+from permy.scoring.lead_score import score_permit  # noqa: E402
 
 
 class Repo:
@@ -285,7 +299,7 @@ class Repo:
         return self.markets.get(zipc)
 
     def rank_leads(self, params: Dict[str, Any]) -> Tuple[List[RankedLead], int]:
-        from permy.scoring.lead_score import rank_permits, score_permit
+        from permy.scoring.lead_score import score_permit
         persona = params.get("persona", "general")
         permits, total = self.search_permits(params)
         hotspots = {z: m.hotspot_score for z, m in self.markets.items()}

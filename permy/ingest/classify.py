@@ -10,9 +10,9 @@ MVP = deterministic keyword maps (no LLM). A cheap-LLM refinement pass for the
 top uncertain records is a Phase 7+ enhancement — kept behind a flag so the
 deterministic path stays the default and remains auditable.
 """
-from typing import Optional
+from typing import Optional  # noqa: E402
 
-from permy.core.config import TRADE_KEYWORDS
+from permy.core.config import TRADE_KEYWORDS  # noqa: E402
 
 
 def classify_trade(description: Optional[str], permit_type_desc: Optional[str] = None) -> str:

@@ -10,8 +10,8 @@ It blends:
 
 Weights: source 0.4, freshness 0.3, completeness 0.3
 """
-from datetime import datetime, timezone, timedelta
-from typing import Dict
+from datetime import datetime, timezone  # noqa: E402
+from typing import Dict  # noqa: E402
 
 
 def source_confidence(source_portal: str, is_live: bool) -> float:

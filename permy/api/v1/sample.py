@@ -15,17 +15,19 @@ body.
 Auth bypass lives in the RateLimitMiddleware (it skips /v1/sample/*) and the
 sample quota is enforced here via ``check_sample_quota()``.
 """
-from datetime import date
-from typing import Optional
+from typing import Optional  # noqa: E402
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status  # noqa: E402
 
-from permy.core.config import settings
-from permy.db.repo import Repo, get_repo
-from permy.middleware.ratelimit import check_sample_quota
-from permy.models.schemas import (
-    CoverageResponse, PermitsSearchResponse, Permit,
-    ContractorsSearchResponse, RankedLeadsResponse,
+from permy.core.config import settings  # noqa: E402
+from permy.db.repo import Repo, get_repo  # noqa: E402
+from permy.middleware.ratelimit import check_sample_quota  # noqa: E402
+from permy.models.schemas import (  # noqa: E402
+    ContractorsSearchResponse,
+    CoverageResponse,
+    Permit,
+    PermitsSearchResponse,
+    RankedLeadsResponse,
 )
 
 router = APIRouter(prefix="/v1/sample", tags=["sample"])

@@ -6,14 +6,14 @@ Note: get_repo() auto-seeds all 7 cities from fixtures on first access, so the
 in-memory repo is never empty. These tests assert the scripts add the expected
 records and are idempotent, not that the repo starts empty.
 """
-import json
-import sys
-from datetime import date, datetime, timezone
-from pathlib import Path
+import json  # noqa: E402
+import sys  # noqa: E402
+from datetime import date, datetime, timezone  # noqa: E402
+from pathlib import Path  # noqa: E402
 
-import pytest
+import pytest  # noqa: E402
 
-from permy.db.repo import get_repo, reset_repo
+from permy.db.repo import get_repo, reset_repo  # noqa: E402
 
 
 @pytest.fixture(autouse=True)
@@ -121,16 +121,16 @@ def test_ingest_cli_invalid_since_exits_2():
 
 # ---- alert matcher ----
 def test_permit_matches_empty_query():
-    from permy.ingest.alert_matcher import permit_matches_query
     from permy.db.repo import get_repo
+    from permy.ingest.alert_matcher import permit_matches_query
     repo = get_repo()
     p = repo.permits[0]
     assert permit_matches_query(p, {}) is True       # open search
 
 
 def test_permit_matches_city():
-    from permy.ingest.alert_matcher import permit_matches_query
     from permy.db.repo import get_repo
+    from permy.ingest.alert_matcher import permit_matches_query
     repo = get_repo()
     p = repo.permits[0]
     assert permit_matches_query(p, {"city": p.address.city}) is True
@@ -138,8 +138,8 @@ def test_permit_matches_city():
 
 
 def test_permit_matches_trade():
-    from permy.ingest.alert_matcher import permit_matches_query
     from permy.db.repo import get_repo
+    from permy.ingest.alert_matcher import permit_matches_query
     repo = get_repo()
     p = next(p for p in repo.permits if p.trade_category != "unknown")
     assert permit_matches_query(p, {"trade": p.trade_category}) is True
@@ -147,8 +147,8 @@ def test_permit_matches_trade():
 
 
 def test_permit_matches_multiple_clauses_and_semantics():
-    from permy.ingest.alert_matcher import permit_matches_query
     from permy.db.repo import get_repo
+    from permy.ingest.alert_matcher import permit_matches_query
     repo = get_repo()
     p = repo.permits[0]
     # both clauses must match (AND)
@@ -157,9 +157,9 @@ def test_permit_matches_multiple_clauses_and_semantics():
 
 
 def test_match_alerts_returns_matches_with_scores():
-    from permy.models.schemas import Alert
-    from permy.ingest.alert_matcher import match_alerts
     from permy.db.repo import get_repo
+    from permy.ingest.alert_matcher import match_alerts
+    from permy.models.schemas import Alert
     repo = get_repo()
     p = repo.permits[0]
     alert = Alert(id="1", persona="roofer", query={"city": p.address.city},
@@ -175,9 +175,9 @@ def test_match_alerts_returns_matches_with_scores():
 
 
 def test_match_alerts_skips_inactive():
-    from permy.models.schemas import Alert
-    from permy.ingest.alert_matcher import match_alerts
     from permy.db.repo import get_repo
+    from permy.ingest.alert_matcher import match_alerts
+    from permy.models.schemas import Alert
     repo = get_repo()
     p = repo.permits[0]
     alert = Alert(id="1", persona="roofer", query={"city": p.address.city},
@@ -187,9 +187,9 @@ def test_match_alerts_skips_inactive():
 
 
 def test_match_alerts_no_match_when_query_excludes():
-    from permy.models.schemas import Alert
-    from permy.ingest.alert_matcher import match_alerts
     from permy.db.repo import get_repo
+    from permy.ingest.alert_matcher import match_alerts
+    from permy.models.schemas import Alert
     repo = get_repo()
     p = repo.permits[0]
     alert = Alert(id="1", persona="roofer", query={"city": "Nonexistent City"},
@@ -199,9 +199,9 @@ def test_match_alerts_no_match_when_query_excludes():
 
 
 def test_build_webhook_payload_shape():
-    from permy.models.schemas import Alert
-    from permy.ingest.alert_matcher import match_alerts, build_webhook_payload
     from permy.db.repo import get_repo
+    from permy.ingest.alert_matcher import build_webhook_payload, match_alerts
+    from permy.models.schemas import Alert
     repo = get_repo()
     p = repo.permits[0]
     alert = Alert(id="7", persona="investor", query={"city": p.address.city},
@@ -218,10 +218,10 @@ def test_build_webhook_payload_shape():
 
 # ---- webhook delivery (worker.match_and_deliver) ----
 def test_match_and_deliver_fires_webhooks():
-    from permy.models.schemas import Alert
-    from permy.ingest.worker import match_and_deliver
-    from permy.ingest.webhooks import DeliveryResult
     from permy.db.repo import get_repo
+    from permy.ingest.webhooks import DeliveryResult
+    from permy.ingest.worker import match_and_deliver
+    from permy.models.schemas import Alert
     repo = get_repo()
     alert = Alert(id="1", persona="roofer", query={"city": repo.permits[0].address.city},
                   webhook_url="https://example.com/hook", is_active=True,
@@ -243,10 +243,10 @@ def test_match_and_deliver_fires_webhooks():
 
 
 def test_match_and_deliver_skips_alert_without_webhook_url():
-    from permy.models.schemas import Alert
-    from permy.ingest.worker import match_and_deliver
-    from permy.ingest.webhooks import DeliveryResult
     from permy.db.repo import get_repo
+    from permy.ingest.webhooks import DeliveryResult
+    from permy.ingest.worker import match_and_deliver
+    from permy.models.schemas import Alert
     repo = get_repo()
     alert = Alert(id="1", persona="roofer", query={"city": repo.permits[0].address.city},
                   webhook_url=None, is_active=True, created_at=datetime.now(timezone.utc))
@@ -257,10 +257,10 @@ def test_match_and_deliver_skips_alert_without_webhook_url():
 
 
 def test_match_and_deliver_counts_failures():
-    from permy.models.schemas import Alert
-    from permy.ingest.worker import match_and_deliver
-    from permy.ingest.webhooks import DeliveryResult
     from permy.db.repo import get_repo
+    from permy.ingest.webhooks import DeliveryResult
+    from permy.ingest.worker import match_and_deliver
+    from permy.models.schemas import Alert
     repo = get_repo()
     alert = Alert(id="1", persona="roofer", query={"city": repo.permits[0].address.city},
                   webhook_url="https://example.com/hook", is_active=True,
@@ -273,8 +273,8 @@ def test_match_and_deliver_counts_failures():
 
 # ---- list_active_alerts on the repo ----
 def test_repo_list_active_alerts():
-    from permy.models.schemas import Alert
     from permy.db.repo import get_repo
+    from permy.models.schemas import Alert
     repo = get_repo()
     repo.alerts["1"] = Alert(id="1", persona="roofer", query={"city": "Austin"},
                              webhook_url="https://x", is_active=True,

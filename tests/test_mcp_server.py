@@ -5,13 +5,13 @@ from __future__ import annotations
 The stdio transport needs the `mcp` package (not installed in CI); the HTTP
 transport uses Starlette (bundled with FastAPI) and is fully testable here.
 """
-import json
+import json  # noqa: E402
 
-import pytest
-from starlette.testclient import TestClient
+import pytest  # noqa: E402
+from starlette.testclient import TestClient  # noqa: E402
 
-from permy.db.repo import reset_repo
-from permy.mcp.server import build_http_app, call_tool, list_tools
+from permy.db.repo import reset_repo  # noqa: E402
+from permy.mcp.server import build_http_app, call_tool, list_tools  # noqa: E402
 
 
 @pytest.fixture(autouse=True)

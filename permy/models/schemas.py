@@ -6,12 +6,10 @@ These are the source of truth for the OpenAPI 3.1 spec (FastAPI generates it).
 Every record must use explicit `null` for missing fields — never omit — so
 downstream apps and agents can rely on schema stability across cities.
 """
-from datetime import date, datetime
-from typing import Any, Dict, List, Literal, Optional, Union
+from datetime import date, datetime  # noqa: E402
+from typing import Any, Dict, List, Literal, Optional, Union  # noqa: E402
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl
-
-from permy.core.config import PERSONAS, RECOMMENDED_ACTIONS, TRADES, WORK_CLASSES
+from pydantic import BaseModel, ConfigDict, Field  # noqa: E402
 
 # ---- shared enums (Literal tuples so OpenAPI emits proper enums) ----
 TradeCategory = Literal[

@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from permy.db.repo import reset_repo
-from permy.mcp.server import TOOL_DEFINITIONS, call_tool, list_tools
+from permy.mcp.server import call_tool, list_tools
 
 
 @pytest.fixture(autouse=True)

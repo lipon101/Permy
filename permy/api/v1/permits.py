@@ -1,14 +1,19 @@
 from __future__ import annotations
 
 """Permit + property endpoints (1–4)."""
-from datetime import date
-from typing import Optional
+from datetime import date  # noqa: E402
+from typing import Optional  # noqa: E402
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status  # noqa: E402
 
-from permy.db.repo import Repo, get_repo
-from permy.middleware.auth import ApiKeyContext, get_api_key_context
-from permy.models.schemas import Permit, PermitsSearchResponse, Property, PropertyTimeline
+from permy.db.repo import Repo, get_repo  # noqa: E402
+from permy.middleware.auth import ApiKeyContext, get_api_key_context  # noqa: E402
+from permy.models.schemas import (  # noqa: E402
+    Permit,
+    PermitsSearchResponse,
+    Property,
+    PropertyTimeline,
+)
 
 router = APIRouter(prefix="/v1", tags=["permits"])
 

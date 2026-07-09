@@ -20,16 +20,29 @@ the routers to async def, swap these to await directly.
 `connect_or_none()` is the safe factory: returns a PostgresRepo if the DB is
 reachable + schema present, else None (so `get_repo()` falls back to memory).
 """
-import asyncio
-import hashlib
-from datetime import date, datetime, timezone
-from typing import Any, Dict, List, Optional, Tuple
+import asyncio  # noqa: E402
+from typing import Any, Dict, List, Optional, Tuple  # noqa: E402
 
-from permy.models.schemas import (
-    Address, Alert, AlertCreate, Contractor, ContractorActivity, ContractorRef,
-    CoverageCity, CoverageResponse, Enrichment, IntelligenceRequest,
-    IntelligenceResponse, MarketScore, OwnerRef, Permit, PermitTimelineEntry,
-    Property, PropertyTimeline, RankedLead, RiskFlag,
+from permy.models.schemas import (  # noqa: E402
+    Address,
+    Alert,
+    AlertCreate,
+    Contractor,
+    ContractorActivity,
+    ContractorRef,
+    CoverageCity,
+    CoverageResponse,
+    Enrichment,
+    IntelligenceRequest,
+    IntelligenceResponse,
+    MarketScore,
+    OwnerRef,
+    Permit,
+    PermitTimelineEntry,
+    Property,
+    PropertyTimeline,
+    RankedLead,
+    RiskFlag,
 )
 
 
@@ -193,7 +206,7 @@ class PostgresRepo:
             where_sql = " WHERE " + " AND ".join(where)
             count_sql = f"SELECT count(*) FROM permits{where_sql}"
             data_sql = (f"SELECT * FROM v_permits_full{where_sql} "
-                        f"ORDER BY {sort_col} {direction} {nulls} LIMIT $${limit_param} OFFSET $${offset_param}")
+                        f"ORDER BY {sort_col} {direction} {nulls} LIMIT $${{limit_param}} OFFSET $${{offset_param}}")
             # asyncpg uses $1,$2,… — rebuild with explicit param indexes for LIMIT/OFFSET
             data_sql = data_sql.replace("{limit_param}", str(i)).replace("{offset_param}", str(i + 1))
             args += [limit, offset]
@@ -276,13 +289,21 @@ class PostgresRepo:
             args: List[Any] = []
             i = 1
             if params.get("name"):
-                where.append(f"name ILIKE ${i}"); args.append(f"%{params['name']}%"); i += 1
+                where.append(f"name ILIKE ${i}")
+                args.append(f"%{params['name']}%")
+                i += 1
             if params.get("trade"):
-                where.append(f"trade = ${i}"); args.append(params["trade"]); i += 1
+                where.append(f"trade = ${i}")
+                args.append(params["trade"])
+                i += 1
             if params.get("license"):
-                where.append(f"license_number ILIKE ${i}"); args.append(f"%{params['license']}%"); i += 1
+                where.append(f"license_number ILIKE ${i}")
+                args.append(f"%{params['license']}%")
+                i += 1
             if params.get("city"):
-                where.append(f"city ILIKE ${i}"); args.append(f"%{params['city']}%"); i += 1
+                where.append(f"city ILIKE ${i}")
+                args.append(f"%{params['city']}%")
+                i += 1
             page = max(1, int(params.get("page", 1)))
             limit = max(1, min(100, int(params.get("limit", 25))))
             offset = (page - 1) * limit

@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 """Contractor + market endpoints (5–7)."""
-from typing import Optional
+from typing import Optional  # noqa: E402
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status  # noqa: E402
 
-from permy.db.repo import Repo, get_repo
-from permy.middleware.auth import ApiKeyContext, get_api_key_context
-from permy.models.schemas import (
-    ContractorActivity, ContractorsSearchResponse, MarketScore,
+from permy.db.repo import Repo, get_repo  # noqa: E402
+from permy.middleware.auth import ApiKeyContext, get_api_key_context  # noqa: E402
+from permy.models.schemas import (  # noqa: E402
+    ContractorActivity,
+    ContractorsSearchResponse,
+    MarketScore,
 )
 
 router = APIRouter(prefix="/v1", tags=["contractors & markets"])
@@ -30,7 +32,6 @@ def search_contractors(
         name=name, license=license, city=city, trade=trade, page=page, limit=limit,
     ).items() if v is not None}
     contractors, total = repo.search_contractors(params)
-    from permy.models.schemas import Contractor
     return ContractorsSearchResponse(page=page, limit=limit, total=total, contractors=contractors)
 
 

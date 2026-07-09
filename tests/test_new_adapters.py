@@ -7,11 +7,9 @@ CI) into the canonical Permit shape. The cross-city test at the bottom proves
 ALL 7 cities — Socrata + ArcGIS — normalize into the same Permit schema, which
 is Permy's core differentiator.
 """
-import json
-from datetime import date
-from pathlib import Path
-
-import pytest
+import json  # noqa: E402
+from datetime import date  # noqa: E402
+from pathlib import Path  # noqa: E402
 
 FX = Path(__file__).parent / "fixtures"
 
@@ -292,14 +290,14 @@ def test_all_seven_cities_produce_valid_permits():
     """The core differentiator: Socrata + ArcGIS cities all normalize into one
     canonical Permit schema. This is what makes Permy cross-city searchable."""
     from permy.adapters.austin import AustinAdapter
-    from permy.adapters.nyc import NYCAdapter
     from permy.adapters.chicago import ChicagoAdapter
-    from permy.adapters.sf import SFAdapter
-    from permy.adapters.seattle import SeattleAdapter
+    from permy.adapters.fortworth import FortWorthAdapter
     from permy.adapters.la import LAAdapter
     from permy.adapters.miami import MiamiAdapter
+    from permy.adapters.nyc import NYCAdapter
     from permy.adapters.orlando import OrlandoAdapter
-    from permy.adapters.fortworth import FortWorthAdapter
+    from permy.adapters.seattle import SeattleAdapter
+    from permy.adapters.sf import SFAdapter
 
     cases = [
         (AustinAdapter(), "austin", False),
@@ -335,16 +333,16 @@ def test_all_seven_cities_produce_valid_permits():
 
 
 def test_seven_cities_registered_in_adapters():
-    from permy.adapters.base import ADAPTERS
     # import all city modules so they register
     import permy.adapters.austin  # noqa: F401
-    import permy.adapters.nyc  # noqa: F401
     import permy.adapters.chicago  # noqa: F401
-    import permy.adapters.sf  # noqa: F401
-    import permy.adapters.seattle  # noqa: F401
+    import permy.adapters.fortworth  # noqa: F401
     import permy.adapters.la  # noqa: F401
     import permy.adapters.miami  # noqa: F401
+    import permy.adapters.nyc  # noqa: F401
     import permy.adapters.orlando  # noqa: F401
-    import permy.adapters.fortworth  # noqa: F401
+    import permy.adapters.seattle  # noqa: F401
+    import permy.adapters.sf  # noqa: F401
+    from permy.adapters.base import ADAPTERS
     expected = {"austin-tx", "nyc-ny", "chicago-il", "sf-ca", "seattle-wa", "la-ca", "miami-fl", "orlando-fl", "fortworth-tx"}
     assert expected <= set(ADAPTERS.keys()), f"missing: {expected - set(ADAPTERS.keys())}"

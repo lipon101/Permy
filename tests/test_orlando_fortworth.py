@@ -5,9 +5,8 @@ from __future__ import annotations
 Both fixtures are REAL live data captured 2026-07-10 — Orlando permits issued
 that same day, Fort Worth building permits filed that day. No mocks.
 """
-import json
-from datetime import date
-from pathlib import Path
+import json  # noqa: E402
+from pathlib import Path  # noqa: E402
 
 FX = Path(__file__).parent / "fixtures"
 

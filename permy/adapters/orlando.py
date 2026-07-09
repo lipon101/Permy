@@ -36,17 +36,27 @@ Honest gaps:
   * No ZIP code in the feed (Orlando uses neighborhood, not ZIP) — we leave zip null.
   * Owner published (parcel_owner_name / property_owner_name) — better than most.
 """
-from datetime import date
-from typing import Any, Dict, List, Optional
-from urllib.parse import urlencode
+from datetime import date  # noqa: E402
+from typing import Any, Dict, List, Optional  # noqa: E402
+from urllib.parse import urlencode  # noqa: E402
 
-import httpx
+import httpx  # noqa: E402
 
-from permy.adapters.base import (
-    Address, ContractorRef, Enrichment, OwnerRef, Permit, PermitDates,
-    _date, _float, _int, _str, now_utc, register,
+from permy.adapters.base import (  # noqa: E402
+    Address,
+    ContractorRef,
+    Enrichment,
+    OwnerRef,
+    Permit,
+    PermitDates,
+    _date,
+    _float,
+    _int,
+    _str,
+    now_utc,
+    register,
 )
-from permy.core.config import settings
+from permy.core.config import settings  # noqa: E402
 
 RESOURCE_ID = "ryhf-m453"
 BASE_URL = f"https://data.cityoforlando.net/resource/{RESOURCE_ID}.json"

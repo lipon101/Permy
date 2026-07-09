@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 """Coverage, health, usage (12–13)."""
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timezone  # noqa: E402
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends  # noqa: E402
 
-from permy.db.repo import Repo, get_repo
-from permy.middleware.auth import ApiKeyContext, get_api_key_context
-from permy.middleware.ratelimit import usage_today
-from permy.models.schemas import CoverageResponse, HealthResponse, UsageResponse
+from permy.db.repo import Repo, get_repo  # noqa: E402
+from permy.middleware.auth import ApiKeyContext, get_api_key_context  # noqa: E402
+from permy.middleware.ratelimit import usage_today  # noqa: E402
+from permy.models.schemas import CoverageResponse, HealthResponse, UsageResponse  # noqa: E402
 
 router = APIRouter(prefix="/v1", tags=["meta"])
 
