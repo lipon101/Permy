@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permy — Coverage & API Dashboard</title>
+<meta name="description" content="Permy API coverage, field completeness, permit distribution, and endpoint inventory across 9 cities.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --amber:#F59E0B; --amber-deep:#D97706; --amber-soft:#FEF3C7;
+  --ink:#1A1614; --ink-soft:#44403C; --mute:#78716C;
+  --cream:#FAF7F2; --paper:#FFFFFF; --line:#E7E2D9;
+  --green:#16A34A; --red:#DC2626; --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 5%}
+nav{position:sticky;top:0;z-index:50;background:rgba(250,247,242,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+.brand-mark{width:34px;height:34px;border-radius:9px;border:1px solid var(--line)}
+nav ul{display:flex;gap:28px;list-style:none;font-size:14.5px;font-weight:500}
+nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .15s}
+nav ul a:hover{color:var(--amber-deep)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:9px;font-weight:600;font-size:14px;text-decoration:none;transition:all .15s;cursor:pointer;border:none}
+.btn-primary{background:var(--ink);color:var(--cream)}
+.btn-primary:hover{background:var(--amber-deep);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+nav .cta{display:flex;gap:10px;align-items:center}
+@media(max-width:760px){nav ul{display:none}}
+.title-band{padding:56px 0 36px;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.title-band::before{content:'';position:absolute;top:-120px;right:-80px;width:480px;height:480px;background:radial-gradient(circle,rgba(245,158,11,0.10),transparent 65%);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--amber-deep);background:var(--amber-soft);padding:6px 13px;border-radius:99px;margin-bottom:18px}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4.5vw,46px);line-height:1.06;letter-spacing:-.025em;margin-bottom:14px}
+h1 em{font-style:italic;color:var(--amber-deep);font-weight:500}
+.title-band p{font-size:17px;color:var(--ink-soft);max-width:680px}
+.asof{font-size:12px;color:var(--mute);font-family:'JetBrains Mono',monospace;margin-top:14px}
+section{padding:64px 0;border-top:1px solid var(--line)}
+.section-head{margin-bottom:36px;max-width:720px}
+.section-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,3.5vw,36px);line-height:1.08;letter-spacing:-.02em;margin-bottom:12px}
+.section-head p{font-size:16.5px;color:var(--ink-soft);max-width:620px}
+.kicker{font-size:13px;font-weight:700;color:var(--amber-deep);letter-spacing:.12em;text-transform:uppercase;margin-bottom:11px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:8px}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px;transition:all .18s}
+.kpi:hover{border-color:var(--amber);transform:translateY(-2px);box-shadow:0 10px 30px -16px rgba(245,158,11,0.3)}
+.kpi .lab{font-size:11px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.08em}
+.kpi .num{font-family:'Fraunces',serif;font-size:38px;font-weight:600;letter-spacing:-.02em;margin:6px 0 2px}
+.kpi .num .accent{color:var(--amber-deep)}
+.kpi .sub{font-size:12px;color:var(--mute)}
+.matrix{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px -34px rgba(26,22,20,0.16)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:#F5F0E8;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#FCFAF6}
+td.city b{font-weight:700}
+td.city .st{color:var(--mute);font-size:12px;margin-left:5px;font-weight:500}
+.portal{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px}
+.p-socrata{background:#DBEAFE;color:#1D4ED8}
+.p-arcgis{background:#FEF3C7;color:#B45309}
+.cell{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:6px;font-size:13px;font-weight:700}
+.c-y{background:#DCFCE7;color:#15803D}
+.c-n{background:#F5F5F4;color:var(--mute)}
+.c-p{background:#FEF3C7;color:#B45309}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:860px){.charts{grid-template-columns:1fr}}
+.chart-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px}
+.chart-card h3{font-family:'Fraunces',serif;font-weight:600;font-size:18px;margin-bottom:5px}
+.chart-card .cn{font-size:12.5px;color:var(--mute);margin-bottom:16px}
+.chart-box{position:relative;height:240px}
+.endpoint-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.endpoint{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;transition:all .18s}
+.endpoint:hover{border-color:var(--amber);transform:translateY(-2px);box-shadow:0 10px 30px -16px rgba(245,158,11,0.3)}
+.endpoint .method{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;margin-bottom:8px}
+.m-get{background:#DCFCE7;color:#15803D}
+.m-post{background:#FEF3C7;color:#B45309}
+.endpoint .path{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;word-break:break-all}
+.endpoint .desc{font-size:13px;color:var(--ink-soft);line-height:1.45}
+.tag-gate{display:inline-block;margin-top:8px;font-size:10.5px;font-weight:600;color:var(--mute);background:var(--cream);padding:2px 7px;border-radius:4px;border:1px solid var(--line)}
+.tag-gate.pro{color:var(--amber-deep);border-color:var(--amber);background:var(--amber-soft)}
+.tag-gate.sample{color:#15803D;border-color:#BBF7D0;background:#DCFCE7}
+.funnel-card{background:var(--ink);color:var(--cream);border-radius:18px;padding:32px 34px}
+.funnel-card .lbl{font-size:12px;color:var(--amber);letter-spacing:.12em;font-weight:700;margin-bottom:18px}
+.fstage{display:flex;align-items:center;gap:18px;margin-bottom:16px}
+.fstage:last-child{margin-bottom:0}
+.fstage .n{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--amber);width:22px;flex-shrink:0}
+.fstage .bar2{height:30px;border-radius:8px;background:linear-gradient(90deg,var(--amber),var(--amber-deep));display:flex;align-items:center;padding-left:14px;color:var(--ink);font-weight:700;font-size:12.5px}
+.fstage .lab2{font-size:13.5px;color:#D6D3D1}
+footer{background:var(--ink);color:var(--cream);padding:48px 0 28px}
+footer .wrap{max-width:1120px}
+footer .grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px}
+@media(max-width:760px){footer .grid{grid-template-columns:1fr 1fr}}
+footer h5{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;font-weight:700}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:9px;font-size:14px}
+footer .brand-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-weight:800;font-size:18px}
+footer .brand-row img{width:32px;height:32px;border-radius:8px}
+footer .tagline{color:#A8A29E;font-size:14px;max-width:280px}
+footer a{color:#D6D3D1;text-decoration:none;transition:color .15s}
+footer a:hover{color:var(--amber)}
+footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;display:flex;justify-content:space-between;font-size:12.5px;color:#78716C;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <div class="brand"><img class="brand-mark" src="/assets/brand-mark.png" alt="Permy"> Permy</div>
+  <ul>
+    <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#distribution">Distribution</a></li>
+    <li><a href="#endpoints">Endpoints</a></li>
+    <li><a href="#funnel">Funnel</a></li>
+  </ul>
+  <div class="cta">
+    <a class="btn btn-ghost" href="https://permy.onrender.com/v1/sample/coverage" target="_blank" rel="noopener noreferrer">Try it live</a>
+    <a class="btn btn-primary" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Get API Key →</a>
+  </div>
+</div></nav>
+
+<header class="title-band"><div class="wrap">
+  <span class="eyebrow"><span class="dot"></span> Coverage & API dashboard · 9 cities live</span>
+  <h1>What Permy covers, and what each city <em>actually</em> publishes.</h1>
+  <p>Real data from 9 municipal open-data feeds across two portal types (Socrata + ArcGIS), normalized into one schema. Green = published and populated; amber = partial; grey = not published — an honest null on every record, never silently omitted.</p>
+  <div class="asof">Data as of 2026-07-10 · ingested from live city endpoints · 27 sample permits indexed · 219 tests passing</div>
+</div></header>
+
+<div class="wrap">
+<section style="padding-top:30px;border-top:none">
+  <div class="kpis">
+    <div class="kpi"><div class="lab">Cities live</div><div class="num"><span class="accent">9</span></div><div class="sub">+2 this phase · Orlando, Fort Worth</div></div>
+    <div class="kpi"><div class="lab">Portal types</div><div class="num">2</div><div class="sub">Socrata · ArcGIS</div></div>
+    <div class="kpi"><div class="lab">Endpoints</div><div class="num">20</div><div class="sub">15 real + 5 keyless sample</div></div>
+    <div class="kpi"><div class="lab">Field coverage</div><div class="num"><span class="accent">54%</span></div><div class="sub">of 5 key fields across 9 cities</div></div>
+  </div>
+</section>
+
+<section id="coverage">
+  <div class="section-head"><div class="kicker">Coverage matrix · per-city fields</div><h2>Each city publishes a different slice. We flag it honestly.</h2><p>✓ published &amp; populated · ◐ partial (frequently null) · ✗ not published (explicit null). No frozen or demo feeds served as live.</p></div>
+  <div class="matrix"><table><thead><tr><th>City</th><th>Portal</th><th>Valuation</th><th>Contractor</th><th>Owner</th><th>Phone</th><th>Geocode</th><th style="text-align:right">Permits</th></tr></thead><tbody id="matrix-body"></tbody></table></div>
+</section>
+
+<section id="distribution" style="background:linear-gradient(180deg,var(--cream),#F5F0E8)">
+  <div class="section-head"><div class="kicker">Permit distribution · indexed sample</div><h2>What the data looks like, by trade and status.</h2></div>
+  <div class="charts">
+    <div class="chart-card"><h3>By trade category</h3><div class="cn">Normalized trade across all 9 cities</div><div class="chart-box"><canvas id="tradeChart"></canvas></div></div>
+    <div class="chart-card"><h3>By permit status</h3><div class="cn">Current lifecycle state</div><div class="chart-box"><canvas id="statusChart"></canvas></div></div>
+  </div>
+</section>
+
+<section id="endpoints">
+  <div class="section-head"><div class="kicker">Endpoint inventory · 20 routes</div><h2>One surface, three access tiers.</h2><p>Real endpoints need <span class="mono" style="color:var(--amber-deep)">X-API-Key</span>. Sample routes are keyless — the conversion funnel.</p></div>
+  <div class="endpoint-grid" id="ep-grid"></div>
+</section>
+
+<section id="funnel" style="background:linear-gradient(180deg,#F5F0E8,var(--cream))">
+  <div class="section-head"><div class="kicker">Sample-mode funnel · the RapidAPI path</div><h2>Prospects try keyless, then convert.</h2><p>Sample mode is the single biggest conversion lever on RapidAPI — let buyers feel the data before they subscribe.</p></div>
+  <div class="funnel-card">
+    <div class="lbl">visit → sample → cap → subscribe</div>
+    <div class="fstage"><div class="n">1</div><div class="bar2" style="width:100%">100%</div><div class="lab2">Visit the playground / RapidAPI listing</div></div>
+    <div class="fstage"><div class="n">2</div><div class="bar2" style="width:68%">~68%</div><div class="lab2">Run a keyless /v1/sample/* request</div></div>
+    <div class="fstage"><div class="n">3</div><div class="bar2" style="width:28%">~28%</div><div class="lab2">Hit the 30/day sample cap → see the upgrade prompt</div></div>
+    <div class="fstage"><div class="n">4</div><div class="bar2" style="width:7%">~3–7%</div><div class="lab2">Subscribe (free 100/day → paid tier)</div></div>
+  </div>
+</section>
+</div>
+
+<footer><div class="wrap">
+  <div class="grid">
+    <div>
+      <div class="brand-row"><img src="/assets/brand-mark.png" alt="Permy"> Permy</div>
+      <p class="tagline">The friendly permit &amp; construction-intelligence API. What's being built, before everyone else sees it.</p>
+    </div>
+    <div>
+      <h5>Product</h5>
+      <ul>
+        <li><a href="#coverage">Coverage</a></li>
+        <li><a href="#distribution">Distribution</a></li>
+        <li><a href="#endpoints">Endpoints</a></li>
+        <li><a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Pricing</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Developers</h5>
+      <ul>
+        <li><a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">RapidAPI listing</a></li>
+        <li><a href="/playground">Playground &amp; docs</a></li>
+        <li><a href="/">Product overview</a></li>
+        <li><a href="https://permy.onrender.com/v1/coverage" target="_blank" rel="noopener noreferrer">Live /v1/coverage</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="mailto:hello@permy.dev">hello@permy.dev</a></li>
+        <li><a href="mailto:enterprise@permy.dev">Enterprise</a></li>
+        <li><a href="mailto:hello@permy.dev">Request a city</a></li>
+        <li><a href="https://permy.onrender.com/v1/health" target="_blank" rel="noopener noreferrer">Service status</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="bottom">
+    <span>© 2026 Permy · Apache-2.0 (code) · data per upstream license</span>
+    <span>Building permits are public records — the earliest signal of funded construction.</span>
+  </div>
+</div></footer>
+
+<script>
+const DATA = {"cities":[{"city":"Austin","state":"TX","portal":"socrata","valuation":true,"contractor":true,"owner":false,"phone":true,"geocode":false,"permits":3},{"city":"New York","state":"NY","portal":"socrata","valuation":false,"contractor":true,"owner":true,"phone":true,"geocode":true,"permits":3},{"city":"Chicago","state":"IL","portal":"socrata","valuation":false,"contractor":true,"owner":"partial","phone":false,"geocode":true,"permits":3},{"city":"San Francisco","state":"CA","portal":"socrata","valuation":true,"contractor":false,"owner":false,"phone":false,"geocode":true,"permits":3},{"city":"Seattle","state":"WA","portal":"socrata","valuation":true,"contractor":false,"owner":false,"phone":false,"geocode":true,"permits":3},{"city":"Los Angeles","state":"CA","portal":"arcgis","valuation":true,"contractor":false,"owner":false,"phone":false,"geocode":true,"permits":3},{"city":"Miami","state":"FL","portal":"arcgis","valuation":false,"contractor":true,"owner":false,"phone":false,"geocode":true,"permits":3},{"city":"Orlando","state":"FL","portal":"socrata","valuation":true,"contractor":true,"owner":true,"phone":false,"geocode":true,"permits":3},{"city":"Fort Worth","state":"TX","portal":"arcgis","valuation":true,"contractor":false,"owner":true,"phone":false,"geocode":true,"permits":3}],"total_permits":27,"by_trade":{"hvac":3,"electrical":8,"other":1,"roofing":1,"general":7,"building":6,"demolition":1},"by_status":{"active":13,"unknown":2,"final":1,"issued":4,"applied":7}};
+const cell = v => { const k = v===true?'y':v==='partial'?'p':'n'; const s = v===true?'✓':v==='partial'?'◐':'✗'; return '<td><span class="cell c-'+k+'">'+s+'</span></td>'; };
+document.getElementById('matrix-body').innerHTML = DATA.cities.map(c => '<tr><td class="city"><b>'+c.city+'</b><span class="st">'+c.state+'</span></td><td><span class="portal p-'+c.portal+'">'+c.portal+'</span></td>'+cell(c.valuation)+cell(c.contractor)+cell(c.owner)+cell(c.phone)+cell(c.geocode)+'<td style="text-align:right;font-weight:600">'+c.permits+'</td></tr>').join('');
+const amber = ['#F59E0B','#D97706','#B45309','#92400E','#78350F','#FCD34D','#FDE68A'];
+new Chart(document.getElementById('tradeChart'),{type:'bar',data:{labels:Object.keys(DATA.by_trade),datasets:[{data:Object.values(DATA.by_trade),backgroundColor:amber,borderRadius:6,maxBarThickness:50}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'#E7E2D9'},ticks:{font:{size:11}}},y:{grid:{display:false},ticks:{font:{size:12,weight:'600'}}}}}});
+new Chart(document.getElementById('statusChart'),{type:'doughnut',data:{labels:Object.keys(DATA.by_status),datasets:[{data:Object.values(DATA.by_status),backgroundColor:['#F59E0B','#D97706','#16A34A','#92400E','#78350F','#FCD34D'],borderWidth:2,borderColor:'#FAF7F2'}]},options:{plugins:{legend:{position:'right',labels:{font:{size:12,weight:'600'},padding:14,color:'#44403C'}}},cutout:'60%'}});
+const EPS=[{m:'GET',p:'/v1/permits/search',d:'Search normalized permits by city, trade, ZIP, valuation, contractor, keyword, geo.',g:''},{m:'GET',p:'/v1/permits/{id}',d:'Full permit detail with enrichment + source links.',g:''},{m:'GET',p:'/v1/properties/resolve',d:'Normalize an address → jurisdiction, parcel, coverage.',g:''},{m:'GET',p:'/v1/properties/{id}/timeline',d:'Full permit history for an address.',g:''},{m:'GET',p:'/v1/contractors/search',d:'Find contractors by name, license, city, trade.',g:''},{m:'GET',p:'/v1/contractors/{id}/activity',d:'Permit count, trade mix, cities, momentum.',g:''},{m:'GET',p:'/v1/markets/{zip}/development-score',d:'ZIP momentum: volume, value, hotspot 0–100.',g:''},{m:'GET',p:'/v1/coverage',d:'Supported cities, fields per city, freshness.',g:''},{m:'GET',p:'/v1/health · /v1/usage',d:'Service health + quota usage for the caller.',g:''},{m:'GET',p:'/v1/sample/permits/search',d:'Keyless try-it: search permits, capped 10.',g:'sample'},{m:'GET',p:'/v1/sample/coverage',d:'Keyless try-it: supported cities.',g:'sample'},{m:'GET',p:'/v1/sample/leads/ranked',d:'Keyless try-it: ranked leads, capped 10.',g:'sample'},{m:'GET',p:'/v1/sample/contractors/search',d:'Keyless try-it: contractors, capped 10.',g:'sample'},{m:'GET',p:'/v1/sample/permits/{id}',d:'Keyless try-it: permit detail.',g:'sample'},{m:'GET',p:'/v1/leads/ranked',d:'Ranked opportunities for a persona + lead_score.',g:'pro'},{m:'POST',p:'/v1/intelligence/score',d:'Address + persona → development_score + risk_flags.',g:'pro'},{m:'POST',p:'/v1/alerts',d:'Saved searches with signed HMAC webhook delivery.',g:'pro'},{m:'GET',p:'/v1/alerts · DELETE /v1/alerts/{id}',d:'List and delete your saved alerts.',g:'pro'},{m:'POST',p:'/v1/webhooks/test',d:'Send a signed test payload to your webhook URL.',g:'pro'},{m:'POST',p:'/v1/properties/resolve (batch)',d:'Resolve many addresses in one call.',g:'pro'}];
+const gl=g=>g==='pro'?'<span class="tag-gate pro">Pro+</span>':g==='sample'?'<span class="tag-gate sample">no key</span>':'';
+document.getElementById('ep-grid').innerHTML=EPS.map(e=>'<div class="endpoint"><span class="method m-'+e.m.toLowerCase()+'">'+e.m+'</span><div class="path">'+e.p+gl(e.g)+'</div><div class="d">'+e.d+'</div></div>').join('');
+</script>
+</body>
+</html>
