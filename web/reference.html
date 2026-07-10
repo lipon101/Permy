@@ -76,6 +76,16 @@ nav .cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
 /* Scalar explorer wrapper — sits ABOVE the footer */
 .scalar-section{max-width:1280px;margin:0 auto;padding:0 5% 56px}
 .scalar-section #scalar{min-height:72vh}
+/* Override Scalar's internal top padding/gap so the explorer sits close to the auth note */
+.scalar-section .scalar-app{padding-top:0!important;margin-top:0!important}
+.scalar-section [data-v-app]{margin-top:0!important;padding-top:0!important}
+.scalar-section .references-rendered{padding-top:0!important;margin-top:0!important}
+.scalar-section .narrow-references-container{padding-top:0!important;margin-top:8px!important}
+.scalar-section .section-container{padding-top:0!important;margin-top:0!important}
+.scalar-section .introduction-section{padding-top:8px!important}
+/* tighten the hero section gap */
+.ref-head{padding:32px 0 16px}
+.note{margin-bottom:8px!important}
 footer{background:var(--ink);color:var(--cream);padding:40px 0 30px;border-top:1px solid var(--line)}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
 footer .brand-row{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px}
