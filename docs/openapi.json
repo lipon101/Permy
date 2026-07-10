@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Permy \u2014 Building Permit & Construction Intelligence API",
-    "description": "Normalized permits, contractor activity, property timelines, and ZIP development signals \u2014 ranked, sourced, and ready for your app. Give Permy an address, city, ZIP, contractor, or trade and get back clean, machine-readable municipal intelligence with source links and confidence scores.",
+    "title": "Permy — Building Permit & Construction Intelligence API",
+    "description": "Building permit & construction intelligence: normalized permits, contractor activity, property timelines, and ZIP development signals — ranked, sourced, machine-readable.",
     "termsOfService": "https://docs.permy.dev/terms",
     "contact": {
       "name": "Permy",
@@ -258,10 +258,10 @@
                   "type": "null"
                 }
               ],
-              "description": "west,south,east,north \u2014 geo bounding box",
+              "description": "west,south,east,north — geo bounding box",
               "title": "Bbox"
             },
-            "description": "west,south,east,north \u2014 geo bounding box"
+            "description": "west,south,east,north — geo bounding box"
           },
           {
             "name": "sort",
@@ -454,7 +454,7 @@
         "tags": [
           "permits"
         ],
-        "summary": "Normalize an address \u2192 jurisdiction, city/county, parcel hints, coverage status",
+        "summary": "Normalize an address → jurisdiction, city/county, parcel hints, coverage status",
         "operationId": "resolve_property_v1_properties_resolve_get",
         "parameters": [
           {
@@ -850,7 +850,7 @@
         "tags": [
           "contractors & markets"
         ],
-        "summary": "ZIP-level development momentum: volume, value, trade mix, MoM delta, hotspot 0\u2013100",
+        "summary": "ZIP-level development momentum: volume, value, trade mix, MoM delta, hotspot 0–100",
         "operationId": "market_score_v1_markets__zip__development_score_get",
         "parameters": [
           {
@@ -1114,7 +1114,7 @@
         "tags": [
           "leads & intelligence"
         ],
-        "summary": "Address or permit_id + persona \u2192 development_score, risk_flags, market narrative, sources",
+        "summary": "Address or permit_id + persona → development_score, risk_flags, market narrative, sources",
         "operationId": "intelligence_score_v1_intelligence_score_post",
         "parameters": [
           {
@@ -1503,7 +1503,7 @@
         "tags": [
           "sample"
         ],
-        "summary": "[Sample, no key] Search permits \u2014 capped at 10 records",
+        "summary": "[Sample, no key] Search permits — capped at 10 records",
         "operationId": "sample_search_permits_v1_sample_permits_search_get",
         "parameters": [
           {
@@ -1756,7 +1756,7 @@
         "tags": [
           "sample"
         ],
-        "summary": "[Sample, no key] Search contractors \u2014 capped at 10 records",
+        "summary": "[Sample, no key] Search contractors — capped at 10 records",
         "operationId": "sample_search_contractors_v1_sample_contractors_search_get",
         "parameters": [
           {
@@ -1848,7 +1848,7 @@
         "tags": [
           "sample"
         ],
-        "summary": "[Sample, no key] Ranked leads \u2014 capped at 10 records",
+        "summary": "[Sample, no key] Ranked leads — capped at 10 records",
         "operationId": "sample_rank_leads_v1_sample_leads_ranked_get",
         "parameters": [
           {
@@ -2474,7 +2474,7 @@
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Momentum",
-            "description": "Recent activity intensity 0\u20131",
+            "description": "Recent activity intensity 0–1",
             "default": 0.0
           },
           "first_seen_at": {
@@ -2681,7 +2681,7 @@
             },
             "type": "object",
             "title": "Fields",
-            "description": "true / false / 'partial' \u2014 honestly notes where a city publishes a field only sometimes (e.g. owner via contact list)."
+            "description": "true / false / 'partial' — honestly notes where a city publishes a field only sometimes (e.g. owner via contact list)."
           }
         },
         "additionalProperties": false,
@@ -2733,7 +2733,7 @@
               }
             ],
             "title": "Lead Score",
-            "description": "0\u2013100 lead score"
+            "description": "0–100 lead score"
           },
           "recommended_action": {
             "anyOf": [
@@ -3088,7 +3088,7 @@
             "maximum": 100.0,
             "minimum": 0.0,
             "title": "Hotspot Score",
-            "description": "ZIP development momentum 0\u2013100"
+            "description": "ZIP development momentum 0–100"
           },
           "narrative": {
             "anyOf": [
@@ -4156,7 +4156,7 @@
     },
     {
       "name": "sample",
-      "description": "No-key docs playground \u2014 capped, for trying the API before signup."
+      "description": "No-key docs playground — capped, for trying the API before signup."
     },
     {
       "name": "meta",

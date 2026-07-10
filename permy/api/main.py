@@ -138,10 +138,8 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="Permy — Building Permit & Construction Intelligence API",
         description=(
-            "Normalized permits, contractor activity, property timelines, and ZIP development "
-            "signals — ranked, sourced, and ready for your app. Give Permy an address, city, ZIP, "
-            "contractor, or trade and get back clean, machine-readable municipal intelligence with "
-            "source links and confidence scores."
+            "Building permit & construction intelligence: normalized permits, contractor activity, "
+            "property timelines, and ZIP development signals — ranked, sourced, machine-readable."
         ),
         version=APP_VERSION,
         contact={"name": "Permy", "url": "https://permy.dev", "email": "hi@permy.dev"},

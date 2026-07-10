@@ -82,10 +82,30 @@ nav .cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
 .scalar-section .references-rendered{padding-top:0!important;margin-top:0!important}
 .scalar-section .narrow-references-container{padding-top:0!important;margin-top:8px!important}
 .scalar-section .section-container{padding-top:0!important;margin-top:0!important}
-.scalar-section .introduction-section{padding-top:8px!important}
-/* tighten the hero section gap */
-.ref-head{padding:32px 0 16px}
-.note{margin-bottom:8px!important}
+/* --- reference tightening: hero + auth + Scalar explorer sit flush, no gaps --- */
+/* shrink hero so it reads as a compact label, not a competing page section */
+.ref-head{padding:24px 0 10px}
+.ref-head .eyebrow{margin-bottom:10px}
+.ref-head h1{font-size:clamp(24px,3.2vw,32px);margin-bottom:8px}
+.ref-head p{font-size:14.5px;margin-bottom:12px}
+.ref-head .row{margin-bottom:0}
+/* auth note hugging the explorer */
+.note{margin-bottom:6px!important;font-size:12.5px;padding:10px 16px}
+/* kill every leading gap Scalar injects between the auth note and the explorer */
+.scalar-section{max-width:1280px;margin:0 auto;padding:0 5% 56px}
+.scalar-section #scalar{min-height:72vh}
+.scalar-section .scalar-app,
+.scalar-section [data-v-app],
+.scalar-section .references-rendered,
+.scalar-section .narrow-references-container,
+.scalar-section .section-container{padding-top:0!important;margin-top:0!important}
+/* Scalar's own Introduction card starts immediately */
+.scalar-section .introduction-section{padding-top:0!important;margin-top:0!important}
+/* collapse any inner spacer Scalar places above the first heading */
+.scalar-section .introduction-section .section-container,
+.scalar-section .narrow-references-container > *{margin-top:0!important}
+/* hide the duplicate long title block Scalar prints inside Introduction, keep the short description */
+.scalar-section .introduction-section .heading{margin-top:0!important}
 footer{background:var(--ink);color:var(--cream);padding:40px 0 30px;border-top:1px solid var(--line)}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
 footer .brand-row{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px}
@@ -156,8 +176,7 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
 <header class="ref-head">
   <div class="wrap">
     <span class="eyebrow"><span class="dot"></span> OpenAPI 3.1 · live from the running API</span>
-    <h1>The full API <em>reference.</em></h1>
-    <p>Every endpoint, parameter, and schema — rendered live from <code>permy.onrender.com/openapi.json</code>. Try any endpoint with your RapidAPI key, inspect responses, download the spec.</p>
+    <h1>API <em>reference.</em></h1>
     <div class="row">
       <span class="live-pill"><span class="d"></span> 20 endpoints · 29 schemas · live</span>
       <a class="btn btn-ghost" href="https://permy.onrender.com/openapi.json" target="_blank" rel="noopener noreferrer">View raw spec ↗</a>
@@ -169,7 +188,7 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
 <div class="wrap" style="padding-top:0;padding-bottom:0">
   <div class="note">
     <span class="ico">🔑</span>
-    <span><b>Auth.</b> Set the server to <code>https://permy.p.rapidapi.com</code> and send <code>X-RapidAPI-Key</code> + <code>X-RapidAPI-Host: permy.p.rapidapi.com</code>. <code>/v1/sample/*</code> needs no key. <a href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get a key →</a></span>
+    <span><b>Auth.</b> Server <code>https://permy.p.rapidapi.com</code> · headers <code>X-RapidAPI-Key</code> + <code>X-RapidAPI-Host: permy.p.rapidapi.com</code>. <code>/v1/sample/*</code> is keyless. <a href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get a key →</a></span>
   </div>
 </div>
 
