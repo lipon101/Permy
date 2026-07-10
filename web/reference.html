@@ -73,15 +73,6 @@ nav .cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
 .note .ico{font-size:17px;flex-shrink:0}
 .note code{font-family:'JetBrains Mono',monospace;background:#fff;color:#92400E;padding:1px 5px;border-radius:4px;font-size:.88em}
 .note a{color:#92400E;font-weight:600}
-/* Scalar explorer wrapper — sits ABOVE the footer */
-.scalar-section{max-width:1280px;margin:0 auto;padding:0 5% 56px}
-.scalar-section #scalar{min-height:72vh}
-/* Override Scalar's internal top padding/gap so the explorer sits close to the auth note */
-.scalar-section .scalar-app{padding-top:0!important;margin-top:0!important}
-.scalar-section [data-v-app]{margin-top:0!important;padding-top:0!important}
-.scalar-section .references-rendered{padding-top:0!important;margin-top:0!important}
-.scalar-section .narrow-references-container{padding-top:0!important;margin-top:8px!important}
-.scalar-section .section-container{padding-top:0!important;margin-top:0!important}
 /* --- reference tightening: hero + auth + Scalar explorer sit flush, no gaps --- */
 /* shrink hero so it reads as a compact label, not a competing page section */
 .ref-head{padding:24px 0 10px}
@@ -91,21 +82,24 @@ nav .cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
 .ref-head .row{margin-bottom:0}
 /* auth note hugging the explorer */
 .note{margin-bottom:6px!important;font-size:12.5px;padding:10px 16px}
-/* kill every leading gap Scalar injects between the auth note and the explorer */
+/* Scalar explorer wrapper — flush under the auth note, no top gap */
 .scalar-section{max-width:1280px;margin:0 auto;padding:0 5% 56px}
 .scalar-section #scalar{min-height:72vh}
-.scalar-section .scalar-app,
+/* zero the sticky-header CSS var Scalar uses to reserve top space */
+.scalar-section .scalar-app{--refs-header-height:0px;--scalar-custom-header-height:0px;padding-top:0!important;margin-top:0!important}
+/* kill every leading margin/padding Scalar injects above the Introduction */
 .scalar-section [data-v-app],
 .scalar-section .references-rendered,
 .scalar-section .narrow-references-container,
-.scalar-section .section-container{padding-top:0!important;margin-top:0!important}
-/* Scalar's own Introduction card starts immediately */
-.scalar-section .introduction-section{padding-top:0!important;margin-top:0!important}
-/* collapse any inner spacer Scalar places above the first heading */
-.scalar-section .introduction-section .section-container,
+.scalar-section .section-container,
+.scalar-section .introduction-section,
+.scalar-section .introduction-section .section-container{padding-top:0!important;margin-top:0!important}
+/* collapse the decorative flare + any inner spacer above the first heading */
+.scalar-section .section-flare{display:none!important}
 .scalar-section .narrow-references-container > *{margin-top:0!important}
-/* hide the duplicate long title block Scalar prints inside Introduction, keep the short description */
-.scalar-section .introduction-section .heading{margin-top:0!important}
+/* Introduction card: tighten internal top gap so it sits close to the auth note */
+.scalar-section .introduction-section{padding:0!important;margin-top:0!important;gap:0!important}
+.scalar-section .introduction-section .section-content{padding-top:8px!important}
 footer{background:var(--ink);color:var(--cream);padding:40px 0 30px;border-top:1px solid var(--line)}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
 footer .brand-row{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px}
