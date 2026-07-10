@@ -222,7 +222,7 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
     <div class="section-head">
       <div class="kicker">Quickstart · keyless · 30 seconds</div>
       <h2>Run this. Get real data. No key.</h2>
-      <p>These hit the live <code>/v1/sample/*</code> endpoints on <code>https://permy.onrender.com</code> — capped at 10 records and 30 requests/day per IP, but the data is real and current. Swap the URL for <code>https://permy.p.rapidapi.com</code> + your key for full access.</p>
+      <p>These hit the live <code>/v1/sample/*</code> endpoints on <code>https://permy.onrender.com</code> — capped at 10 records and 30 requests/day per IP, but the data is real and current. Swap the URL for <code>https://permy-building-permit-construction-intelligence-api.p.rapidapi.com</code> + your key for full access.</p>
     </div>
 
     <div class="code-card">
@@ -260,12 +260,12 @@ console.log(<span class="s">"total:"</span>, total);
 permits.forEach(p =&gt; console.log(p.address.full, p.trade_category, p.enrichment.lead_score));</pre>
 
 <pre class="code-pane" id="pane-leads"><span class="c"># Ranked leads (paid) — with your RapidAPI key</span>
-curl -G <span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked"</span> \
+curl -G <span class="s">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/leads/ranked"</span> \
   --data-urlencode <span class="s">"persona=roofer"</span> \
   --data-urlencode <span class="s">"city=Austin"</span> \
   --data-urlencode <span class="s">"limit=10"</span> \
   -H <span class="s">"X-RapidAPI-Key: YOUR_KEY"</span> \
-  -H <span class="s">"X-RapidAPI-Host: permy.p.rapidapi.com"</span>
+  -H <span class="s">"X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com"</span>
 
 <span class="c"># keyless preview of the same shape (no key):</span>
 curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</span> \
@@ -290,7 +290,7 @@ curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</spa
   <div class="wrap">
     <div class="note">
       <span class="ico">🔑</span>
-      <span><b>Authentication.</b> Keyless <code>/v1/sample/*</code> endpoints need no key — perfect for evaluation. For full endpoints (ranked leads, intelligence, alerts, signed webhooks), send your RapidAPI key as <code>X-RapidAPI-Key</code> with <code>X-RapidAPI-Host: permy.p.rapidapi.com</code> on every request. <a href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer" style="color:#92400E;font-weight:600">Request a key →</a></span>
+      <span><b>Authentication.</b> Keyless <code>/v1/sample/*</code> endpoints need no key — perfect for evaluation. For full endpoints (ranked leads, intelligence, alerts, signed webhooks), send your RapidAPI key as <code>X-RapidAPI-Key</code> with <code>X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com</code> on every request. <a href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer" style="color:#92400E;font-weight:600">Request a key →</a></span>
     </div>
   </div>
 </section>
@@ -313,12 +313,12 @@ curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</spa
       <div style="background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px">
         <div style="font-size:12px;font-weight:700;color:var(--amber-deep);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Step 2</div>
         <div style="font-weight:700;font-size:15px;margin-bottom:4px">Set two headers</div>
-        <div style="font-size:13px;color:var(--ink-soft);line-height:1.5"><code>X-RapidAPI-Key: YOUR_KEY</code> and <code>X-RapidAPI-Host: permy.p.rapidapi.com</code> on every paid request.</div>
+        <div style="font-size:13px;color:var(--ink-soft);line-height:1.5"><code>X-RapidAPI-Key: YOUR_KEY</code> and <code>X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com</code> on every paid request.</div>
       </div>
       <div style="background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px">
         <div style="font-size:12px;font-weight:700;color:var(--amber-deep);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Step 3</div>
         <div style="font-weight:700;font-size:15px;margin-bottom:4px">Call any paid endpoint</div>
-        <div style="font-size:13px;color:var(--ink-soft);line-height:1.5">Swap the sample URL for <code>https://permy.p.rapidapi.com</code> and hit any <span class="mono" style="color:var(--amber-deep)">/v1/</span> endpoint — ranked leads, intelligence, alerts.</div>
+        <div style="font-size:13px;color:var(--ink-soft);line-height:1.5">Swap the sample URL for <code>https://permy-building-permit-construction-intelligence-api.p.rapidapi.com</code> and hit any <span class="mono" style="color:var(--amber-deep)">/v1/</span> endpoint — ranked leads, intelligence, alerts.</div>
       </div>
     </div>
 
@@ -331,26 +331,26 @@ curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</spa
       </div>
       <div class="code-body">
 <pre class="code-pane active" id="pane-paid-curl"><span class="c"># Your first paid call — ranked roofing leads in Austin</span>
-curl -G <span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked"</span> \
+curl -G <span class="s">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/leads/ranked"</span> \
   --data-urlencode <span class="s">"persona=roofer"</span> \
   --data-urlencode <span class="s">"city=Austin"</span> \
   --data-urlencode <span class="s">"limit=10"</span> \
   -H <span class="s">"X-RapidAPI-Key: YOUR_KEY"</span> \
-  -H <span class="s">"X-RapidAPI-Host: permy.p.rapidapi.com"</span></pre>
+  -H <span class="s">"X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com"</span></pre>
 
 <pre class="code-pane" id="pane-paid-py"><span class="k">import</span> requests
 
-r = requests.get(<span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked"</span>,
+r = requests.get(<span class="s">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/leads/ranked"</span>,
   params={<span class="s">"persona"</span>: <span class="s">"roofer"</span>, <span class="s">"city"</span>: <span class="s">"Austin"</span>, <span class="s">"limit"</span>: <span class="n">10</span>},
-  headers={<span class="s">"X-RapidAPI-Key"</span>: <span class="s">"YOUR_KEY"</span>, <span class="s">"X-RapidAPI-Host"</span>: <span class="s">"permy.p.rapidapi.com"</span>})
+  headers={<span class="s">"X-RapidAPI-Key"</span>: <span class="s">"YOUR_KEY"</span>, <span class="s">"X-RapidAPI-Host"</span>: <span class="s">"permy-building-permit-construction-intelligence-api.p.rapidapi.com"</span>})
 
 <span class="k">for</span> l <span class="k">in</span> r.json()[<span class="s">"leads"</span>]:
     print(l[<span class="s">"lead_score"</span>], l[<span class="s">"recommended_action"</span>], l[<span class="s">"reason"</span>])</pre>
 
-<pre class="code-pane" id="pane-paid-js"><span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked?persona=roofer&amp;city=Austin&amp;limit=10"</span>, {
+<pre class="code-pane" id="pane-paid-js"><span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/leads/ranked?persona=roofer&amp;city=Austin&amp;limit=10"</span>, {
   headers: {
     <span class="s">"X-RapidAPI-Key"</span>: <span class="s">"YOUR_KEY"</span>,
-    <span class="s">"X-RapidAPI-Host"</span>: <span class="s">"permy.p.rapidapi.com"</span>
+    <span class="s">"X-RapidAPI-Host"</span>: <span class="s">"permy-building-permit-construction-intelligence-api.p.rapidapi.com"</span>
   }
 });
 <span class="k">const</span> { leads } = <span class="k">await</span> res.json();

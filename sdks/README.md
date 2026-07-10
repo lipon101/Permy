@@ -3,7 +3,7 @@
 Official SDKs for the **Permy — Building Permit & Construction Intelligence API**.
 
 Both SDKs are thin, typed wrappers over the `/v1` REST endpoints. They work
-against the RapidAPI gateway (`https://permy.p.rapidapi.com`), the direct site
+against the RapidAPI gateway (`https://permy-building-permit-construction-intelligence-api.p.rapidapi.com`), the direct site
 (`https://api.permy.dev`), or a local instance (`http://localhost:8000`).
 
 ## Python
@@ -15,7 +15,7 @@ pip install permy-sdk
 ```python
 from permy_sdk import Permy, PermyError
 
-p = Permy(api_key="YOUR_RAPIDAPI_KEY", base_url="https://permy.p.rapidapi.com")
+p = Permy(api_key="YOUR_RAPIDAPI_KEY", base_url="https://permy-building-permit-construction-intelligence-api.p.rapidapi.com")
 
 # sample mode — no key needed, great for kicking the tires
 print(p.sample_coverage())
@@ -47,7 +47,7 @@ npm install permy-sdk
 ```typescript
 import { Permy, PermyError } from "permy-sdk";
 
-const p = new Permy({ apiKey: "YOUR_RAPIDAPI_KEY", baseUrl: "https://permy.p.rapidapi.com" });
+const p = new Permy({ apiKey: "YOUR_RAPIDAPI_KEY", baseUrl: "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com" });
 
 // sample mode — no key needed
 console.log(await p.sampleCoverage());

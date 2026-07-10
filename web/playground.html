@@ -315,12 +315,12 @@ curl -G <span class="c-str">"https://permy.onrender.com/v1/sample/permits/search
   --data-urlencode <span class="c-str">"city=Austin"</span> --data-urlencode <span class="c-str">"trade=roofing"</span>
 
 <span class="c-comment"># real endpoints — your RapidAPI key is sent automatically</span>
-curl -G <span class="c-str">"https://permy.p.rapidapi.com/v1/permits/search"</span> \
+curl -G <span class="c-str">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/permits/search"</span> \
   --data-urlencode <span class="c-str">"city=Austin"</span> --data-urlencode <span class="c-str">"trade=roofing"</span> \
-  -H <span class="c-str">"X-RapidAPI-Key: YOUR_KEY"</span> -H <span class="c-str">"X-RapidAPI-Host: permy.p.rapidapi.com"</span></pre></div>
+  -H <span class="c-str">"X-RapidAPI-Key: YOUR_KEY"</span> -H <span class="c-str">"X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com"</span></pre></div>
     <div class="qs-pane" data-pane="python"><pre><span class="c-key">from</span> permy_sdk <span class="c-key">import</span> Permy, PermyError
 
-p = Permy(api_key=<span class="c-str">"YOUR_RAPIDAPI_KEY"</span>, base_url=<span class="c-str">"https://permy.p.rapidapi.com"</span>)
+p = Permy(api_key=<span class="c-str">"YOUR_RAPIDAPI_KEY"</span>, base_url=<span class="c-str">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com"</span>)
 
 <span class="c-comment"># sample mode — no key needed, great for kicking the tires</span>
 print(p.sample_coverage())
@@ -340,7 +340,7 @@ intel = p.score_intelligence(address=<span class="c-str">"10912 Mystic Timber Dr
     print(e.code, e.status)  <span class="c-comment"># e.g. "quota_exceeded" 429</span></pre></div>
     <div class="qs-pane" data-pane="node"><pre><span class="c-key">import</span> { Permy, PermyError } <span class="c-key">from</span> <span class="c-str">"permy-sdk"</span>;
 
-<span class="c-key">const</span> p = <span class="c-key">new</span> Permy({ apiKey: <span class="c-str">"YOUR_RAPIDAPI_KEY"</span>, baseUrl: <span class="c-str">"https://permy.p.rapidapi.com"</span> });
+<span class="c-key">const</span> p = <span class="c-key">new</span> Permy({ apiKey: <span class="c-str">"YOUR_RAPIDAPI_KEY"</span>, baseUrl: <span class="c-str">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com"</span> });
 
 <span class="c-comment">// sample mode — no key needed</span>
 console.log(<span class="c-key">await</span> p.sampleCoverage());

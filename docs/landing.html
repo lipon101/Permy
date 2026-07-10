@@ -453,16 +453,16 @@ footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;dis
       </div>
       <div class="code-body">
 <pre class="code-pane active" id="pane-curl"><span class="c"># Ranked roofing leads in Austin</span>
-curl -G <span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked"</span> \
+curl -G <span class="s">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/leads/ranked"</span> \
   --data-urlencode <span class="s">"persona=roofer"</span> \
   --data-urlencode <span class="s">"city=Austin"</span> \
   --data-urlencode <span class="s">"limit=10"</span> \
   -H <span class="s">"X-RapidAPI-Key: YOUR_KEY"</span> \
-  -H <span class="s">"X-RapidAPI-Host: permy.p.rapidapi.com"</span></pre>
+  -H <span class="s">"X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com"</span></pre>
 
 <pre class="code-pane" id="pane-python"><span class="k">import</span> requests
 
-url = <span class="s">"https://permy.p.rapidapi.com/v1/permits/search"</span>
+url = <span class="s">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/permits/search"</span>
 headers = {<span class="s">"X-RapidAPI-Key"</span>: <span class="s">"YOUR_KEY"</span>}
 params  = {<span class="s">"city"</span>: <span class="s">"Austin"</span>, <span class="s">"trade"</span>: <span class="s">"roofing"</span>, <span class="s">"limit"</span>: <span class="n">10</span>}
 
@@ -471,7 +471,7 @@ r = requests.get(url, headers=headers, params=params)
     print(p[<span class="s">"address"</span>][<span class="s">"full"</span>], p[<span class="s">"enrichment"</span>][<span class="s">"lead_score"</span>],
           p[<span class="s">"enrichment"</span>][<span class="s">"recommended_action"</span>])</pre>
 
-<pre class="code-pane" id="pane-js"><span class="k">const</span> url = <span class="k">new</span> URL(<span class="s">"https://permy.p.rapidapi.com/v1/permits/search"</span>);
+<pre class="code-pane" id="pane-js"><span class="k">const</span> url = <span class="k">new</span> URL(<span class="s">"https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/permits/search"</span>);
 url.searchParams.set(<span class="s">"city"</span>, <span class="s">"Austin"</span>);
 url.searchParams.set(<span class="s">"trade"</span>, <span class="s">"roofing"</span>);
 url.searchParams.set(<span class="s">"limit"</span>, <span class="s">"10"</span>);

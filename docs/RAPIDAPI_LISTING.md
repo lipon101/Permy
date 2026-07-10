@@ -51,9 +51,9 @@ Official city & county open-data portals (Socrata, ArcGIS Hub, Accela, Tyler, CK
 4. Call any endpoint. Example: find roofing permits in Austin:
 
 ```bash
-curl -G "https://permy.p.rapidapi.com/v1/permits/search" \
+curl -G "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/permits/search" \
   --data-urlencode "city=Austin" --data-urlencode "trade=roofing" --data-urlencode "limit=5" \
-  -H "X-RapidAPI-Key: YOUR_KEY" -H "X-RapidAPI-Host: permy.p.rapidapi.com"
+  -H "X-RapidAPI-Key: YOUR_KEY" -H "X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com"
 ```
 
 Official SDKs: **`permy-sdk`** (Python: `pip install permy-sdk`, Node: `npm install permy-sdk`) — typed wrappers over every endpoint with stable error codes. Full quickstart + interactive playground at **https://docs.permy.dev**.
@@ -73,17 +73,17 @@ Data, Business, Real Estate, Developer Tools
 ### cURL
 ```bash
 # Ranked roofing leads in Austin
-curl -G "https://permy.p.rapidapi.com/v1/leads/ranked" \
+curl -G "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/leads/ranked" \
   --data-urlencode "persona=roofer" --data-urlencode "city=Austin" --data-urlencode "limit=10" \
-  -H "X-RapidAPI-Key: YOUR_KEY" -H "X-RapidAPI-Host: permy.p.rapidapi.com"
+  -H "X-RapidAPI-Key: YOUR_KEY" -H "X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com"
 ```
 
 ### Python (requests)
 ```python
 import requests
 
-url = "https://permy.p.rapidapi.com/v1/permits/search"
-headers = {"X-RapidAPI-Key": "YOUR_KEY", "X-RapidAPI-Host": "permy.p.rapidapi.com"}
+url = "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/permits/search"
+headers = {"X-RapidAPI-Key": "YOUR_KEY", "X-RapidAPI-Host": "permy-building-permit-construction-intelligence-api.p.rapidapi.com"}
 params = {"city": "Austin", "trade": "roofing", "limit": 10, "sort": "lead_score"}
 
 r = requests.get(url, headers=headers, params=params)
@@ -95,13 +95,13 @@ for p in data["permits"]:
 
 ### JavaScript (fetch)
 ```javascript
-const url = new URL("https://permy.p.rapidapi.com/v1/permits/search");
+const url = new URL("https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/permits/search");
 url.searchParams.set("city", "Austin");
 url.searchParams.set("trade", "roofing");
 url.searchParams.set("limit", "10");
 
 const res = await fetch(url, {
-  headers: { "X-RapidAPI-Key": "YOUR_KEY", "X-RapidAPI-Host": "permy.p.rapidapi.com" },
+  headers: { "X-RapidAPI-Key": "YOUR_KEY", "X-RapidAPI-Host": "permy-building-permit-construction-intelligence-api.p.rapidapi.com" },
 });
 const { permits, total } = await res.json();
 permits.forEach(p => console.log(p.address.full, p.enrichment.lead_score));
@@ -112,11 +112,11 @@ permits.forEach(p => console.log(p.address.full, p.enrichment.lead_score));
 <?php
 $curl = curl_init();
 curl_setopt_array($curl, [
-  CURLOPT_URL => "https://permy.p.rapidapi.com/v1/permits/search?city=Austin&trade=roofing&limit=10",
+  CURLOPT_URL => "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/permits/search?city=Austin&trade=roofing&limit=10",
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_HTTPHEADER => [
     "X-RapidAPI-Key: YOUR_KEY",
-    "X-RapidAPI-Host: permy.p.rapidapi.com"
+    "X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com"
   ],
 ]);
 $response = curl_exec($curl);

@@ -5,7 +5,7 @@ Designed for RapidAPI users: point ``base_url`` at the RapidAPI gateway and set
 your RapidAPI key as ``api_key`` (sent as ``X-API-Key``).
 
     from permy_sdk import Permy
-    p = Permy(api_key="your-rapidapi-key", base_url="https://permy.p.rapidapi.com")
+    p = Permy(api_key="your-rapidapi-key", base_url="https://permy-building-permit-construction-intelligence-api.p.rapidapi.com")
     permits = p.search_permits(city="Austin", trade="roofing", limit=25)
     cov = p.coverage()
     lead = p.get_permit("austin-tx:12345")
@@ -40,12 +40,12 @@ class Permy:
     Args:
         api_key:   Your RapidAPI key (sent as X-API-Key). Required for /v1/*;
                    sample endpoints (/v1/sample/*) need no key.
-        base_url:  API base. Use ``https://permy.p.rapidapi.com`` via RapidAPI,
+        base_url:  API base. Use ``https://permy-building-permit-construction-intelligence-api.p.rapidapi.com`` via RapidAPI,
                    ``https://api.permy.dev`` direct, or ``http://localhost:8000``.
         timeout:   Per-request timeout in seconds.
     """
 
-    def __init__(self, api_key: Optional[str] = None, base_url: str = "https://permy.p.rapidapi.com",
+    def __init__(self, api_key: Optional[str] = None, base_url: str = "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com",
                  timeout: float = 30.0):
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout

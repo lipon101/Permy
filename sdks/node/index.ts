@@ -6,7 +6,7 @@
  * the built-in `fetch`) and in browsers.
  *
  *   import { Permy, PermyError } from "permy-sdk";
- *   const p = new Permy({ apiKey: "your-rapidapi-key", baseUrl: "https://permy.p.rapidapi.com" });
+ *   const p = new Permy({ apiKey: "your-rapidapi-key", baseUrl: "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com" });
  *   const permits = await p.searchPermits({ city: "Austin", trade: "roofing", limit: 25 });
  *   const cov = await p.coverage();
  *
@@ -53,7 +53,7 @@ export class Permy {
   private timeoutMs: number;
 
   constructor(opts: PermyOptions = {}) {
-    this.baseUrl = (opts.baseUrl ?? "https://permy.p.rapidapi.com").replace(/\/+$/, "");
+    this.baseUrl = (opts.baseUrl ?? "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com").replace(/\/+$/, "");
     this.timeoutMs = opts.timeoutMs ?? 30000;
     this.headers = { Accept: "application/json" };
     if (opts.apiKey) this.headers["X-API-Key"] = opts.apiKey;

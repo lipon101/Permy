@@ -20,7 +20,7 @@
   },
   "servers": [
     {
-      "url": "https://permy.p.rapidapi.com",
+      "url": "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com",
       "description": "RapidAPI production"
     },
     {

@@ -8,9 +8,9 @@ Subscribe to the **Free** plan on RapidAPI. Your RapidAPI key is sent automatica
 ## 2. Your first call — roofing permits in Austin
 
 ```bash
-curl -G "https://permy.p.rapidapi.com/v1/permits/search" \
+curl -G "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/permits/search" \
   --data-urlencode "city=Austin" --data-urlencode "trade=roofing" --data-urlencode "limit=5" \
-  -H "X-RapidAPI-Key: YOUR_KEY" -H "X-RapidAPI-Host: permy.p.rapidapi.com"
+  -H "X-RapidAPI-Key: YOUR_KEY" -H "X-RapidAPI-Host: permy-building-permit-construction-intelligence-api.p.rapidapi.com"
 ```
 
 You'll get back normalized permits, each with an `enrichment` block:
@@ -48,8 +48,8 @@ Note: **missing fields are `null`, never omitted.** `source_url` and `confidence
 
 ```python
 import requests
-r = requests.get("https://permy.p.rapidapi.com/v1/leads/ranked",
-    headers={"X-RapidAPI-Key": "YOUR_KEY", "X-RapidAPI-Host": "permy.p.rapidapi.com"},
+r = requests.get("https://permy-building-permit-construction-intelligence-api.p.rapidapi.com/v1/leads/ranked",
+    headers={"X-RapidAPI-Key": "YOUR_KEY", "X-RapidAPI-Host": "permy-building-permit-construction-intelligence-api.p.rapidapi.com"},
     params={"persona": "roofer", "city": "Austin", "limit": 10})
 for lead in r.json()["leads"]:
     print(lead["lead_score"], lead["recommended_action"], lead["reason"])

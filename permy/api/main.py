@@ -215,7 +215,7 @@ def create_app() -> FastAPI:
         license_info={"name": "Apache-2.0 (code); data per upstream license", "url": "https://docs.permy.dev/legal"},
         terms_of_service="https://docs.permy.dev/terms",
         servers=[
-            {"url": "https://permy.p.rapidapi.com", "description": "RapidAPI production"},
+            {"url": "https://permy-building-permit-construction-intelligence-api.p.rapidapi.com", "description": "RapidAPI production"},
             {"url": "https://api.permy.dev", "description": "Direct site"},
             {"url": "http://localhost:8000", "description": "Local dev"},
         ],
