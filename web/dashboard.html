@@ -126,6 +126,32 @@ footer .tagline{color:#A8A29E;font-size:14px;max-width:280px}
 footer a{color:#D6D3D1;text-decoration:none;transition:color .15s}
 footer a:hover{color:var(--amber)}
 footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;display:flex;justify-content:space-between;font-size:12.5px;color:#78716C;flex-wrap:wrap;gap:10px}
+
+/* responsive nav */
+.nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--paper);cursor:pointer;padding:0;align-items:center;transition:all .15s}
+.nav-burger:hover{border-color:var(--ink)}
+.nav-burger span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:all .2s}
+.nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-panel{display:none;position:absolute;top:100%;left:0;right:0;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:0 16px 40px -20px rgba(26,22,20,.25);padding:14px 5% 22px;flex-direction:column;gap:2px}
+.nav-panel.open{display:flex}
+.nav-panel a{padding:12px 14px;border-radius:9px;font-size:15px;font-weight:500;color:var(--ink-soft);text-decoration:none;transition:background .12s}
+.nav-panel a:hover{background:var(--cream);color:var(--amber-deep)}
+.nav-panel a.active{color:var(--amber-deep);background:var(--amber-soft)}
+.nav-panel .nav-cta-row{display:flex;gap:10px;margin-top:12px;padding-top:14px;border-top:1px solid var(--line)}
+.nav-panel .nav-cta-row .btn{flex:1;justify-content:center}
+@media(max-width:900px){
+  nav ul,nav .wrap>ul{display:none!important}
+  .nav-burger{display:flex}
+  nav .cta .btn-ghost{display:none}
+  nav .wrap{position:relative}
+  .nav-panel{display:none}
+  .nav-panel.open{display:flex}
+}
+@media(max-width:560px){
+  nav .cta .btn-primary{padding:9px 13px;font-size:13.5px}
+}
 </style>
 </head>
 <body>
@@ -139,11 +165,23 @@ footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;dis
     <li><a href="/docs">Docs</a></li>
     <li><a href="/reference">Reference</a></li>
   </ul>
-  <div class="cta">
+  <button class="nav-burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="cta">
     <a class="btn btn-ghost" href="https://permy.onrender.com/v1/sample/coverage" target="_blank" rel="noopener noreferrer">Try it live</a>
     <a class="btn btn-primary" href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get API Key →</a>
   </div>
-</div></nav>
+</div><div class="nav-panel">
+    <a href="#coverage">Coverage</a>
+    <a href="#distribution">Distribution</a>
+    <a href="#endpoints">Endpoints</a>
+    <a href="#funnel">Funnel</a>
+    <a href="/docs">Docs</a>
+    <a href="/reference">Reference</a>
+  <div class="nav-cta-row">
+    <a class="btn btn-ghost" href="https://permy.onrender.com/v1/sample/coverage" target="_blank" rel="noopener noreferrer">Try it live</a>
+    <a class="btn btn-primary" href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get API Key →</a>
+  </div></div>
+</nav>
 
 <header class="title-band"><div class="wrap">
   <span class="eyebrow"><span class="dot"></span> Coverage & API dashboard · 9 cities live</span>
@@ -244,6 +282,16 @@ new Chart(document.getElementById('statusChart'),{type:'doughnut',data:{labels:O
 const EPS=[{m:'GET',p:'/v1/permits/search',d:'Search normalized permits by city, trade, ZIP, valuation, contractor, keyword, geo.',g:''},{m:'GET',p:'/v1/permits/{id}',d:'Full permit detail with enrichment + source links.',g:''},{m:'GET',p:'/v1/properties/resolve',d:'Normalize an address → jurisdiction, parcel, coverage.',g:''},{m:'GET',p:'/v1/properties/{id}/timeline',d:'Full permit history for an address.',g:''},{m:'GET',p:'/v1/contractors/search',d:'Find contractors by name, license, city, trade.',g:''},{m:'GET',p:'/v1/contractors/{id}/activity',d:'Permit count, trade mix, cities, momentum.',g:''},{m:'GET',p:'/v1/markets/{zip}/development-score',d:'ZIP momentum: volume, value, hotspot 0–100.',g:''},{m:'GET',p:'/v1/coverage',d:'Supported cities, fields per city, freshness.',g:''},{m:'GET',p:'/v1/health · /v1/usage',d:'Service health + quota usage for the caller.',g:''},{m:'GET',p:'/v1/sample/permits/search',d:'Keyless try-it: search permits, capped 10.',g:'sample'},{m:'GET',p:'/v1/sample/coverage',d:'Keyless try-it: supported cities.',g:'sample'},{m:'GET',p:'/v1/sample/leads/ranked',d:'Keyless try-it: ranked leads, capped 10.',g:'sample'},{m:'GET',p:'/v1/sample/contractors/search',d:'Keyless try-it: contractors, capped 10.',g:'sample'},{m:'GET',p:'/v1/sample/permits/{id}',d:'Keyless try-it: permit detail.',g:'sample'},{m:'GET',p:'/v1/leads/ranked',d:'Ranked opportunities for a persona + lead_score.',g:'pro'},{m:'POST',p:'/v1/intelligence/score',d:'Address + persona → development_score + risk_flags.',g:'pro'},{m:'POST',p:'/v1/alerts',d:'Saved searches with signed HMAC webhook delivery.',g:'pro'},{m:'GET',p:'/v1/alerts · DELETE /v1/alerts/{id}',d:'List and delete your saved alerts.',g:'pro'},{m:'POST',p:'/v1/webhooks/test',d:'Send a signed test payload to your webhook URL.',g:'pro'},{m:'POST',p:'/v1/properties/resolve (batch)',d:'Resolve many addresses in one call.',g:'pro'}];
 const gl=g=>g==='pro'?'<span class="tag-gate pro">Pro+</span>':g==='sample'?'<span class="tag-gate sample">no key</span>':'';
 document.getElementById('ep-grid').innerHTML=EPS.map(e=>'<div class="endpoint"><span class="method m-'+e.m.toLowerCase()+'">'+e.m+'</span><div class="path">'+e.p+gl(e.g)+'</div><div class="d">'+e.d+'</div></div>').join('');
+</script>
+<script>
+// responsive nav toggle
+(function(){
+  var b=document.querySelector('.nav-burger'),p=document.querySelector('.nav-panel');
+  if(!b||!p)return;
+  b.addEventListener('click',function(){b.classList.toggle('open');p.classList.toggle('open');});
+  p.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){b.classList.remove('open');p.classList.remove('open');});});
+  document.addEventListener('click',function(e){if(!b.contains(e.target)&&!p.contains(e.target)){b.classList.remove('open');p.classList.remove('open');}});
+})();
 </script>
 </body>
 </html>
