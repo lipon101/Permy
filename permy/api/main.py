@@ -7,6 +7,7 @@ RapidAPI, the docs site, and the MCP server all derive from it.
 """
 import time  # noqa: E402
 import uuid  # noqa: E402
+from collections import defaultdict  # noqa: E402
 
 from fastapi import FastAPI, Request  # noqa: E402
 from fastapi.exceptions import RequestValidationError  # noqa: E402
@@ -62,7 +63,70 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         response.headers["X-Permy-Version"] = APP_VERSION
         response.headers["X-Request-Id"] = request.state.request_id
+        # Hide framework fingerprint — don't advertise the server stack to
+        # attackers mapping the attack surface. These overwrite uvicorn/starlette
+        # defaults set later in the response chain.
+        response.headers["Server"] = "permy"
+        # Strip framework fingerprint header if present (MutableHeaders has no
+        # .pop(); use guarded del).
+        try:
+            del response.headers["X-Powered-By"]
+        except KeyError:
+            pass
         return response
+
+
+# Common vulnerability-scan paths (bots, crawlers, exploit kits). Reject fast
+# with a plain 404 so they don't hit the error envelope or pollute logs.
+_SCAN_PATHS = frozenset({
+    "/.env", "/.git", "/.git/config", "/wp-admin", "/wp-login.php", "/xmlrpc.php",
+    "/admin", "/admin/", "/phpinfo.php", "/.aws", "/.ssh", "/config.json",
+    "/.DS_Store", "/vendor/phpunit", "/cgi-bin/", "/manager/html", "/solr",
+    "/actuator", "/actuator/env", "/.well-known/security.txt",  # keep security.txt? no → 404
+})
+
+
+class PublicRateLimitMiddleware(BaseHTTPMiddleware):
+    """Per-IP rate limit on the PUBLIC surface so it can't be abused, scraped,
+    or used to DoS the host.
+
+    Applies a per-IP token bucket to: /, /v1/health, /docs, /redoc, /openapi.json
+    (the paths PUBLIC_PREFIXES covers, minus /v1/sample which has its own per-IP
+    limiter in the sample router). Protected /v1/* paths are handled by
+    RateLimitMiddleware (tier-aware); unknown routes fall through to the 404
+    envelope. Also fast-rejects common scan paths with a bare 404 (no envelope,
+    no log noise) so bots don't learn the API shape or burn cycles.
+    """
+
+    _PUBLIC_RATE_PATHS = frozenset({"/", "/v1/health", "/docs", "/redoc", "/openapi.json"})
+    _BUCKETS: dict = defaultdict(lambda: {"tokens": 30.0, "ts": time.time()})
+    # 30 req/min per IP on the public docs/spec surface — enough for a human
+    # browsing /docs + Scalar fetching the spec, far below scrape/DoS rates.
+    _CAPACITY = 30.0
+
+    async def dispatch(self, request: Request, call_next):
+        path = request.url.path
+        # fast-reject common scan/probe paths — bare 404, no body, no logging
+        if path in _SCAN_PATHS or path.endswith(".php") or "/.git" in path:
+            return JSONResponse(status_code=404, content={"error": {"code": "not_found"}})
+        if path in self._PUBLIC_RATE_PATHS:
+            ip = request.client.host if request.client and request.client.host else "unknown"
+            now = time.time()
+            b = self._BUCKETS[ip]
+            elapsed = now - b["ts"]
+            b["tokens"] = min(self._CAPACITY, b["tokens"] + elapsed * (self._CAPACITY / 60.0))
+            b["ts"] = now
+            if b["tokens"] < 1.0:
+                return JSONResponse(
+                    status_code=429,
+                    content={"error": {
+                        "code": "rate_limited",
+                        "message": "Too many requests. Slow down.",
+                    }},
+                    headers={"Retry-After": "2"},
+                )
+            b["tokens"] -= 1.0
+        return await call_next(request)
 
 
 def _known_route(app: FastAPI, path: str) -> bool:
@@ -135,6 +199,11 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
 
 def create_app() -> FastAPI:
+    # In prod/staging, hide the interactive docs UI (Swagger /docs + ReDoc) so
+    # the full API surface isn't browseable by attackers reverse-engineering it.
+    # The raw /openapi.json stays available (rate-limited) so Scalar + RapidAPI
+    # can still import the spec. Local/dev keeps docs on for convenience.
+    _is_prod = settings.env in ("prod", "production", "staging")
     app = FastAPI(
         title="Permy — Building Permit & Construction Intelligence API",
         description=(
@@ -152,12 +221,21 @@ def create_app() -> FastAPI:
         ],
         openapi_tags=OPENAPI_TAGS,
         openapi_url="/openapi.json",
-        docs_url="/docs",
-        redoc_url="/redoc",
+        docs_url=None if _is_prod else "/docs",
+        redoc_url=None if _is_prod else "/redoc",
     )
+    # CORS: open origins (public API, key-gated; the Vercel playground calls
+    # cross-origin) but RESTRICT methods + headers to the explicit set we use,
+    # removing the wildcard method/header surface that aids reconnaissance.
     app.add_middleware(
-        CORSMiddleware, allow_origins=["*"], allow_methods=["*"],
-        allow_headers=["*"], allow_credentials=False,
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+        allow_headers=[
+            "X-API-Key", "Authorization", "Content-Type", "X-Request-Id",
+            "X-RapidAPI-Key", "X-RapidAPI-Host", "X-RapidAPI-Subscription",
+        ],
+        allow_credentials=False,
     )
     # Order matters: the LAST add_middleware is the OUTERMOST. We want security
     # headers + request-id echo on EVERY response (including auth/rate-limit
@@ -168,6 +246,10 @@ def create_app() -> FastAPI:
     # middleware, not the app).
     app.add_middleware(RateLimitMiddleware, permy_app=app)
     app.add_middleware(SecurityHeadersMiddleware)
+    # Outermost: reject scan paths + per-IP limit the public docs/spec surface
+    # BEFORE auth/security headers (so a bot hammering /.env or scraping
+    # /openapi.json never reaches the app or pollutes logs).
+    app.add_middleware(PublicRateLimitMiddleware)
 
     app.include_router(permits_router)
     app.include_router(contractors_router)
