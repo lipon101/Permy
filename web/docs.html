@@ -187,10 +187,9 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
         <div class="code-tab" data-tab="leads">Ranked leads</div>
       </div>
       <div class="code-body">
-<pre class="code-pane active" id="pane-curl"><span class="c"># 1) Real roofing permits in Austin — no key needed</span>
+<pre class="code-pane active" id="pane-curl"><span class="c"># 1) Real permits in Austin — no key needed</span>
 curl -G <span class="s">"https://permy.onrender.com/v1/sample/permits/search"</span> \
   --data-urlencode <span class="s">"city=Austin"</span> \
-  --data-urlencode <span class="s">"trade=roofing"</span> \
   --data-urlencode <span class="s">"limit=10"</span>
 
 <span class="c"># 2) What each city publishes (honest coverage)</span>
@@ -200,20 +199,19 @@ curl <span class="s">"https://permy.onrender.com/v1/sample/coverage"</span></pre
 
 <span class="c"># keyless sample — real data, capped at 10 records</span>
 r = requests.get(<span class="s">"https://permy.onrender.com/v1/sample/permits/search"</span>,
-                 params={<span class="s">"city"</span>: <span class="s">"Austin"</span>, <span class="s">"trade"</span>: <span class="s">"roofing"</span>, <span class="s">"limit"</span>: <span class="n">10</span>})
+                 params={<span class="s">"city"</span>: <span class="s">"Austin"</span>, <span class="s">"limit"</span>: <span class="n">10</span>})
 
 <span class="k">for</span> p <span class="k">in</span> r.json()[<span class="s">"permits"</span>]:
-    print(p[<span class="s">"address"</span>][<span class="s">"full"</span>], p[<span class="s">"enrichment"</span>][<span class="s">"lead_score"</span>],
-          p[<span class="s">"enrichment"</span>][<span class="s">"recommended_action"</span>])</pre>
+    print(p[<span class="s">"address"</span>][<span class="s">"full"</span>], p[<span class="s">"trade_category"</span>],
+          p[<span class="s">"enrichment"</span>][<span class="s">"lead_score"</span>], p[<span class="s">"enrichment"</span>][<span class="s">"recommended_action"</span>])</pre>
 
 <pre class="code-pane" id="pane-js"><span class="c">// keyless sample — real data, runs in the browser console</span>
 <span class="k">const</span> url = <span class="k">new</span> URL(<span class="s">"https://permy.onrender.com/v1/sample/permits/search"</span>);
 url.searchParams.set(<span class="s">"city"</span>, <span class="s">"Austin"</span>);
-url.searchParams.set(<span class="s">"trade"</span>, <span class="s">"roofing"</span>);
 
 <span class="k">const</span> { permits, total } = <span class="k">await</span> (<span class="k">await</span> fetch(url)).json();
 console.log(<span class="s">"total:"</span>, total);
-permits.forEach(p =&gt; console.log(p.address.full, p.enrichment.lead_score));</pre>
+permits.forEach(p =&gt; console.log(p.address.full, p.trade_category, p.enrichment.lead_score));</pre>
 
 <pre class="code-pane" id="pane-leads"><span class="c"># Ranked leads (paid) — with your RapidAPI key</span>
 curl -G <span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked"</span> \
@@ -223,7 +221,7 @@ curl -G <span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked"</span> \
   -H <span class="s">"X-RapidAPI-Key: YOUR_KEY"</span> \
   -H <span class="s">"X-RapidAPI-Host: permy.p.rapidapi.com"</span>
 
-<span class="c"># keyless preview of the same shape:</span>
+<span class="c"># keyless preview of the same shape (no key):</span>
 curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</span> \
   --data-urlencode <span class="s">"persona=roofer"</span> --data-urlencode <span class="s">"city=Austin"</span></pre>
         <span class="copy" onclick="copyCode()">copy</span>
@@ -231,7 +229,7 @@ curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</spa
     </div>
 
     <div class="try-card" style="margin-top:20px">
-      <div class="try-head"><span>GET /v1/sample/permits/search?city=Austin&amp;trade=roofing&amp;limit=3</span><span class="pill" id="try-status">live</span></div>
+      <div class="try-head"><span>GET /v1/sample/permits/search?city=Austin&amp;limit=3</span><span class="pill" id="try-status">live</span></div>
       <div class="try-out" id="try-out"><span style="color:#78716C">// loading real data…</span></div>
       <div class="try-foot">
         <span>This is a live response from <code>permy.onrender.com</code> — not a mock. Re-run anytime.</span>
@@ -361,7 +359,7 @@ async function runTry(){
   out.innerHTML='<span style="color:#78716C">// fetching live data from permy.onrender.com…</span>';
   st.textContent='…'; st.style.color='#78716C';
   try{
-    const r=await fetch('https://permy.onrender.com/v1/sample/permits/search?city=Austin&trade=roofing&limit=3');
+    const r=await fetch('https://permy.onrender.com/v1/sample/permits/search?city=Austin&limit=3');
     st.textContent=r.status+' OK'; st.style.color='#15803D';
     const txt=await r.text();
     let pretty=txt; try{pretty=JSON.stringify(JSON.parse(txt),null,2);}catch(e){}
