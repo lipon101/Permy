@@ -148,10 +148,11 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
       <li><a href="/#coverage">Coverage</a></li>
       <li><a href="/#pricing">Pricing</a></li>
       <li><a href="/docs" style="color:var(--amber-deep);font-weight:600">Docs</a></li>
+      <li><a href="/reference">Reference</a></li>
     </ul>
     <div class="cta">
       <a class="btn btn-ghost" href="/#playground">Try it live</a>
-      <a class="btn btn-primary" href="mailto:hi@permy.dev?subject=Get%20an%20API%20key">Get API Key →</a>
+      <a class="btn btn-primary" href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get API Key →</a>
     </div>
   </div>
 </nav>
@@ -244,7 +245,7 @@ curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</spa
   <div class="wrap">
     <div class="note">
       <span class="ico">🔑</span>
-      <span><b>Authentication.</b> Keyless <code>/v1/sample/*</code> endpoints need no key — perfect for evaluation. For full endpoints (ranked leads, intelligence, alerts, signed webhooks), send your RapidAPI key as <code>X-RapidAPI-Key</code> with <code>X-RapidAPI-Host: permy.p.rapidapi.com</code> on every request. <a href="mailto:hi@permy.dev?subject=Get%20an%20API%20key" style="color:#92400E;font-weight:600">Request a key →</a></span>
+      <span><b>Authentication.</b> Keyless <code>/v1/sample/*</code> endpoints need no key — perfect for evaluation. For full endpoints (ranked leads, intelligence, alerts, signed webhooks), send your RapidAPI key as <code>X-RapidAPI-Key</code> with <code>X-RapidAPI-Host: permy.p.rapidapi.com</code> on every request. <a href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer" style="color:#92400E;font-weight:600">Request a key →</a></span>
     </div>
   </div>
 </section>
@@ -296,20 +297,30 @@ curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</spa
       <div class="feat"><div class="ico">📊</div><h4>Bulk + warehouse delivery</h4><p>Business/Enterprise gets bulk CSV export, multiple API keys, 99.5% SLA, and Snowflake/BigQuery delivery. DPA and white-label available.</p></div>
     </div>
     <div style="text-align:center;margin-top:32px">
-      <a class="btn btn-amber btn-lg" href="mailto:hi@permy.dev?subject=Get%20an%20API%20key">Get your API key →</a>
+      <a class="btn btn-amber btn-lg" href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get your API key →</a>
       <a class="btn btn-ghost btn-lg" href="/#pricing" style="margin-left:10px">See pricing</a>
     </div>
   </div>
 </section>
 
-<!-- ===================== SCALAR LIVE REFERENCE ===================== -->
-<section style="padding:40px 0 0;background:linear-gradient(180deg,var(--cream-2),var(--cream))">
-  <div class="scalar-head">
-    <div><span class="kicker" style="margin-bottom:0">Interactive reference</span><div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-top:4px">Full OpenAPI 3.1 explorer</div></div>
-    <a href="https://permy.onrender.com/openapi.json" target="_blank" rel="noopener noreferrer">view raw spec ↗</a>
+<!-- ===================== REFERENCE LINK CARD ===================== -->
+<section style="padding:48px 0">
+  <div class="wrap">
+    <a href="/reference" style="display:block;text-decoration:none;color:inherit">
+      <div style="background:var(--ink);color:var(--cream);border-radius:var(--radius-lg);padding:36px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;transition:transform .18s,box-shadow .18s;box-shadow:var(--shadow-lg)">
+        <div>
+          <div style="font-size:12.5px;font-weight:700;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px">Interactive reference</div>
+          <div style="font-family:'Fraunces',serif;font-size:clamp(22px,3vw,30px);font-weight:600;line-height:1.1;margin-bottom:6px">Full OpenAPI 3.1 explorer →</div>
+          <div style="font-size:15px;color:#A8A29E;max-width:560px">Every endpoint, parameter, and schema rendered live from the running API. Try any endpoint with your key, inspect responses, download the spec.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="btn btn-amber btn-lg">Open reference →</span>
+          <a href="https://permy.onrender.com/openapi.json" target="_blank" rel="noopener noreferrer" style="font-size:12.5px;color:#A8A29E;text-decoration:underline" onclick="event.stopPropagation()">view raw spec ↗</a>
+        </div>
+      </div>
+    </a>
   </div>
 </section>
-<div id="scalar" style="padding-top:16px;padding-bottom:72px"></div>
 
 <!-- ===================== FOOTER ===================== -->
 <footer>
@@ -322,6 +333,8 @@ curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</spa
       <a href="/#playground">Playground</a>
       <a href="/#coverage">Coverage</a>
       <a href="/#pricing">Pricing</a>
+      <a href="/docs">Docs</a>
+      <a href="/reference">Reference</a>
       <a href="/legal">Legal</a>
       <a href="https://github.com/lipon101/Permy" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="mailto:hi@permy.dev">hi@permy.dev</a>
@@ -371,18 +384,6 @@ async function runTry(){
 }
 document.getElementById('try-run').addEventListener('click',runTry);
 runTry();
-// Scalar live OpenAPI
-(function(){
-  const s=document.createElement('script');
-  s.id='api-reference';
-  s.setAttribute('data-url','https://permy.onrender.com/openapi.json');
-  s.setAttribute('data-proxy-url','https://proxy.scalar.com');
-  s.setAttribute('data-sidebar-position','left');
-  s.setAttribute('data-theme','light');
-  s.setAttribute('data-show-sidebar','true');
-  s.src='https://cdn.jsdelivr.net/npm/@scalar/api-reference@latest';
-  document.body.appendChild(s);
-})();
 </script>
 </body>
 </html>
