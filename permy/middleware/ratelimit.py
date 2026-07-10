@@ -13,8 +13,8 @@ Enforces THREE layers so free users cannot abuse the API or the Render host:
 Quota counters are written to the `usage_daily` table in prod; here we keep a
 process-local counter for the self-contained test path.
 """
-import time  # noqa: E402
 import calendar  # noqa: E402
+import time  # noqa: E402
 from collections import defaultdict  # noqa: E402
 from typing import Optional, Tuple  # noqa: E402
 

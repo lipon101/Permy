@@ -17,7 +17,15 @@ sample quota is enforced here via ``check_sample_quota(request)`` (per-IP).
 """
 from typing import Optional  # noqa: E402
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status  # noqa: E402
+from fastapi import (  # noqa: E402
+    APIRouter,
+    Depends,
+    HTTPException,
+    Query,
+    Request,
+    Response,
+    status,
+)
 
 from permy.core.config import settings  # noqa: E402
 from permy.db.repo import Repo, get_repo  # noqa: E402

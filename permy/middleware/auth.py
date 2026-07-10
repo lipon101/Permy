@@ -26,6 +26,7 @@ from fastapi import Header, HTTPException, Request, status  # noqa: E402
 from permy.core.config import TIER_LIMITS, settings  # noqa: E402
 from permy.core.logging import logger  # noqa: E402
 
+
 # Direct-site keys (PERMY_API_KEYS / PERMY_ADMIN_KEYS env) → tier. Used for the
 # direct site, MCP server, tests, and any caller presenting one of these.
 # SECURITY: never hardcode keys here. The repo is PUBLIC — any committed key is
