@@ -33,9 +33,10 @@
   --green:#16A34A; --green-soft:#DCFCE7;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%overflow-x:hidden}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiasedoverflow-x:hidden}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
+img{max-width:100%}
 .wrap{max-width:1160px;margin:0 auto;padding:0 5%}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:11px 18px;border-radius:10px;font-weight:600;font-size:14.5px;text-decoration:none;transition:all .18s;cursor:pointer;border:none;white-space:nowrap}
 .btn-primary{background:var(--ink);color:var(--cream)}
@@ -50,29 +51,31 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.025em;text-decoration:none;color:var(--ink)}
 .brand-mark{width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--line)}
 nav ul{display:flex;gap:26px;list-style:none;font-size:14.5px;font-weight:500;margin:0 auto}
-nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .15swhite-space:nowrap;}
+nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .15s;white-space:nowrap}
 nav ul a:hover{color:var(--amber-deep)}
-nav .cta{display:flex;gap:10px;align-items:centerflex-shrink:0;}
+nav .cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
 @media(max-width:1100px){nav ul{gap:18px;font-size:14px}}
 @media(max-width:900px){nav ul{display:none}}
-.ref-head{padding:40px 0 24px;position:relative;overflow:hidden}
+.ref-head{padding:40px 0 20px;position:relative;overflow:hidden}
 .ref-head::before{content:'';position:absolute;top:-100px;right:-80px;width:440px;height:440px;background:radial-gradient(circle,rgba(245,158,11,.10),transparent 65%);pointer-events:none}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--amber-deep);background:var(--amber-soft);padding:6px 14px;border-radius:99px;margin-bottom:18px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--amber-deep);background:var(--amber-soft);padding:6px 14px;border-radius:99px;margin-bottom:16px}
 .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 2.4s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
-.ref-head h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4.4vw,44px);line-height:1.05;letter-spacing:-.025em;margin-bottom:14px}
+.ref-head h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,4vw,40px);line-height:1.05;letter-spacing:-.025em;margin-bottom:12px}
 .ref-head h1 em{font-style:italic;color:var(--amber-deep);font-weight:500}
-.ref-head p{font-size:17.5px;color:var(--ink-soft);max-width:680px;margin-bottom:20px;line-height:1.55}
+.ref-head p{font-size:16.5px;color:var(--ink-soft);max-width:680px;margin-bottom:18px;line-height:1.55}
 .ref-head .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.ref-head code{font-family:'JetBrains Mono',monospace;background:var(--amber-soft);color:var(--amber-deep);padding:2px 6px;border-radius:5px;font-size:.85em}
 .live-pill{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#15803D;background:var(--green-soft);padding:6px 12px;border-radius:99px}
 .live-pill .d{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-.note{max-width:1160px;margin:0 auto 20px;padding:16px 22px;background:var(--amber-soft);border:1px solid #FCD34B;border-radius:14px;font-size:14px;color:#78350F;line-height:1.55;display:flex;gap:12px;align-items:flex-start}
+.note{max-width:1160px;margin:0 auto 16px;padding:14px 20px;background:var(--amber-soft);border:1px solid #FCD34B;border-radius:12px;font-size:13.5px;color:#78350F;line-height:1.55;display:flex;gap:12px;align-items:flex-start}
 .note b{color:#92400E}
-.note .ico{font-size:18px;flex-shrink:0}
-.note code{font-family:'JetBrains Mono',monospace;background:#fff;color:#92400E;padding:1px 6px;border-radius:5px;font-size:.9em}
+.note .ico{font-size:17px;flex-shrink:0}
+.note code{font-family:'JetBrains Mono',monospace;background:#fff;color:#92400E;padding:1px 5px;border-radius:4px;font-size:.88em}
 .note a{color:#92400E;font-weight:600}
-#scalar{min-height:80vh}
-.scalar-wrap{max-width:1280px;margin:0 auto;padding:0 5% 72px}
+/* Scalar explorer wrapper — sits ABOVE the footer */
+.scalar-section{max-width:1280px;margin:0 auto;padding:0 5% 56px}
+.scalar-section #scalar{min-height:72vh}
 footer{background:var(--ink);color:var(--cream);padding:40px 0 30px;border-top:1px solid var(--line)}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
 footer .brand-row{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px}
@@ -81,7 +84,6 @@ footer .tag{color:#A8A29E;font-size:13.5px}
 footer a{color:#D6D3D1;text-decoration:none;transition:color .15s}
 footer a:hover{color:var(--amber)}
 footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
-
 /* responsive nav */
 .nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--paper);cursor:pointer;padding:0;align-items:center;transition:all .15s}
 .nav-burger:hover{border-color:var(--ink)}
@@ -101,11 +103,10 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
   .nav-burger{display:flex}
   nav .cta .btn-ghost{display:none}
   nav .wrap{position:relative}
-  .nav-panel{display:none}
-  .nav-panel.open{display:flex}
 }
 @media(max-width:560px){
   nav .cta .btn-primary{padding:9px 13px;font-size:13.5px}
+  .scalar-section{padding:0 4% 40px}
 }
 </style>
 </head>
@@ -124,20 +125,21 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
     </ul>
     <button class="nav-burger" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="cta">
-      <a class="btn btn-ghost" href="/docs">← Back to docs</a>
+      <a class="btn btn-ghost" href="/docs">← Docs</a>
       <a class="btn btn-primary" href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get API Key →</a>
     </div>
   </div>
-<div class="nav-panel">
-      <a href="/#playground">Playground</a>
-      <a href="/#coverage">Coverage</a>
-      <a href="/#pricing">Pricing</a>
-      <a href="/docs">Docs</a>
-      <a href="/reference" style="color:var(--amber-deep);font-weight:600">Reference</a>
+  <div class="nav-panel">
+    <a href="/#playground">Playground</a>
+    <a href="/#coverage">Coverage</a>
+    <a href="/#pricing">Pricing</a>
+    <a href="/docs">Docs</a>
+    <a href="/reference" style="color:var(--amber-deep);font-weight:600">Reference</a>
     <div class="nav-cta-row">
-      <a class="btn btn-ghost" href="/docs">← Back to docs</a>
+      <a class="btn btn-ghost" href="/docs">← Docs</a>
       <a class="btn btn-primary" href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get API Key →</a>
-    </div></div>
+    </div>
+  </div>
 </nav>
 
 <!-- ===================== REF HEAD ===================== -->
@@ -145,7 +147,7 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
   <div class="wrap">
     <span class="eyebrow"><span class="dot"></span> OpenAPI 3.1 · live from the running API</span>
     <h1>The full API <em>reference.</em></h1>
-    <p>Every endpoint, parameter, and schema — rendered live from <code style="font-family:'JetBrains Mono',monospace;background:var(--amber-soft);color:var(--amber-deep);padding:2px 6px;border-radius:5px;font-size:.85em">permy.onrender.com/openapi.json</code>. Try any endpoint with your RapidAPI key, inspect responses, and download the spec.</p>
+    <p>Every endpoint, parameter, and schema — rendered live from <code>permy.onrender.com/openapi.json</code>. Try any endpoint with your RapidAPI key, inspect responses, download the spec.</p>
     <div class="row">
       <span class="live-pill"><span class="d"></span> 20 endpoints · 29 schemas · live</span>
       <a class="btn btn-ghost" href="https://permy.onrender.com/openapi.json" target="_blank" rel="noopener noreferrer">View raw spec ↗</a>
@@ -157,16 +159,19 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
 <div class="wrap" style="padding-top:0;padding-bottom:0">
   <div class="note">
     <span class="ico">🔑</span>
-    <span><b>Authentication.</b> Set the explorer's server to <code>https://permy.p.rapidapi.com</code> and send your RapidAPI key as <code>X-RapidAPI-Key</code> with <code>X-RapidAPI-Host: permy.p.rapidapi.com</code>. The <code>/v1/sample/*</code> endpoints need no key. Don't have a key yet? <a href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get one on RapidAPI →</a></span>
+    <span><b>Auth.</b> Set the server to <code>https://permy.p.rapidapi.com</code> and send <code>X-RapidAPI-Key</code> + <code>X-RapidAPI-Host: permy.p.rapidapi.com</code>. <code>/v1/sample/*</code> needs no key. <a href="https://rapidapi.com/lipon/api/permy-building-permit-construction-intelligence-api" target="_blank" rel="noopener noreferrer">Get a key →</a></span>
   </div>
 </div>
 
-<!-- ===================== SCALAR EXPLORER ===================== -->
-<div class="scalar-wrap">
+<!-- ===================== SCALAR EXPLORER (ABOVE footer) ===================== -->
+<section class="scalar-section">
   <div id="scalar"></div>
-</div>
+  <!-- Scalar mounts the explorer HERE, inside the page flow, above the footer -->
+  <script id="api-reference" data-url="https://permy.onrender.com/openapi.json" data-proxy-url="https://proxy.scalar.com" data-sidebar-position="left" data-theme="light" data-show-sidebar="true"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@latest"></script>
+</section>
 
-<!-- ===================== FOOTER ===================== -->
+<!-- ===================== FOOTER (below the explorer) ===================== -->
 <footer>
   <div class="wrap">
     <div>
@@ -185,8 +190,6 @@ footer .links{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}
   </div>
 </footer>
 
-<script id="api-reference" data-url="https://permy.onrender.com/openapi.json" data-proxy-url="https://proxy.scalar.com" data-sidebar-position="left" data-theme="light" data-show-sidebar="true"></script>
-<script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@latest"></script>
 <script>
 // responsive nav toggle
 (function(){

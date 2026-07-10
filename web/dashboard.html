@@ -36,7 +36,7 @@
   --shadow-lg:0 24px 60px -28px rgba(26,22,20,.22);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%overflow-x:hidden}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden}
 body{font-family:'Inter',-apple-system,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"overflow-x:hidden}
 .mono{font-family:'JetBrains Mono',monospace}
 a{color:inherit}
@@ -47,14 +47,14 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.02em}
 .brand-mark{width:34px;height:34px;border-radius:9px;border:1px solid var(--line)}
 nav ul{display:flex;gap:28px;list-style:none;font-size:14.5px;font-weight:500}
-nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .15swhite-space:nowrap;}
+nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .15s;white-space:nowrap;}
 nav ul a:hover{color:var(--amber-deep)}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:9px;font-weight:600;font-size:14px;text-decoration:none;transition:all .15s;cursor:pointer;border:none}
 .btn-primary{background:var(--ink);color:var(--cream)}
 .btn-primary:hover{background:var(--amber-deep);color:#fff}
 .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn-ghost:hover{border-color:var(--ink)}
-nav .cta{display:flex;gap:10px;align-items:centerflex-shrink:0;}
+nav .cta{display:flex;gap:10px;align-items:center;flex-shrink:0;}
 @media(max-width:760px){nav ul{display:none}}
 .title-band{padding:56px 0 36px;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
 .title-band::before{content:'';position:absolute;top:-120px;right:-80px;width:480px;height:480px;background:radial-gradient(circle,rgba(245,158,11,0.10),transparent 65%);pointer-events:none}
