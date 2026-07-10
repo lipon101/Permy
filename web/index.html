@@ -64,10 +64,11 @@ nav{position:sticky;top:0;z-index:50;background:rgba(250,247,242,.86);backdrop-f
 nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:20px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.025em;text-decoration:none;color:var(--ink)}
 .brand-mark{width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--line)}
-nav ul{display:flex;gap:26px;list-style:none;font-size:14.5px;font-weight:500;margin:0 auto}
-nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .15s}
+nav ul{display:flex;gap:24px;list-style:none;font-size:14.5px;font-weight:500;margin:0 auto}
+nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .15s;white-space:nowrap}
 nav ul a:hover{color:var(--amber-deep)}
-nav .cta{display:flex;gap:10px;align-items:center}
+nav .cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
+@media(max-width:1100px){nav ul{gap:18px;font-size:14px}}
 @media(max-width:900px){nav ul{display:none}}
 .hero{padding:80px 0 56px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-160px;right:-100px;width:560px;height:560px;background:radial-gradient(circle,rgba(245,158,11,.12),transparent 65%);pointer-events:none}
@@ -257,9 +258,6 @@ footer .bottom{margin-top:44px;padding-top:24px;border-top:1px solid #2D2724;dis
     <ul>
       <li><a href="#playground">Playground</a></li>
       <li><a href="#coverage">Coverage</a></li>
-      <li><a href="#endpoints">Endpoints</a></li>
-      <li><a href="#quickstart">Quickstart</a></li>
-      <li><a href="#scoring">Lead Scoring</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="/docs">Docs</a></li>
       <li><a href="/reference">Reference</a></li>
@@ -273,9 +271,6 @@ footer .bottom{margin-top:44px;padding-top:24px;border-top:1px solid #2D2724;dis
 <div class="nav-panel">
       <a href="#playground">Playground</a>
       <a href="#coverage">Coverage</a>
-      <a href="#endpoints">Endpoints</a>
-      <a href="#quickstart">Quickstart</a>
-      <a href="#scoring">Lead Scoring</a>
       <a href="#pricing">Pricing</a>
       <a href="/docs">Docs</a>
       <a href="/reference">Reference</a>
