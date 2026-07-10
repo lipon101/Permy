@@ -5,6 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Permy — Playground & API Docs</title>
 <meta name="description" content="Try the Permy Building Permit API live, no key required. Search permits, contractors, leads, and coverage across 9 cities — ranked, sourced, and ready for your app.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#F59E0B">
+<link rel="canonical" href="https://permyapp.vercel.app/playground">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Permy">
+<meta property="og:title" content="Permy — Playground & API Docs">
+<meta property="og:description" content="Try the Permy Building Permit API live, no key required. Search permits, contractors, leads, and coverage across 9 cities — ranked, sourced, and ready for your app.">
+<meta property="og:url" content="https://permyapp.vercel.app/playground">
+<meta property="og:image" content="https://permyapp.vercel.app/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Permy — Playground & API Docs">
+<meta name="twitter:description" content="Try the Permy Building Permit API live, no key required. Search permits, contractors, leads, and coverage across 9 cities — ranked, sourced, and ready for your app.">
+<meta name="twitter:image" content="https://permyapp.vercel.app/assets/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
@@ -174,7 +191,7 @@ footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;dis
     </ul>
     <div class="cta">
       <a class="btn btn-ghost" href="#playground">Try it live</a>
-      <a class="btn btn-primary" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Get API Key →</a>
+      <a class="btn btn-primary" href="/docs">Get API Key →</a>
     </div>
   </div>
 </nav>
@@ -211,7 +228,7 @@ footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;dis
         </select>
         <div id="params"></div>
         <button class="run-btn" id="run">Run request →</button>
-        <p class="pg-hint">Sample mode returns up to <code>10</code> records and allows <code>30</code> requests/day per IP — enough to evaluate. For 100/day free + all 20 endpoints, <a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">get a key</a>. Point at your own deploy with <code>?api=https://your-host</code>.</p>
+        <p class="pg-hint">Sample mode returns up to <code>10</code> records and allows <code>30</code> requests/day per IP — enough to evaluate. For 100/day free + all 20 endpoints, <a href="mailto:hi@permy.dev?subject=Get%20an%20API%20key" target="_blank" rel="noopener noreferrer">get a key</a>. Point at your own deploy with <code>?api=https://your-host</code>.</p>
       </div>
       <div class="pg-right">
         <div class="pg-req">
@@ -334,13 +351,13 @@ console.log(<span class="c-key">await</span> p.sampleCoverage());
           <li><a href="#playground">Playground</a></li>
           <li><a href="#endpoints">Endpoints</a></li>
           <li><a href="#coverage">Coverage</a></li>
-          <li><a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Pricing</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
         </ul>
       </div>
       <div>
         <h5>Developers</h5>
         <ul>
-          <li><a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">RapidAPI listing</a></li>
+          <li><a href="https://github.com/lipon101/Permy" target="_blank" rel="noopener noreferrer">GitHub &amp; source</a></li>
           <li><a href="#quickstart">Quickstart + code</a></li>
           <li><a href="#playground">Try it (no key)</a></li>
           <li><a href="https://permy.onrender.com/v1/coverage" target="_blank" rel="noopener noreferrer">Live /v1/coverage</a></li>

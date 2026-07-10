@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal & Data License — Permy</title>
+<meta name="description" content="Legal terms, acceptable use, and data-license notes for the Permy building permit & construction-intelligence API.">
+<meta name="robots" content="index,follow">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="#F59E0B">
+<link rel="canonical" href="https://permyapp.vercel.app/legal">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,sans-serif;background:#FAF7F2;color:#1A1614;line-height:1.6}
+.topnav{position:sticky;top:0;z-index:60;background:rgba(250,247,242,.94);backdrop-filter:blur(12px);border-bottom:1px solid #E7E2D9}
+.topnav .wrap{max-width:1120px;margin:0 auto;padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.02em;text-decoration:none;color:#1A1614}
+.brand img{width:34px;height:34px;border-radius:9px;border:1px solid #E7E2D9}
+.back{font-size:14px;font-weight:600;color:#44403C;text-decoration:none;border:1px solid #E7E2D9;padding:8px 16px;border-radius:9px;transition:all .15s}
+.back:hover{border-color:#1A1614}
+.doc{max-width:760px;margin:0 auto;padding:48px 5% 80px}
+.doc .eyebrow{font-size:13px;font-weight:700;color:#D97706;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.doc h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,40px);line-height:1.1;letter-spacing:-.02em;margin-bottom:8px}
+.doc .updated{font-size:13px;color:#78716C;margin-bottom:36px}
+.doc h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:40px 0 12px;letter-spacing:-.01em}
+.doc h3{font-size:17px;font-weight:700;margin:28px 0 10px}
+.doc p{font-size:15.5px;color:#44403C;margin-bottom:14px}
+.doc ul{margin:0 0 18px 20px;color:#44403C;font-size:15.5px}
+.doc li{margin-bottom:8px}
+.doc code{font-family:'JetBrains Mono',monospace;font-size:13px;background:#FEF3C7;color:#B45309;padding:2px 6px;border-radius:4px}
+.doc .card{background:#fff;border:1px solid #E7E2D9;border-radius:14px;padding:22px 24px;margin:24px 0}
+.doc .card h3{margin-top:0}
+.doc .callout{background:#FEF3C7;border:1px solid #FCD34B;border-radius:14px;padding:18px 22px;margin:24px 0;font-size:14.5px;color:#78350F}
+.doc .callout b{color:#92400E}
+.doc a{color:#D97706;text-decoration:none}
+.doc a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/assets/brand-mark.png" alt="Permy"> Permy</a>
+    <a class="back" href="/">← Back to site</a>
+  </div>
+</nav>
+
+<article class="doc">
+  <div class="eyebrow">Legal</div>
+  <h1>Legal & Data License</h1>
+  <div class="updated">Last updated: July 10, 2026 · v0.1</div>
+
+  <p>Permy is a developer-first API that surfaces publicly available building-permit and construction data. This page summarizes the terms of use, the data-license obligations you inherit, and our privacy stance. It is a summary, not legal advice — the definitive terms live in the OpenAPI <code>termsOfService</code> field and any executed agreement.</p>
+
+  <h2>1. Source code license</h2>
+  <p>The Permy reference implementation is released under <b>Apache-2.0</b>. You may use, modify, and self-host it under the terms of that license. The hosted API service at <code>permy.onrender.com</code> and on RapidAPI is operated as a commercial service and is not governed by the open-source license.</p>
+
+  <h2>2. Data sources & upstream licenses</h2>
+  <p>Permy ingests only <b>public records and official open-data APIs</b> — Socrata, ArcGIS Hub, Accela, Tyler, and CKAN portals operated by U.S. cities and counties. We do not scrape gated or ToS-protected sources. Each permit record carries its own provenance:</p>
+  <ul>
+    <li><code>source_url</code> — a direct link to the originating city record.</li>
+    <li><code>source_name</code> — the human-readable name of the portal.</li>
+    <li><code>last_checked_at</code> — when we last verified the record upstream.</li>
+  </ul>
+  <p><b>You inherit the license terms of each upstream jurisdiction.</b> Most U.S. municipal open-data portals publish under permissive terms (often CC0, ODbL, or a custom open license), but obligations vary — attribution requirements, redistribution limits, and commercial-use terms differ by city. The <code>/v1/coverage</code> endpoint reports each jurisdiction's <code>source_portal</code> and <code>source_name</code> so you can identify and comply with the relevant license. When in doubt, consult the upstream portal's terms linked from <code>source_url</code>.</p>
+
+  <div class="callout">
+    <b>Redistribution.</b> Because upstream terms vary, bulk redistribution of raw permit records may be restricted by some jurisdictions. The normalized, derived intelligence Permy adds (lead scores, development scores, confidence, recommended actions, narratives) is original work and is not subject to the upstream data license.
+  </div>
+
+  <h2>3. Acceptable use</h2>
+  <ul>
+    <li><b>Public records only.</b> Permy exposes data that is already public. We do not surface gated, paywalled, or ToS-protected municipal data.</li>
+    <li><b>No PII resale.</b> You may not resell homeowner personal information as a standalone product. Building-product lead generation, contractor analytics, and proptech use cases are permitted.</li>
+    <li><b>Rate-limit respect.</b> Do not attempt to bypass the documented rate limits or the RapidAPI quota system.</li>
+    <li><b>Honesty in freshness.</b> Do not present cached or archive data as live. Permy labels archive sources explicitly; preserve those labels in downstream UIs.</li>
+  </ul>
+
+  <h2>4. Privacy</h2>
+  <p>Building permits are public records and may contain property-owner names and contractor contact details as published by the jurisdiction. Permy:</p>
+  <ul>
+    <li>Minimizes homeowner personal data per each city's published license.</li>
+    <li>Does not sell personal data.</li>
+    <li>Does not log or retain your API query parameters beyond what is needed for billing and abuse prevention.</li>
+    <li>Is GDPR-aware — a Data Processing Addendum (DPA) is available on the Enterprise tier.</li>
+  </ul>
+
+  <h2>5. No warranty; "data as of"</h2>
+  <p>Permitted data is provided "as is." Municipal portals can lag, change schema, or go temporarily offline. Every response includes freshness signals (<code>last_checked_at</code>, <code>last_ingested_at</code>) and confidence scores so you can make informed decisions. We clearly label archive sources when an upstream feed goes dark — we never serve stale data as fresh.</p>
+
+  <h2>6. Contact</h2>
+  <p>For legal, data-license, DPA, or enterprise inquiries: <a href="mailto:hi@permy.dev">hi@permy.dev</a>. To request a new city be added to coverage: <a href="mailto:hi@permy.dev?subject=Request%20a%20city">request a city</a>.</p>
+</article>
+</body>
+</html>

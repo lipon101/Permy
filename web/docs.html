@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permy — API Docs & Reference</title>
+<meta name="description" content="Interactive OpenAPI 3.1 reference for the Permy building permit & construction-intelligence API. Try every endpoint live with the embedded Scalar API explorer.">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="#F59E0B">
+<link rel="canonical" href="https://permyapp.vercel.app/docs">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,sans-serif;background:#FAF7F2;color:#1A1614}
+.topnav{position:sticky;top:0;z-index:60;background:rgba(250,247,242,.94);backdrop-filter:blur(12px);border-bottom:1px solid #E7E2D9}
+.topnav .wrap{max-width:1120px;margin:0 auto;padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.02em;text-decoration:none;color:#1A1614}
+.brand img{width:34px;height:34px;border-radius:9px;border:1px solid #E7E2D9}
+.back{font-size:14px;font-weight:600;color:#44403C;text-decoration:none;border:1px solid #E7E2D9;padding:8px 16px;border-radius:9px;transition:all .15s}
+.back:hover{border-color:#1A1614}
+.intro{max-width:880px;margin:0 auto;padding:48px 5% 28px;text-align:center}
+.intro .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#D97706;background:#FEF3C7;padding:6px 13px;border-radius:99px;margin-bottom:18px}
+.intro h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4vw,42px);line-height:1.1;letter-spacing:-.02em;margin-bottom:14px}
+.intro p{font-size:18px;color:#44403C;line-height:1.55;max-width:620px;margin:0 auto 8px}
+.intro .source{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#78716C;margin-top:14px}
+.intro .source a{color:#D97706;text-decoration:none}
+.intro .source a:hover{text-decoration:underline}
+#scalar{max-width:1200px;margin:0 auto;padding:0 5% 80px}
+.note{max-width:880px;margin:0 auto 32px;padding:18px 22px;background:#FEF3C7;border:1px solid #FCD34B;border-radius:14px;font-size:14px;color:#78350F;line-height:1.55;display:flex;gap:12px;align-items:flex-start}
+.note b{color:#92400E}
+.note .ico{font-size:18px;flex-shrink:0}
+</style>
+<title>Permy API Reference</title>
+</head>
+<body>
+<nav class="topnav">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/assets/brand-mark.png" alt="Permy"> Permy</a>
+    <a class="back" href="/">← Back to site</a>
+  </div>
+</nav>
+
+<section class="intro">
+  <span class="eyebrow">OpenAPI 3.1 · live reference</span>
+  <h1>Permy API Reference</h1>
+  <p>Every endpoint, parameter, and schema — rendered live from the running API. Try any endpoint directly in the explorer below with your <code>X-API-Key</code>.</p>
+  <div class="source">Spec source: <a href="https://permy.onrender.com/openapi.json" target="_blank" rel="noopener noreferrer">permy.onrender.com/openapi.json</a> · Base URL: <code>https://permy.p.rapidapi.com</code></div>
+</section>
+
+<div class="note" style="max-width:1200px">
+  <span class="ico">🔑</span>
+  <span><b>Authentication.</b> Send your RapidAPI key as <code>X-RapidAPI-Key</code> (and <code>X-RapidAPI-Host: permy.p.rapidapi.com</code>) on every request. The keyless <code>/v1/sample/*</code> endpoints need no key — try those in the <a href="/#playground" style="color:#D97706;font-weight:600">playground</a> first.</span>
+</div>
+
+<div id="scalar"></div>
+
+<script id="api-reference" data-url="https://permy.onrender.com/openapi.json" data-proxy-url="https://proxy.scalar.com" data-sidebar-position="left" data-theme="light" data-show-sidebar="true"></script>
+<script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@latest"></script>
+</body>
+</html>

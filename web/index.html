@@ -5,6 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Permy — Building Permit & Construction Intelligence API</title>
 <meta name="description" content="Normalized permits, contractor activity, property timelines, and ZIP development signals — ranked, sourced, and ready for your app.">
+<meta name="keywords" content="building permits API, construction data API, contractor leads, permit data, roofing leads, solar leads, HVAC leads, municipal data, proptech API, RapidAPI, permit intelligence, ZIP development score, real estate API">
+<meta name="author" content="Permy">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#F59E0B">
+<link rel="canonical" href="https://permyapp.vercel.app/">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Permy">
+<meta property="og:title" content="Permy — Building Permit & Construction Intelligence API">
+<meta property="og:description" content="Normalized permits, contractor activity, property timelines, and ZIP development signals — ranked, sourced, and ready for your app.">
+<meta property="og:url" content="https://permyapp.vercel.app/">
+<meta property="og:image" content="https://permyapp.vercel.app/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Permy — Building Permit & Construction Intelligence API">
+<meta name="twitter:description" content="Normalized permits, contractor activity, property timelines, and ZIP development signals — ranked, sourced, and ready for your app.">
+<meta name="twitter:image" content="https://permyapp.vercel.app/assets/og-image.jpg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Permy","description":"Building permit & construction-intelligence API providing normalized permits, contractor activity, property timelines, and ZIP development signals with source provenance and confidence scores.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","description":"Free tier: 100 requests/day"},"url":"https://permyapp.vercel.app/","logo":"https://permyapp.vercel.app/assets/brand-mark.png"}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
@@ -317,10 +341,11 @@ footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;dis
       <li><a href="#quickstart">Quickstart</a></li>
       <li><a href="#scoring">Lead Scoring</a></li>
       <li><a href="#pricing">Pricing</a></li>
+      <li><a href="/docs">Docs</a></li>
     </ul>
     <div class="cta">
       <a class="btn btn-ghost" href="#playground">Try it live</a>
-      <a class="btn btn-primary" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Get API Key →</a>
+      <a class="btn btn-primary" href="/docs">Get API Key →</a>
     </div>
   </div>
 </nav>
@@ -334,7 +359,7 @@ footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;dis
       <p class="lead">Give Permy an address, city, ZIP, contractor, or trade — get back clean, normalized, ranked municipal intelligence: permits, contractor activity, property timelines, and ZIP development signals — with source links and confidence scores.</p>
       <div class="hero-ctas">
         <a class="btn btn-amber" href="#playground">Try it live — no key</a>
-        <a class="btn btn-primary" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Get your API key — Free</a>
+        <a class="btn btn-primary" href="/docs">Get your API key — Free</a>
         <a class="btn btn-ghost" href="#quickstart">See the quickstart</a>
       </div>
       <div class="hero-meta">
@@ -345,7 +370,7 @@ footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;dis
     </div>
     <div class="mascot-stage">
       <span class="badge-floating">v0.1 · daily-fresh</span>
-      <img class="mascot" src="/assets/mascot-4k.png" alt="Permy — the friendly permit mascot">
+      <img class="mascot" src="/assets/mascot.png" width="760" height="760" alt="Permy — the friendly permit mascot" loading="eager">
     </div>
   </div>
 </header>
@@ -375,7 +400,7 @@ footer .bottom{margin-top:40px;padding-top:22px;border-top:1px solid #2D2724;dis
           </select>
           <div id="pg-params"></div>
           <button class="run-btn" id="pg-run">Run request →</button>
-          <p class="pg-hint">Sample mode returns up to <code>10</code> records / <code>30</code> requests per day. For 100/day free + full endpoints (leads, intelligence, alerts, webhooks), <a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer" style="color:var(--amber-deep);font-weight:600">get a key</a>.</p>
+          <p class="pg-hint">Sample mode returns up to <code>10</code> records / <code>30</code> requests per day. For 100/day free + full endpoints (leads, intelligence, alerts, webhooks), <a href="mailto:hi@permy.dev?subject=Get%20an%20API%20key" target="_blank" rel="noopener noreferrer">get a key</a>.</p>
         </div>
         <div class="pg-right">
           <div class="pg-req"><span class="m-get" id="pg-method">GET</span><span class="url" id="pg-url">/v1/sample/permits/search</span></div>
@@ -612,8 +637,8 @@ recency       × <span class="w">w_recency</span><br>
       <p style="margin-left:auto;margin-right:auto">The friendly permit clerk who does the boring municipal data wrangling — so your app, agents, and pipelines don't have to.</p>
     </div>
     <div class="video-wrap">
-      <video controls preload="metadata" poster="/assets/mascot-4k.png">
-        <source src="/assets/mascot-intro.mp4" type="video/mp4">
+      <video controls preload="none" poster="/assets/mascot.png">
+        <source src="/assets/mascot-intro-sm.mp4" type="video/mp4">
       </video>
       <div class="video-cap"><span><b>Permy intro</b> — stamp, hat tip, wave · 8s</span><span style="color:var(--mute)">amber #F59E0B · off-white</span></div>
     </div>
@@ -637,7 +662,7 @@ recency       × <span class="w">w_recency</span><br>
           <li>/coverage, /health, /usage</li>
           <li>100 requests / day</li>
         </ul>
-        <a class="btn btn-ghost" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Start free</a>
+        <a class="btn btn-ghost" href="/docs">Start free</a>
       </div>
       <div class="price">
         <div class="tier-name">Starter</div>
@@ -648,7 +673,7 @@ recency       × <span class="w">w_recency</span><br>
           <li>/properties/resolve + timeline</li>
           <li>2,000 requests / month</li>
         </ul>
-        <a class="btn btn-ghost" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Choose Starter</a>
+        <a class="btn btn-ghost" href="/docs">Choose Starter</a>
       </div>
       <div class="price">
         <div class="tier-name">Builder</div>
@@ -659,7 +684,7 @@ recency       × <span class="w">w_recency</span><br>
           <li>/contractors/search + activity</li>
           <li>5 saved searches, CSV export</li>
         </ul>
-        <a class="btn btn-ghost" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Choose Builder</a>
+        <a class="btn btn-ghost" href="/docs">Choose Builder</a>
       </div>
       <div class="price featured">
         <div class="tier-name">Pro</div>
@@ -671,7 +696,7 @@ recency       × <span class="w">w_recency</span><br>
           <li>Signed webhooks on new permits</li>
           <li>Priority email support</li>
         </ul>
-        <a class="btn btn-amber" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Choose Pro</a>
+        <a class="btn btn-amber" href="/docs">Choose Pro</a>
       </div>
       <div class="price">
         <div class="tier-name">Business</div>
@@ -682,7 +707,7 @@ recency       × <span class="w">w_recency</span><br>
           <li>Bulk export, multiple API keys</li>
           <li>99.5% SLA, MCP server access</li>
         </ul>
-        <a class="btn btn-ghost" href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">Choose Business</a>
+        <a class="btn btn-ghost" href="/docs">Choose Business</a>
       </div>
       <div class="price">
         <div class="tier-name">Enterprise</div>
@@ -693,7 +718,7 @@ recency       × <span class="w">w_recency</span><br>
           <li>Data warehouse delivery</li>
           <li>White-label, DPA, custom cities</li>
         </ul>
-        <a class="btn btn-ghost" href="/cdn-cgi/l/email-protection#36535842534446445f4553764653445b4f18525340">Talk to us</a>
+        <a class="btn btn-ghost" href="mailto:hi@permy.dev?subject=Enterprise%20inquiry">Talk to us</a>
       </div>
     </div>
     <p style="text-align:center;margin-top:22px;font-size:13.5px;color:var(--mute)">Usage-based overage on Pro+ · ~17% annual discount on all paid tiers.</p>
@@ -740,20 +765,20 @@ recency       × <span class="w">w_recency</span><br>
       <div>
         <h5>Developers</h5>
         <ul>
-          <li><a href="https://rapidapi.com/permy" target="_blank" rel="noopener noreferrer">RapidAPI listing</a></li>
+          <li><a href="https://github.com/lipon101/Permy" target="_blank" rel="noopener noreferrer">GitHub &amp; source</a></li>
           <li><a href="#quickstart">Quickstart + code</a></li>
           <li><a href="#playground">Try it (no key)</a></li>
-          <li><a href="#">OpenAPI 3.1 spec</a></li>
-          <li><a href="#">Node & Python SDKs</a></li>
+          <li><a href="/docs">OpenAPI 3.1 spec</a></li>
+          <li><a href="https://github.com/lipon101/Permy" target="_blank" rel="noopener noreferrer">Node & Python SDKs</a></li>
         </ul>
       </div>
       <div>
         <h5>Company</h5>
         <ul>
-          <li><a href="/cdn-cgi/l/email-protection#721a1b320217001f0b5c161704"><span class="__cf_email__" data-cfemail="82eaebc2f2e7f0effbace6e7f4">[email&#160;protected]</span></a></li>
-          <li><a href="/cdn-cgi/l/email-protection#e2878c96879092908b9187a29287908f9bcc868794">Enterprise</a></li>
-          <li><a href="/cdn-cgi/l/email-protection#4a29233e232f390a3a2f382733642e2f3c">Request a city</a></li>
-          <li><a href="#">Legal & data license</a></li>
+          <li><a href="mailto:hi@permy.dev">hi@permy.dev</a></li>
+          <li><a href="mailto:enterprise@permy.dev?subject=Enterprise%20inquiry">Enterprise</a></li>
+          <li><a href="mailto:hi@permy.dev?subject=Request%20a%20city">Request a city</a></li>
+          <li><a href="/legal">Legal & data license</a></li>
         </ul>
       </div>
     </div>
@@ -764,7 +789,7 @@ recency       × <span class="w">w_recency</span><br>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // code tabs
 document.querySelectorAll('.code-tab').forEach(tab=>{
   tab.addEventListener('click',()=>{
@@ -893,6 +918,71 @@ document.addEventListener('keydown', function(e) {
   window.__brokenImgHandler=true;
   var MAX=5,DELAYS=[2000,4000,8000,16000,32000];
   document.addEventListener('error',function(e){
+    var img=e.target;
+    if(!img||img.tagName!=='IMG')return;
+    var liveSrc=img.getAttribute('src');
+    var src=img.dataset.haOriginalSrc||liveSrc;
+    if(!src)return;
+    if(img.dataset.haOriginalSrc&&liveSrc&&liveSrc!==img.dataset.haOriginalSrc&&liveSrc.indexOf('_r=')<0){src=liveSrc;img.dataset.haOriginalSrc=src;img.dataset.haRetryCount='0'}
+    else if(!img.dataset.haOriginalSrc){img.dataset.haOriginalSrc=src}
+    var attempt=parseInt(img.dataset.haRetryCount||'0',10);
+    if(img.dataset.haPhId){var old=document.getElementById(img.dataset.haPhId);if(old)old.remove()}
+    var ph=document.createElement('div');
+    ph.className='ha-img-placeholder'+(attempt>=MAX?' ha-failed':'');
+    ph.id='ha-ph-'+Math.random().toString(36).slice(2,9);
+    var w=img.getAttribute('width');var h=img.getAttribute('height');
+    if(w)ph.style.width=w+(isNaN(Number(w))?'':'px');
+    else if(img.style.width)ph.style.width=img.style.width;
+    else if(img.width>1)ph.style.width=img.width+'px';
+    if(h)ph.style.height=h+(isNaN(Number(h))?'':'px');
+    else if(img.style.height)ph.style.height=img.style.height;
+    else if(img.height>1)ph.style.height=img.height+'px';
+    ph.textContent=attempt>=MAX?'Image unavailable':'Loading image\u2026';
+    img.dataset.haPhId=ph.id;
+    if(img.dataset.haOrigDisplay==null)img.dataset.haOrigDisplay=img.style.display||'';
+    img.style.display='none';
+    img.insertAdjacentElement('afterend',ph);
+    if(attempt<MAX){
+      img.dataset.haRetryCount=String(attempt+1);
+      setTimeout(function(){
+        if(!img.isConnected)return;
+        if(img.dataset.haOriginalSrc!==src)return;
+        if(img.complete&&img.naturalWidth>0)return;
+        var curSrc=img.getAttribute('src');
+        if(curSrc&&curSrc.indexOf(src)!==0)return;
+        var fresh=src+(src.indexOf('?')>=0?'&':'?')+'_r='+(attempt+1)+'_'+Date.now();
+        img.src=fresh;
+      },DELAYS[attempt]);
+    }
+  },true);
+  document.addEventListener('load',function(e){
+    var img=e.target;
+    if(!img||img.tagName!=='IMG')return;
+    if(img.dataset.haPhId){
+      var ph=document.getElementById(img.dataset.haPhId);
+      if(ph)ph.remove();
+      delete img.dataset.haPhId;
+      img.style.display=img.dataset.haOrigDisplay||'';
+      delete img.dataset.haOrigDisplay;
+      delete img.dataset.haOriginalSrc;
+      delete img.dataset.haRetryCount;
+    }
+  },true);
+})();
+</script>
+</body>
+</html>
+aOrigDisplay||'';
+      delete img.dataset.haOrigDisplay;
+      delete img.dataset.haOriginalSrc;
+      delete img.dataset.haRetryCount;
+    }
+  },true);
+})();
+</script>
+</body>
+</html>
+nction(e){
     var img=e.target;
     if(!img||img.tagName!=='IMG')return;
     var liveSrc=img.getAttribute('src');
