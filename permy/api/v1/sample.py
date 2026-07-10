@@ -13,11 +13,11 @@ clients can tell sample from real responses, and a ``sample: true`` field in the
 body.
 
 Auth bypass lives in the RateLimitMiddleware (it skips /v1/sample/*) and the
-sample quota is enforced here via ``check_sample_quota()``.
+sample quota is enforced here via ``check_sample_quota(request)`` (per-IP).
 """
 from typing import Optional  # noqa: E402
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response, status  # noqa: E402
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status  # noqa: E402
 
 from permy.core.config import settings  # noqa: E402
 from permy.db.repo import Repo, get_repo  # noqa: E402
@@ -35,14 +35,15 @@ router = APIRouter(prefix="/v1/sample", tags=["sample"])
 SAMPLE_MAX = settings.sample_max_per_response
 
 
-def _enforce_sample_quota() -> None:
-    """Bump the sample-day counter; raise 429 when the cap is hit."""
-    check_sample_quota()
+def _enforce_sample_quota(request: Request) -> None:
+    """Bump the per-IP sample counter; raise 429 when the cap is hit."""
+    check_sample_quota(request)
 
 
 @router.get("/permits/search", response_model=PermitsSearchResponse,
             summary="[Sample, no key] Search permits — capped at 10 records")
 def sample_search_permits(
+    request: Request,
     response: Response,
     city: Optional[str] = Query(None),
     state: Optional[str] = Query(None),
@@ -56,7 +57,7 @@ def sample_search_permits(
     page: int = Query(1, ge=1),
     repo: Repo = Depends(get_repo),  # noqa: B008
 ) -> PermitsSearchResponse:
-    _enforce_sample_quota()
+    _enforce_sample_quota(request)
     response.headers["X-Permy-Mode"] = "sample"
     params = {k: v for k, v in dict(
         city=city, state=state, zip=zip, trade=trade, status=status,
@@ -74,10 +75,11 @@ def sample_search_permits(
             summary="[Sample, no key] Full permit detail")
 def sample_get_permit(
     permit_id: str,
+    request: Request,
     response: Response,
     repo: Repo = Depends(get_repo),  # noqa: B008
 ) -> Permit:
-    _enforce_sample_quota()
+    _enforce_sample_quota(request)
     response.headers["X-Permy-Mode"] = "sample"
     p = repo.get_permit(permit_id)
     if not p:
@@ -89,8 +91,8 @@ def sample_get_permit(
 
 @router.get("/coverage", response_model=CoverageResponse,
             summary="[Sample, no key] Supported cities + per-city fields")
-def sample_coverage(response: Response, repo: Repo = Depends(get_repo)) -> CoverageResponse:  # noqa: B008
-    _enforce_sample_quota()
+def sample_coverage(request: Request, response: Response, repo: Repo = Depends(get_repo)) -> CoverageResponse:  # noqa: B008
+    _enforce_sample_quota(request)
     response.headers["X-Permy-Mode"] = "sample"
     return repo.coverage()
 
@@ -98,6 +100,7 @@ def sample_coverage(response: Response, repo: Repo = Depends(get_repo)) -> Cover
 @router.get("/contractors/search", response_model=ContractorsSearchResponse,
             summary="[Sample, no key] Search contractors — capped at 10 records")
 def sample_search_contractors(
+    request: Request,
     response: Response,
     name: Optional[str] = Query(None),
     trade: Optional[str] = Query(None),
@@ -105,7 +108,7 @@ def sample_search_contractors(
     page: int = Query(1, ge=1),
     repo: Repo = Depends(get_repo),  # noqa: B008
 ) -> ContractorsSearchResponse:
-    _enforce_sample_quota()
+    _enforce_sample_quota(request)
     response.headers["X-Permy-Mode"] = "sample"
     params = {k: v for k, v in dict(
         name=name, trade=trade, city=city, page=page, limit=SAMPLE_MAX,
@@ -118,13 +121,14 @@ def sample_search_contractors(
 @router.get("/leads/ranked", response_model=RankedLeadsResponse,
             summary="[Sample, no key] Ranked leads — capped at 10 records")
 def sample_rank_leads(
+    request: Request,
     response: Response,
     persona: str = Query("roofer", pattern="^(roofer|solar|hvac|investor|supplier|insurer|general)$"),
     trade: Optional[str] = Query(None),
     city: Optional[str] = Query(None),
     repo: Repo = Depends(get_repo),  # noqa: B008
 ) -> RankedLeadsResponse:
-    _enforce_sample_quota()
+    _enforce_sample_quota(request)
     response.headers["X-Permy-Mode"] = "sample"
     params = {k: v for k, v in dict(
         persona=persona, trade=trade, city=city, limit=SAMPLE_MAX,

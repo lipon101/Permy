@@ -171,12 +171,16 @@ def test_intelligence_blocked_for_free(client):
 # A paid subscriber MUST get access to the tier they paid for; a free/basic
 # subscriber MUST get a clean 403 with the upgrade message. This is what makes
 # the product actually monetizable — do not let it regress.
-def test_rapidapi_pro_subscriber_gets_leads(client):
-    """A RapidAPI PRO subscriber (paid) can access /leads/ranked."""
-    r = client.get("/v1/leads/ranked?persona=roofer&limit=3",
+def test_rapidapi_pro_subscriber_gets_contractors_not_leads(client):
+    """A RapidAPI PRO subscriber ($49 → builder tier) gets contractors (export)
+    but is blocked from leads (which needs ULTRA/pro tier)."""
+    r = client.get("/v1/contractors/search?limit=3",
                    headers={"X-RapidAPI-Key": "buyer-pro", "X-RapidAPI-Subscription": "PRO"})
     assert r.status_code == 200
-    assert r.json()["persona"] == "roofer"
+    r2 = client.get("/v1/leads/ranked?persona=roofer",
+                    headers={"X-RapidAPI-Key": "buyer-pro", "X-RapidAPI-Subscription": "PRO"})
+    assert r2.status_code == 403
+    assert r2.json()["error"]["code"] == "feature_not_available"
 
 
 def test_rapidapi_basic_subscriber_blocked_from_leads(client):
@@ -188,7 +192,7 @@ def test_rapidapi_basic_subscriber_blocked_from_leads(client):
 
 
 def test_rapidapi_ultra_subscriber_gets_intelligence(client):
-    """A RapidAPI ULTRA subscriber ($499) maps to the business tier → intel access."""
+    """A RapidAPI ULTRA subscriber ($149 → pro tier) gets intel + leads access."""
     r = client.post("/v1/intelligence/score",
                     headers={"X-RapidAPI-Key": "buyer-ultra", "X-RapidAPI-Subscription": "ULTRA"},
                     json={"address": "10912 Mystic Timber Dr, Austin, TX 78754"})
@@ -196,9 +200,9 @@ def test_rapidapi_ultra_subscriber_gets_intelligence(client):
 
 
 def test_rapidapi_subscription_case_insensitive(client):
-    """RapidAPI plan names are matched case-insensitively (pro == PRO == Pro)."""
+    """RapidAPI plan names are matched case-insensitively (ultra == ULTRA == Ultra)."""
     r = client.get("/v1/leads/ranked?persona=roofer&limit=1",
-                   headers={"X-RapidAPI-Key": "buyer-x", "X-RapidAPI-Subscription": "pro"})
+                   headers={"X-RapidAPI-Key": "buyer-x", "X-RapidAPI-Subscription": "ultra"})
     assert r.status_code == 200
 
 
@@ -267,7 +271,7 @@ def test_usage(client):
     r = client.get("/v1/usage", headers=PRO)
     assert r.status_code == 200
     body = r.json()
-    assert body["tier"] in ("free", "starter", "builder", "pro", "business", "enterprise")
+    assert body["tier"] in ("free", "builder", "pro", "business", "enterprise")
     assert "requests_today" in body
 
 

@@ -15,6 +15,7 @@ def client():
     reset_repo()
     import permy.middleware.ratelimit as rl
     rl._sample_daily.clear()
+    rl._sample_rpm.clear()  # per-IP burst bucket — reset between tests
     return TestClient(app, raise_server_exceptions=False)
 
 
@@ -68,12 +69,13 @@ def test_sample_get_permit_404(client):
 def test_sample_quota_exceeded_returns_429(client):
     import permy.middleware.ratelimit as rl
     rl._sample_daily.clear()
+    rl._sample_rpm.clear()
     # default cap is 30/day; exhaust it
     for _ in range(30):
         assert client.get("/v1/sample/permits/search").status_code == 200
     r = client.get("/v1/sample/permits/search")
     assert r.status_code == 429
-    assert r.json()["error"]["code"] == "quota_exceeded"
+    assert r.json()["error"]["code"] in ("quota_exceeded", "rate_limited")
 
 
 # ---- security headers on every response ----

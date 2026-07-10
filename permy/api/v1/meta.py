@@ -35,7 +35,7 @@ def health(repo: Repo = Depends(get_repo)) -> HealthResponse:  # noqa: B008
 def usage(
     ctx: ApiKeyContext = Depends(get_api_key_context),  # noqa: B008
 ) -> UsageResponse:
-    req_today, _ = usage_today(ctx.key)
+    req_today, _ = usage_today(ctx.key, ctx.tier)
     return UsageResponse(
         api_key=ctx.key[:4] + "…", tier=ctx.tier, day=date.today(),
         requests_today=req_today,

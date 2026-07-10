@@ -6,7 +6,7 @@ from typing import Optional  # noqa: E402
 from fastapi import APIRouter, Depends, HTTPException, Query, status  # noqa: E402
 
 from permy.db.repo import Repo, get_repo  # noqa: E402
-from permy.middleware.auth import ApiKeyContext, get_api_key_context  # noqa: E402
+from permy.middleware.auth import ApiKeyContext, get_api_key_context, require_feature  # noqa: E402
 from permy.models.schemas import (  # noqa: E402
     ContractorActivity,
     ContractorsSearchResponse,
@@ -26,7 +26,7 @@ def search_contractors(
     page: int = Query(1, ge=1),
     limit: int = Query(25, ge=1, le=100),
     repo: Repo = Depends(get_repo),  # noqa: B008
-    ctx: ApiKeyContext = Depends(get_api_key_context),  # noqa: B008
+    ctx: ApiKeyContext = Depends(require_feature("export")),  # noqa: B008
 ) -> ContractorsSearchResponse:
     params = {k: v for k, v in dict(
         name=name, license=license, city=city, trade=trade, page=page, limit=limit,
@@ -40,7 +40,7 @@ def search_contractors(
 def contractor_activity(
     contractor_id: str,
     repo: Repo = Depends(get_repo),  # noqa: B008
-    ctx: ApiKeyContext = Depends(get_api_key_context),  # noqa: B008
+    ctx: ApiKeyContext = Depends(require_feature("export")),  # noqa: B008
 ) -> ContractorActivity:
     act = repo.contractor_activity_get(contractor_id)
     if not act:

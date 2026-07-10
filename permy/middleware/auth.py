@@ -23,31 +23,64 @@ from typing import Optional  # noqa: E402
 
 from fastapi import Header, HTTPException, Request, status  # noqa: E402
 
-from permy.core.config import TIER_LIMITS  # noqa: E402
+from permy.core.config import TIER_LIMITS, settings  # noqa: E402
+from permy.core.logging import logger  # noqa: E402
 
-# Direct-site keys (the PERMY_API_KEYS path) → tier. Used for the direct site,
-# MCP server, tests, and any caller presenting one of these. In production,
-# PERMY_API_KEYS contains your own direct-site key(s); RapidAPI subscriber keys
-# are NOT listed here — they're identified via the subscription header below.
-_KEY_TIER = {
-    "dev-key-1": "free",
-    "dev-key-2": "pro",
-    "admin-key-1": "enterprise",
-    "ci-key": "pro",
-}
+# Direct-site keys (PERMY_API_KEYS / PERMY_ADMIN_KEYS env) → tier. Used for the
+# direct site, MCP server, tests, and any caller presenting one of these.
+# SECURITY: never hardcode keys here. The repo is PUBLIC — any committed key is
+# a free enterprise-tier backdoor. Keys are loaded from env at import time; if
+# the env is empty (local dev default), only the RapidAPI subscription path runs.
+def _load_key_tier_map() -> dict:
+    """Build {key: tier} from env so no key is ever hardcoded in source.
+
+    PERMY_API_KEYS supports an optional ``key:tier`` suffix so tests and the
+    direct site can simulate tiers without leaking prod keys:
+        PERMY_API_KEYS=dev-key-1:free,dev-key-2:pro
+    Keys without a ``:tier`` suffix default to ``free``. PERMY_ADMIN_KEYS
+    entries always map to ``enterprise`` (unlimited), regardless of suffix.
+
+    SECURITY: the legacy hardcoded keys (dev-key-1, dev-key-2, admin-key-1,
+    ci-key) were removed because the repo is PUBLIC — any committed key was a
+    free enterprise-tier backdoor. Set these via env in the deployed environment.
+    """
+    valid_tiers = set(TIER_LIMITS.keys())
+    # SAFE-BY-DEFAULT: in prod/staging, ignore the dev-default key string unless
+    # the operator explicitly set PERMY_API_KEYS in the environment. Otherwise a
+    # public-repo reader could send X-API-Key: dev-key-2 and get Pro tier for
+    # free. Prod should rely on the RapidAPI X-RapidAPI-Subscription header.
+    raw = settings.api_keys
+    _DEV_DEFAULT = "dev-key-1:free,dev-key-2:pro"
+    if settings.env in ("prod", "production", "staging") and raw.strip() == _DEV_DEFAULT:
+        raw = ""
+    m: dict = {}
+    for entry in raw.split(","):
+        entry = entry.strip()
+        if not entry:
+            continue
+        if ":" in entry:
+            key, _, tier = entry.partition(":")
+            key, tier = key.strip(), tier.strip().lower()
+            m[key] = tier if tier in valid_tiers else "free"
+        else:
+            m[entry] = "free"
+    for k in settings.admin_key_set:
+        m[k] = "enterprise"  # admin keys → unlimited
+    return m
+
+
+_KEY_TIER = _load_key_tier_map()
 
 # RapidAPI plan name (X-RapidAPI-Subscription) → internal tier.
-# RapidAPI sends BASIC | PRO | ULTRA | MEGA | CUSTOM (case-insensitive).
-# Match these to the plans you create in the RapidAPI Monetize tab — see the
-# mapping notes in docs/RAPIDAPI_LISTING.md. If you rename a plan on RapidAPI,
-# update the key here to match exactly (case-insensitive).
+# RapidAPI's Monetize tab exposes at most 4 plans; we name them BASIC/PRO/ULTRA/MEGA
+# to match the hub, and map them to internal tiers. Match these to the plans you
+# create in the RapidAPI Monetize tab — see docs/RAPIDAPI_LISTING.md. If you rename
+# a plan on RapidAPI, update the key here to match exactly (case-insensitive).
 _RAPIDAPI_SUBSCRIPTION_TIER = {
-    "basic": "free",        # Free tier — $0, 100/day
-    "starter": "starter",   # Starter — $19/mo (name your RapidAPI plan "STARTER")
-    "builder": "builder",   # Builder — $49/mo (name your RapidAPI plan "BUILDER")
-    "pro": "pro",           # Pro — $149/mo, unlocks leads + intel + webhooks
-    "ultra": "business",    # Ultra — $499/mo (RapidAPI's ULTRA → our business tier)
-    "mega": "enterprise",   # Mega — enterprise/SLA
+    "basic": "free",        # BASIC  — $0,   100/day
+    "pro": "builder",       # PRO    — $49,  10,000/mo   (RapidAPI "PRO" → our builder)
+    "ultra": "pro",         # ULTRA  — $149, 100,000/mo  (leads + intel + webhooks)
+    "mega": "business",     # MEGA   — $499, 500,000/mo  (bulk + multi-key + SLA + MCP)
     "custom": "business",   # Custom private plan — treat as business unless overridden
 }
 
@@ -114,7 +147,14 @@ def get_api_key_context(
         #    alone is just an identity, not a tier.
         sub = request.headers.get("x-rapidapi-subscription")
         if sub:
-            tier = _RAPIDAPI_SUBSCRIPTION_TIER.get(sub.strip().lower())
+            sub_norm = sub.strip().lower()
+            tier = _RAPIDAPI_SUBSCRIPTION_TIER.get(sub_norm)
+            if tier is None:
+                # Unmapped plan name — log for visibility so we notice when RapidAPI
+                # renames/adds a plan before wiring it into _RAPIDAPI_SUBSCRIPTION_TIER.
+                # Fallback to free is safe: RapidAPI still enforces gateway quotas.
+                logger.warning("unmapped_rapidapi_subscription",
+                               extra={"subscription": sub_norm})
         # 3. Fallback: free. A brand-new RapidAPI subscriber (or any caller we
         #    haven't mapped) gets a working free-tier response. RapidAPI also
         #    enforces its own quotas at the gateway, so this is safe.

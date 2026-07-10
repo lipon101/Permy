@@ -14,7 +14,11 @@ class Settings(BaseSettings):
     port: int = 8000
     base_url: str = "http://localhost:8000"
 
-    api_keys: str = "dev-key-1"
+    # Direct-site/dev/test keys. Optional ":tier" suffix simulates a tier
+    # (see env.example). Default is dev-only; prod overrides via env. These are
+    # NOT customer keys — RapidAPI subscriber keys are resolved via the
+    # X-RapidAPI-Subscription header, not this list.
+    api_keys: str = "dev-key-1:free,dev-key-2:pro"
     admin_keys: str = ""
 
     webhook_secret: str = "change-me"
@@ -43,7 +47,16 @@ class Settings(BaseSettings):
 
     @property
     def api_key_set(self) -> set:
-        return {k.strip() for k in self.api_keys.split(",") if k.strip()}
+        # PERMY_API_KEYS entries may carry a ":tier" suffix (e.g. "dev-key-2:pro")
+        # for test/direct-site tier simulation. Return only the key part here so
+        # membership checks (is this key valid?) ignore the suffix.
+        out = set()
+        for entry in self.api_keys.split(","):
+            entry = entry.strip()
+            if not entry:
+                continue
+            out.add(entry.split(":", 1)[0].strip())
+        return out
 
     @property
     def admin_key_set(self) -> set:
@@ -53,14 +66,38 @@ class Settings(BaseSettings):
 settings = Settings()
 
 
-# ---- tiers (mirror RapidAPI pricing) ----
+def _fail_fast_on_default_secrets() -> None:
+    """Refuse to boot in prod with a default/guessable webhook secret.
+
+    A forgeable HMAC secret means anyone can sign fake webhook deliveries —
+    a direct breach of integrity. We only enforce this in prod/staging so
+    local dev and CI don't need real secrets to run.
+    """
+    if settings.env in ("prod", "production", "staging"):
+        if not settings.webhook_secret or settings.webhook_secret == "change-me" \
+                or len(settings.webhook_secret) < 32:
+            raise RuntimeError(
+                "PERMY_WEBHOOK_SECRET must be set to a >=32-char random string in "
+                f"env={settings.env!r}. Refusing to boot with a forgeable HMAC secret."
+            )
+
+
+_fail_fast_on_default_secrets()
+
+
+# ---- tiers (mirror RapidAPI pricing: BASIC / PRO / ULTRA / MEGA) ----
+# RapidAPI allows at most 4 monetized plans, so we map:
+#   BASIC  ($0)   -> free        100/day
+#   PRO    ($49)  -> builder     10,000/mo
+#   ULTRA  ($149) -> pro         100,000/mo  (leads + intel + webhooks)
+#   MEGA   ($499) -> business    500,000/mo  (bulk + multi-key + SLA + MCP)
+# Enterprise is off-RapidAPI (direct/contract) — unlimited + warehouse delivery.
 TIER_LIMITS = {
-    "free":     {"daily": 100,       "monthly": None,   "saved_searches": 1,   "webhooks": False, "export": False, "leads": False, "intel": False},
-    "starter":  {"daily": None,      "monthly": 2000,   "saved_searches": 0,   "webhooks": False, "export": False, "leads": False, "intel": False},
-    "builder":  {"daily": None,      "monthly": 10000,  "saved_searches": 5,   "webhooks": False, "export": True,  "leads": False, "intel": False},
-    "pro":      {"daily": None,      "monthly": 100000, "saved_searches": 50,  "webhooks": True,  "export": True,  "leads": True,  "intel": True},
-    "business": {"daily": None,      "monthly": 500000, "saved_searches": 500, "webhooks": True,  "export": True,  "leads": True,  "intel": True},
-    "enterprise": {"daily": None,    "monthly": None,   "saved_searches": -1,  "webhooks": True,  "export": True,  "leads": True,  "intel": True},
+    "free":       {"daily": 100,       "monthly": None,   "saved_searches": 0,   "webhooks": False, "export": False, "leads": False, "intel": False},
+    "builder":    {"daily": None,      "monthly": 10000,  "saved_searches": 5,   "webhooks": False, "export": True,  "leads": False, "intel": False},
+    "pro":        {"daily": None,      "monthly": 100000, "saved_searches": 50,  "webhooks": True,  "export": True,  "leads": True,  "intel": True},
+    "business":   {"daily": None,      "monthly": 500000, "saved_searches": 500, "webhooks": True,  "export": True,  "leads": True,  "intel": True},
+    "enterprise": {"daily": None,      "monthly": None,   "saved_searches": -1,  "webhooks": True,  "export": True,  "leads": True,  "intel": True},
 }
 
 PERSONAS = ["roofer", "solar", "hvac", "investor", "supplier", "insurer", "general"]
