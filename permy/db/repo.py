@@ -219,22 +219,55 @@ class Repo:
         start = (page - 1) * limit
         return results[start:start + limit], total
 
+    @staticmethod
+    def _norm_id(value: str) -> str:
+        """Normalize an ID/path-param for tolerant matching.
+
+        Callers may pass IDs URL-encoded, URL-decoded, with varying case, or
+        with stray whitespace. We normalize so lookups succeed regardless:
+          * URL-decode (%3A -> :, %20 -> space, + -> space)
+          * strip whitespace
+          * collapse internal whitespace
+        We intentionally do NOT lowercase permit/contractor IDs, because the
+        canonical_uid format is case-sensitive by jurisdiction slug. Property
+        IDs (full addresses) are matched case-insensitively in resolve_property.
+        """
+        if not value:
+            return value
+        from urllib.parse import unquote_plus
+        v = unquote_plus(value).strip()
+        return " ".join(v.split())
+
     def get_permit(self, permit_id: str) -> Optional[Permit]:
+        nid = self._norm_id(permit_id)
         for p in self.permits:
-            if p.id == permit_id or p.canonical_uid == permit_id or p.source_permit_id == permit_id:
+            if p.id == nid or p.canonical_uid == nid or p.source_permit_id == nid:
+                return p
+        # tolerant fallback: case-insensitive on the canonical_uid slug prefix
+        nid_l = nid.lower()
+        for p in self.permits:
+            if p.id.lower() == nid_l or p.canonical_uid.lower() == nid_l:
                 return p
         return None
 
     def resolve_property(self, address_str: str) -> Optional[Property]:
-        key = address_str.lower().strip()
-        # fuzzy: prefix match
+        key = self._norm_id(address_str).lower()
+        if not key:
+            return None
+        # exact (normalized) match first
+        prop = self.properties.get(key)
+        if prop:
+            return prop
+        # fuzzy: substring match either way (handles partial / unencoded addresses)
         for k, prop in self.properties.items():
             if key in k or k in key:
                 return prop
         return None
 
     def property_timeline(self, property_id: str) -> Optional[PropertyTimeline]:
-        prop = self.properties.get(property_id) or self.resolve_property(property_id)
+        nid = self._norm_id(property_id)
+        prop = self.properties.get(nid) or self.properties.get(nid.lower()) \
+            or self.resolve_property(nid)
         if prop is None:
             return None
         ps = [p for p in self.permits if p.address.full.lower() == prop.full_address.lower()]
@@ -275,10 +308,19 @@ class Repo:
         return results[start:start + limit], total
 
     def contractor_activity_get(self, contractor_id: str) -> Optional[ContractorActivity]:
-        c = self.contractors.get(contractor_id)
+        nid = self._norm_id(contractor_id)
+        c = self.contractors.get(nid)
+        if c is None:
+            # tolerant: case-insensitive match on the contractor key
+            nid_l = nid.lower()
+            for k, con in self.contractors.items():
+                if k.lower() == nid_l:
+                    c = con
+                    nid = k
+                    break
         if c is None:
             return None
-        act = self.contractor_activity[contractor_id]
+        act = self.contractor_activity[nid]
         tv = act["total_valuation_usd"]
         band = "<50k" if tv < 50_000 else ("50k-500k" if tv < 500_000 else "500k+")
         # momentum: fraction of permits in last 90 days
