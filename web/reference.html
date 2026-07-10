@@ -85,8 +85,18 @@ nav .cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
 /* Scalar explorer wrapper — flush under the auth note, no top gap */
 .scalar-section{max-width:1280px;margin:0 auto;padding:0 5% 56px}
 .scalar-section #scalar{min-height:72vh}
-/* zero the sticky-header CSS var Scalar uses to reserve top space */
-.scalar-section .scalar-app{--refs-header-height:0px;--scalar-custom-header-height:0px;padding-top:0!important;margin-top:0!important}
+/* zero the sticky-header CSS var Scalar uses to reserve top space — apply to
+   EVERY container in the chain so it cascades down to .content-area */
+.scalar-section .scalar-app,
+.scalar-section .scalar-app *,
+.scalar-section .scalar-main,
+.scalar-section .main-wrapper,
+.scalar-section .content-area,
+.scalar-section .references-rendered,
+.scalar-section .narrow-references-container,
+.scalar-section .section-container,
+.scalar-section .introduction-section{--refs-header-height:0px!important;--scalar-custom-header-height:0px!important}
+.scalar-section .scalar-app{padding-top:0!important;margin-top:0!important}
 /* kill every leading margin/padding Scalar injects above the Introduction */
 .scalar-section [data-v-app],
 .scalar-section .references-rendered,
@@ -94,6 +104,9 @@ nav .cta{display:flex;gap:10px;align-items:center;flex-shrink:0}
 .scalar-section .section-container,
 .scalar-section .introduction-section,
 .scalar-section .introduction-section .section-container{padding-top:0!important;margin-top:0!important}
+/* THE gap source: Scalar's .content-area reserves --refs-header-height as
+   padding-top; zero it so the Introduction sits flush under the auth note */
+.scalar-section .content-area{padding-top:0!important;margin-top:0!important}
 /* collapse the decorative flare + any inner spacer above the first heading */
 .scalar-section .section-flare{display:none!important}
 .scalar-section .narrow-references-container > *{margin-top:0!important}
