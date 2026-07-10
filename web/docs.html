@@ -287,6 +287,76 @@ curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</spa
   </div>
 </section>
 
+<!-- ===================== HOW TO USE YOUR KEY ===================== -->
+<section id="use-key" style="padding:48px 0;background:linear-gradient(180deg,var(--cream-2),var(--cream))">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Post-subscribe · 60 seconds to your first paid call</div>
+      <h2>Got your key? Here's exactly where it goes.</h2>
+      <p>You subscribed on RapidAPI and have an <code>X-RapidAPI-Key</code>. Two headers on every paid request — that's it. Copy the example, swap in your key, run it.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:24px">
+      <div style="background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px">
+        <div style="font-size:12px;font-weight:700;color:var(--amber-deep);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Step 1</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Copy your key</div>
+        <div style="font-size:13px;color:var(--ink-soft);line-height:1.5">On the RapidAPI listing, in the right sidebar under <b>Subscribe to Test</b>, your key shows as <code>X-RapidAPI-Key</code>. Copy it.</div>
+      </div>
+      <div style="background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px">
+        <div style="font-size:12px;font-weight:700;color:var(--amber-deep);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Step 2</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Set two headers</div>
+        <div style="font-size:13px;color:var(--ink-soft);line-height:1.5"><code>X-RapidAPI-Key: YOUR_KEY</code> and <code>X-RapidAPI-Host: permy.p.rapidapi.com</code> on every paid request.</div>
+      </div>
+      <div style="background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px">
+        <div style="font-size:12px;font-weight:700;color:var(--amber-deep);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Step 3</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Call any paid endpoint</div>
+        <div style="font-size:13px;color:var(--ink-soft);line-height:1.5">Swap the sample URL for <code>https://permy.p.rapidapi.com</code> and hit any <span class="mono" style="color:var(--amber-deep)">/v1/</span> endpoint — ranked leads, intelligence, alerts.</div>
+      </div>
+    </div>
+
+    <div class="code-card" style="max-width:820px">
+      <div class="code-tabs">
+        <div class="code-tab active" data-tab="paid-curl">cURL</div>
+        <div class="code-tab" data-tab="paid-py">Python</div>
+        <div class="code-tab" data-tab="paid-js">JavaScript</div>
+        <span class="copy" onclick="copyCode2()">copy</span>
+      </div>
+      <div class="code-body">
+<pre class="code-pane active" id="pane-paid-curl"><span class="c"># Your first paid call — ranked roofing leads in Austin</span>
+curl -G <span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked"</span> \
+  --data-urlencode <span class="s">"persona=roofer"</span> \
+  --data-urlencode <span class="s">"city=Austin"</span> \
+  --data-urlencode <span class="s">"limit=10"</span> \
+  -H <span class="s">"X-RapidAPI-Key: YOUR_KEY"</span> \
+  -H <span class="s">"X-RapidAPI-Host: permy.p.rapidapi.com"</span></pre>
+
+<pre class="code-pane" id="pane-paid-py"><span class="k">import</span> requests
+
+r = requests.get(<span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked"</span>,
+  params={<span class="s">"persona"</span>: <span class="s">"roofer"</span>, <span class="s">"city"</span>: <span class="s">"Austin"</span>, <span class="s">"limit"</span>: <span class="n">10</span>},
+  headers={<span class="s">"X-RapidAPI-Key"</span>: <span class="s">"YOUR_KEY"</span>, <span class="s">"X-RapidAPI-Host"</span>: <span class="s">"permy.p.rapidapi.com"</span>})
+
+<span class="k">for</span> l <span class="k">in</span> r.json()[<span class="s">"leads"</span>]:
+    print(l[<span class="s">"lead_score"</span>], l[<span class="s">"recommended_action"</span>], l[<span class="s">"reason"</span>])</pre>
+
+<pre class="code-pane" id="pane-paid-js"><span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">"https://permy.p.rapidapi.com/v1/leads/ranked?persona=roofer&amp;city=Austin&amp;limit=10"</span>, {
+  headers: {
+    <span class="s">"X-RapidAPI-Key"</span>: <span class="s">"YOUR_KEY"</span>,
+    <span class="s">"X-RapidAPI-Host"</span>: <span class="s">"permy.p.rapidapi.com"</span>
+  }
+});
+<span class="k">const</span> { leads } = <span class="k">await</span> res.json();
+leads.forEach(l =&gt; console.log(l.lead_score, l.recommended_action, l.reason));</pre>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;padding:16px 20px;background:var(--paper);border:1px solid var(--line);border-radius:12px;font-size:13.5px;color:var(--ink-soft);display:flex;gap:10px;align-items:flex-start;max-width:820px">
+      <span style="font-size:16px">💡</span>
+      <span><b>SDK shortcut.</b> If you prefer a typed client, the Node &amp; Python SDKs handle the headers for you — pass your key once at construction. See the <a href="https://github.com/lipon101/Permy" target="_blank" rel="noopener noreferrer" style="color:var(--amber-deep);font-weight:600">repo</a> and the <a href="/reference" style="color:var(--amber-deep);font-weight:600">full reference</a>.</span>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== ENDPOINTS (real, from spec) ===================== -->
 <section id="endpoints" style="background:linear-gradient(180deg,var(--cream),var(--cream-2))">
   <div class="wrap">
@@ -380,19 +450,29 @@ curl -G <span class="s">"https://permy.onrender.com/v1/sample/leads/ranked"</spa
 </footer>
 
 <script>
-// code tabs
-document.querySelectorAll('.code-tab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    document.querySelectorAll('.code-tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.code-pane').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('pane-'+tab.dataset.tab).classList.add('active');
+// code tabs (scoped per .code-card so multiple tab groups don't collide)
+document.querySelectorAll('.code-card').forEach(card=>{
+  card.querySelectorAll('.code-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      card.querySelectorAll('.code-tab').forEach(t=>t.classList.remove('active'));
+      card.querySelectorAll('.code-pane').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      const pane=card.querySelector('#pane-'+tab.dataset.tab);
+      if(pane) pane.classList.add('active');
+    });
   });
 });
 function copyCode(){
-  const active=document.querySelector('.code-pane.active');
+  const active=document.querySelector('#pane-curl')||document.querySelector('.code-pane.active');
   navigator.clipboard.writeText(active.innerText);
-  const c=document.querySelector('.copy'); c.textContent='copied!';
+  const c=document.querySelector('.code-card .copy'); c.textContent='copied!';
+  setTimeout(()=>c.textContent='copy',1400);
+}
+function copyCode2(){
+  const active=document.querySelector('#pane-paid-curl')||document.querySelector('#pane-paid-py')||document.querySelector('#pane-paid-js');
+  navigator.clipboard.writeText(active.innerText);
+  const cards=document.querySelectorAll('.code-card');
+  const c=cards[cards.length-1].querySelector('.copy'); c.textContent='copied!';
   setTimeout(()=>c.textContent='copy',1400);
 }
 // live try-it (real keyless data)

@@ -29,15 +29,17 @@
 :root{
   --amber:#F59E0B; --amber-deep:#D97706; --amber-soft:#FEF3C7;
   --ink:#1A1614; --ink-soft:#44403C; --mute:#78716C;
-  --cream:#FAF7F2; --paper:#FFFFFF; --line:#E7E2D9;
-  --green:#16A34A; --red:#DC2626;
-  --radius:14px;
+  --cream:#FAF7F2; --cream-2:#F5F0E8; --paper:#FFFFFF; --line:#E7E2D9;
+  --green:#16A34A; --red:#DC2626; --radius:14px; --radius-lg:18px;
+  --shadow:0 4px 16px -6px rgba(26,22,20,.08);
+  --shadow-lg:0 24px 60px -28px rgba(26,22,20,.22);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',-apple-system,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
 .mono{font-family:'JetBrains Mono',monospace}
 a{color:inherit}
+img{max-width:100%}
 .wrap{max-width:1180px;margin:0 auto;padding:0 5%}
 
 /* ---------- nav (matches landing.html) ---------- */
